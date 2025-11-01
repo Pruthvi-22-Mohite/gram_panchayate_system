@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - Gram Panchayat Portal{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, Admin!</span>
+            <a href="{% url 'auth:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-wrapper">
+    <div class="sidebar">
+        <div class="list-group list-group-flush">
+            <a href="#dashboard" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                <i class="bi bi-house-door-fill me-2"></i><span>Dashboard</span>
+            </a>
+            <a href="#management" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-people-fill me-2"></i><span>User Management</span>
+            </a>
+            <a href="#reports" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-bar-chart-fill me-2"></i><span>Reports & Analytics</span>
+            </a>
+            <a href="#notices" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-megaphone-fill me-2"></i><span>Global Notices</span>
+            </a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="dashboard">
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="summary-card bg-card-blue">
+                            <h5>Total Clerks</h5>
+                            <div class="summary-number">12</div>
+                            <div class="summary-icon"><i class="bi bi-person-badge"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="summary-card bg-card-green">
+                            <h5>Total Citizens</h5>
+                            <div class="summary-number">2,458</div>
+                            <div class="summary-icon"><i class="bi bi-people-fill"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="summary-card bg-card-saffron">
+                            <h5>Active Schemes</h5>
+                            <div class="summary-number">18</div>
+                            <div class="summary-icon"><i class="bi bi-award-fill"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="summary-card bg-danger">
+                            <h5>Pending Grievances</h5>
+                            <div class="summary-number">42</div>
+                            <div class="summary-icon"><i class="bi bi-exclamation-circle"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-box mt-4">
+                    <h3 class="content-box-title">System Overview</h3>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Tax Collection</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="text-muted">This Month</h6>
+                                    <h4>₹12,45,000</h4>
+                                    <div class="progress mt-2">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                                    </div>
+                                    <small class="text-muted">85% of target achieved</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Grievance Resolution</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="text-muted">This Month</h6>
+                                    <h4>78%</h4>
+                                    <div class="progress mt-2">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 78%"></div>
+                                    </div>
+                                    <small class="text-muted">78% resolution rate</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Scheme Applications</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="text-muted">This Month</h6>
+                                    <h4>342</h4>
+                                    <div class="progress mt-2">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 92%"></div>
+                                    </div>
+                                    <small class="text-muted">92% approval rate</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-box mt-4">
+                    <h3 class="content-box-title">Recent Activities</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>New Clerk Added</strong>
+                                    <p class="mb-0">Rajesh Kumar assigned to Ward 3</p>
+                                </div>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>Budget Report Generated</strong>
+                                    <p class="mb-0">FY 2025-26 budget report completed</p>
+                                </div>
+                                <small class="text-muted">1 day ago</small>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>Scheme Launched</strong>
+                                    <p class="mb-0">New scholarship scheme for students</p>
+                                </div>
+                                <small class="text-muted">2 days ago</small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="management">
+                <div class="content-box">
+                    <h3 class="content-box-title">User Management</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-person-plus-fill"></i></div><h6>Add New Clerk</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-list-ul"></i></div><h6>View All Clerks</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-person-lines-fill"></i></div><h6>Assign Roles</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-person-x-fill"></i></div><h6>Deactivate Users</h6></a></div>
+                    </div>
+                    <div class="table-container mt-4">
+                        <h4 class="table-title">Clerk Assignments</h4>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Clerk Name</th>
+                                    <th>Employee ID</th>
+                                    <th>Assigned Ward</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Rajesh Kumar</td>
+                                    <td>CLK001</td>
+                                    <td>Ward 1</td>
+                                    <td>rajesh@grampanchayat.gov.in</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td><button class="btn btn-sm btn-primary">Edit</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Priya Sharma</td>
+                                    <td>CLK002</td>
+                                    <td>Ward 2</td>
+                                    <td>priya@grampanchayat.gov.in</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td><button class="btn btn-sm btn-primary">Edit</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Amit Patel</td>
+                                    <td>CLK003</td>
+                                    <td>Ward 3</td>
+                                    <td>amit@grampanchayat.gov.in</td>
+                                    <td><span class="badge bg-warning">On Leave</span></td>
+                                    <td><button class="btn btn-sm btn-primary">Edit</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="reports">
+                <div class="content-box">
+                    <h3 class="content-box-title">Reports & Analytics</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-currency-rupee"></i></div><h6>Financial Reports</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-bar-chart-fill"></i></div><h6>Grievance Analytics</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-people-fill"></i></div><h6>Scheme Reports</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-file-earmark-bar-graph-fill"></i></div><h6>Export Data</h6></a></div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Performance Overview (Last 12 Months)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="performanceChart" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="notices">
+                <div class="content-box">
+                    <h3 class="content-box-title">Global Notices</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div><h6>Publish Global Notice</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-primary"><i class="bi bi-list-ul"></i></div><h6>View All Notices</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-calendar-event-fill"></i></div><h6>Scheduled Notices</h6></a></div>
+                    </div>
+                    <div class="form-container mt-4">
+                        <h4 class="form-title">Publish New Notice</h4>
+                        <form>
+                            <div class="mb-3">
+                                <label for="noticeTitle" class="form-label">Notice Title</label>
+                                <input type="text" class="form-control" id="noticeTitle" placeholder="Enter notice title">
+                            </div>
+                            <div class="mb-3">
+                                <label for="noticeContent" class="form-label">Notice Content</label>
+                                <textarea class="form-control" id="noticeContent" rows="4" placeholder="Enter notice content"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="noticeDate" class="form-label">Publish Date</label>
+                                <input type="date" class="form-control" id="noticeDate">
+                            </div>
+                            <div class="mb-3">
+                                <label for="noticeAudience" class="form-label">Target Audience</label>
+                                <select class="form-select" id="noticeAudience">
+                                    <option value="all">All Users</option>
+                                    <option value="citizens">Citizens Only</option>
+                                    <option value="clerks">Clerks Only</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" onclick="handleFormSubmit(event, 'Notice')">Publish Notice</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chatbot -->
+<div class="chatbot-container">
+    <div class="chatbot-toggle">
+        <i class="bi bi-chat-dots-fill"></i>
+    </div>
+    <div class="chatbot-window">
+        <div class="chatbot-header">
+            <span>Virtual Assistant</span>
+            <i class="bi bi-x-lg"></i>
+        </div>
+        <div class="chatbot-messages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+        <div class="chatbot-input">
+            <input type="text" placeholder="Type your message...">
+            <button><i class="bi bi-send"></i></button>
+        </div>
+    </div>
+</div>
+{% endblock %}

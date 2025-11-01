@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Gram Panchayat Portal{% endblock %}
+
+{% block content %}
+<body class="login-page">
+    <div class="container d-flex justify-content-center align-items-center min-vh-custom">
+        <div class="card shadow p-4 login-card-width">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Login</h2>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <a href="{% url 'auth:admin_login' %}" class="btn btn-primary w-100">Admin Login</a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a href="{% url 'auth:clerk_login' %}" class="btn btn-success w-100">Clerk Login</a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a href="{% url 'auth:citizen_otp_request' %}" class="btn btn-info w-100">Citizen Login</a>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <p class="text-center">Select your user type to proceed with login</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

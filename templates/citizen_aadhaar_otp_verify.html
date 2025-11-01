@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Aadhaar OTP - Gram Panchayat Portal{% endblock %}
+
+{% block content %}
+<body class="login-page">
+    <div class="container d-flex justify-content-center align-items-center min-vh-custom">
+        <div class="card shadow p-4 login-card-width">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Verify Aadhaar OTP</h2>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="aadhaar_number" value="{{ aadhaar_number }}">
+                    <div class="mb-3">
+                        <label for="otp" class="form-label">OTP</label>
+                        <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP sent to your registered mobile" maxlength="6">
+                        {% if aadhaar_number %}
+                            <small class="form-text text-muted">Enter OTP for Aadhaar number: {{ aadhaar_number }}</small>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Verify OTP</button>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <a href="{% url 'auth:citizen_aadhaar_otp_request' %}" class="text-decoration-none">Request New OTP</a>
+                    <br>
+                    <a href="{% url 'auth:login' %}" class="text-decoration-none">Back to Main Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}Schemes & Subsidies - Gram Panchayat Portal{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Schemes & Subsidies</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, Citizen!</span>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'citizen_dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-award-fill me-2"></i>View All Schemes
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-check-fill me-2"></i>My Applied Schemes
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-people-fill me-2"></i>Beneficiary Lists
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="content-box">
+                <h3 class="content-box-title">Government Schemes & Subsidies</h3>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Pradhan Mantri Awas Yojana (PMAY)</h5>
+                                <p class="card-text">Affordable housing for all by 2022. Provides financial assistance to EWS and LIG categories for construction of houses.</p>
+                                <ul>
+                                    <li>Financial assistance up to ₹2.5 lakh</li>
+                                    <li>Interest subsidy on home loans</li>
+                                    <li>Applicable for EWS/LIG categories</li>
+                                </ul>
+                                <a href="#" class="btn btn-primary">Check Eligibility</a>
+                                <a href="#" class="btn btn-outline-primary">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA)</h5>
+                                <p class="card-text">Guarantees 100 days of wage employment in a financial year to rural households.</p>
+                                <ul>
+                                    <li>100 days of guaranteed employment</li>
+                                    <li>Wage payment within 15 days</li>
+                                    <li>Unemployment allowance if work not provided</li>
+                                </ul>
+                                <a href="#" class="btn btn-primary">Check Eligibility</a>
+                                <a href="#" class="btn btn-outline-primary">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Pradhan Mantri Ujjwala Yojana (PMUY)</h5>
+                                <p class="card-text">Provides LPG connections to women from BPL households to protect their health.</p>
+                                <ul>
+                                    <li>Free LPG connection</li>
+                                    <li>Deposit of ₹1,600 for LPG connection</li>
+                                    <li>Eligible for BPL households</li>
+                                </ul>
+                                <a href="#" class="btn btn-primary">Check Eligibility</a>
+                                <a href="#" class="btn btn-outline-primary">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">National Social Assistance Programme (NSAP)</h5>
+                                <p class="card-text">Provides financial assistance to elderly, widows and disabled persons living below poverty line.</p>
+                                <ul>
+                                    <li>Old Age Pension: ₹200-1000/month</li>
+                                    <li>Widow Pension: ₹300-1000/month</li>
+                                    <li>Disability Pension: ₹300-1000/month</li>
+                                </ul>
+                                <a href="#" class="btn btn-primary">Check Eligibility</a>
+                                <a href="#" class="btn btn-outline-primary">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Pradhan Mantri Jan Dhan Yojana (PMJDY)</h5>
+                                <p class="card-text">Financial inclusion programme aimed at providing universal access to banking facilities.</p>
+                                <ul>
+                                    <li>Zero balance bank account</li>
+                                    <li>Accidental insurance cover of ₹2 lakh</li>
+                                    <li>Overdraft facility after 6 months</li>
+                                </ul>
+                                <a href="#" class="btn btn-primary">Check Eligibility</a>
+                                <a href="#" class="btn btn-outline-primary">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)</h5>
+                                <p class="card-text">Health insurance scheme for poor and vulnerable population with cover of ₹5 lakh per family.</p>
+                                <ul>
+                                    <li>Cover of ₹5 lakh per family</li>
+                                    <li>Pre-existing diseases covered</li>
+                                    <li>No cap on family size or age</li>
+                                </ul>
+                                <a href="#" class="btn btn-primary">Check Eligibility</a>
+                                <a href="#" class="btn btn-outline-primary">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container mt-4">
+                    <h4 class="table-title">My Scheme Applications</h4>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Application ID</th>
+                                <th>Scheme Name</th>
+                                <th>Date Applied</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>APP-2025-0012</td>
+                                <td>PMAY</td>
+                                <td>10 May 2025</td>
+                                <td><span class="badge bg-warning">Under Review</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td>APP-2025-0008</td>
+                                <td>MGNREGA</td>
+                                <td>05 Apr 2025</td>
+                                <td><span class="badge bg-success">Approved</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

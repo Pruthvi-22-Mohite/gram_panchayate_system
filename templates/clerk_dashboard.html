@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+
+{% block title %}Clerk Dashboard - Gram Panchayat Portal{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Clerk Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, Clerk!</span>
+            <a href="{% url 'auth:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-wrapper">
+    <div class="sidebar">
+        <div class="list-group list-group-flush">
+            <a href="#dashboard" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                <i class="bi bi-house-door-fill me-2"></i><span>Dashboard</span>
+            </a>
+            <a href="#management" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-folder-fill me-2"></i><span>Data Management</span>
+            </a>
+            <a href="#grievances" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-exclamation-octagon-fill me-2"></i><span>Grievance Handling</span>
+            </a>
+            <a href="#schemes" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-award-fill me-2"></i><span>Scheme Management</span>
+            </a>
+            <a href="#notices" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-megaphone-fill me-2"></i><span>Notice Board</span>
+            </a>
+            <a href="#reports" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-bar-chart-fill me-2"></i><span>Reports & Analytics</span>
+            </a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="dashboard">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="summary-card bg-card-blue">
+                            <h5>Pending Grievances</h5>
+                            <div class="summary-number">24</div>
+                            <div class="summary-icon"><i class="bi bi-exclamation-circle"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="summary-card bg-card-green">
+                            <h5>Resolved Today</h5>
+                            <div class="summary-number">8</div>
+                            <div class="summary-icon"><i class="bi bi-check-circle"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="summary-card bg-card-saffron">
+                            <h5>Pending Tax Payments</h5>
+                            <div class="summary-number">156</div>
+                            <div class="summary-icon"><i class="bi bi-currency-rupee"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-box mt-4">
+                    <h3 class="content-box-title">Quick Actions</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-person-plus-fill"></i></div><h6>Add New Citizen</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-cash-coin"></i></div><h6>Process Tax Payment</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div><h6>Register Grievance</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-upload"></i></div><h6>Upload Documents</h6></a></div>
+                    </div>
+                </div>
+                <div class="content-box mt-4">
+                    <h3 class="content-box-title">Pending Tasks</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Review property tax applications
+                            <span class="badge bg-primary rounded-pill">12</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Process water bill payments
+                            <span class="badge bg-primary rounded-pill">8</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Update scheme beneficiary lists
+                            <span class="badge bg-primary rounded-pill">5</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Verify citizen documents
+                            <span class="badge bg-primary rounded-pill">17</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="management">
+                <div class="content-box">
+                    <h3 class="content-box-title">Data Management</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-house-fill"></i></div><h6>Property Records</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-people-fill"></i></div><h6>Citizen Database</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-currency-rupee"></i></div><h6>Tax Records</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-info text-dark"><i class="bi bi-map-fill"></i></div><h6>Land Records</h6></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="grievances">
+                <div class="content-box">
+                    <h3 class="content-box-title">Grievance Handling</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-plus-circle-fill"></i></div><h6>New Grievance</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-list-task"></i></div><h6>View All Grievances</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-bar-chart-fill"></i></div><h6>Grievance Statistics</h6></a></div>
+                    </div>
+                    <div class="table-container mt-4">
+                        <h4 class="table-title">Recent Grievances</h4>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Grievance ID</th>
+                                    <th>Citizen</th>
+                                    <th>Category</th>
+                                    <th>Date Filed</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>GRV-2025-004</td>
+                                    <td>Ramesh Kumar</td>
+                                    <td>Road Maintenance</td>
+                                    <td>15 May 2025</td>
+                                    <td><span class="badge bg-warning">In Progress</span></td>
+                                    <td><button class="btn btn-sm btn-primary">Update</button></td>
+                                </tr>
+                                <tr>
+                                    <td>GRV-2025-003</td>
+                                    <td>Sunita Devi</td>
+                                    <td>Water Supply</td>
+                                    <td>10 May 2025</td>
+                                    <td><span class="badge bg-info">Assigned</span></td>
+                                    <td><button class="btn btn-sm btn-primary">Update</button></td>
+                                </tr>
+                                <tr>
+                                    <td>GRV-2025-002</td>
+                                    <td>Amit Sharma</td>
+                                    <td>Street Light</td>
+                                    <td>03 Apr 2025</td>
+                                    <td><span class="badge bg-success">Resolved</span></td>
+                                    <td><button class="btn btn-sm btn-primary">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="schemes">
+                <div class="content-box">
+                    <h3 class="content-box-title">Scheme Management</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-plus-circle-fill"></i></div><h6>Add New Scheme</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-primary"><i class="bi bi-list-ul"></i></div><h6>View All Schemes</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-info text-dark"><i class="bi bi-people-fill"></i></div><h6>Beneficiary Lists</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-bar-chart-fill"></i></div><h6>Scheme Statistics</h6></a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="notices">
+                <div class="content-box">
+                    <h3 class="content-box-title">Notice Board</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div><h6>Publish Notice</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-primary"><i class="bi bi-list-ul"></i></div><h6>View All Notices</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-calendar-event-fill"></i></div><h6>Meeting Schedules</h6></a></div>
+                    </div>
+                    <div class="table-container mt-4">
+                        <h4 class="table-title">Recent Notices</h4>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Notice Title</th>
+                                    <th>Date</th>
+                                    <th>Published By</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Gram Sabha Meeting on 25th June</td>
+                                    <td>15 June 2025</td>
+                                    <td>Sarpanch Office</td>
+                                    <td><button class="btn btn-sm btn-primary">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Water Supply Maintenance on 20th June</td>
+                                    <td>10 June 2025</td>
+                                    <td>Public Health Dept</td>
+                                    <td><button class="btn btn-sm btn-primary">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>New Scholarship Scheme Launched</td>
+                                    <td>05 June 2025</td>
+                                    <td>Education Dept</td>
+                                    <td><button class="btn btn-sm btn-primary">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="reports">
+                <div class="content-box">
+                    <h3 class="content-box-title">Reports & Analytics</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-currency-rupee"></i></div><h6>Tax Collection Report</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-bar-chart-fill"></i></div><h6>Grievance Report</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-people-fill"></i></div><h6>Scheme Report</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-file-earmark-bar-graph-fill"></i></div><h6>Export Reports</h6></a></div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Tax Collection (Last 6 Months)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="taxChart" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Grievance Resolution Rate</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="grievanceChart" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chatbot -->
+<div class="chatbot-container">
+    <div class="chatbot-toggle">
+        <i class="bi bi-chat-dots-fill"></i>
+    </div>
+    <div class="chatbot-window">
+        <div class="chatbot-header">
+            <span>Virtual Assistant</span>
+            <i class="bi bi-x-lg"></i>
+        </div>
+        <div class="chatbot-messages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+        <div class="chatbot-input">
+            <input type="text" placeholder="Type your message...">
+            <button><i class="bi bi-send"></i></button>
+        </div>
+    </div>
+</div>
+{% endblock %}

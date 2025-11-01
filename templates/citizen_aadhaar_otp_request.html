@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Citizen Aadhaar OTP Login - Gram Panchayat Portal{% endblock %}
+
+{% block content %}
+<body class="login-page">
+    <div class="container d-flex justify-content-center align-items-center min-vh-custom">
+        <div class="card shadow p-4 login-card-width">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Citizen Aadhaar OTP Login</h2>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="aadhaar_number" class="form-label">Aadhaar Number</label>
+                        <input type="text" class="form-control" id="aadhaar_number" name="aadhaar_number" placeholder="Enter your 12-digit Aadhaar number" maxlength="12">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Request OTP</button>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>Don't have an account? <a href="{% url 'auth:citizen_registration' %}">Register here</a></p>
+                    <a href="{% url 'auth:login' %}" class="text-decoration-none">Back to Main Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

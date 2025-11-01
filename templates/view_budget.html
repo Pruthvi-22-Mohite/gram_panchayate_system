@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}View Budget - Gram Panchayat Portal{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Financial Information</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, Citizen!</span>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'citizen_dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="{% url 'pay_tax' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-cash-coin me-2"></i>Pay Property Tax
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-pie-chart-fill me-2"></i>View Panchayat Budget
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-journal-check me-2"></i>Social Audit Reports
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="content-box">
+                <h3 class="content-box-title">Gram Panchayat Budget</h3>
+                
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>The budget information is updated annually and approved by the Gram Sabha.
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">FY 2024-25</h5>
+                                <h6 class="text-muted">Total Budget</h6>
+                                <h4 class="text-primary">₹12.5 Crore</h4>
+                                <button class="btn btn-outline-primary btn-sm mt-2">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">FY 2023-24</h5>
+                                <h6 class="text-muted">Total Budget</h6>
+                                <h4 class="text-primary">₹10.8 Crore</h4>
+                                <button class="btn btn-outline-primary btn-sm mt-2">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">FY 2022-23</h5>
+                                <h6 class="text-muted">Total Budget</h6>
+                                <h4 class="text-primary">₹9.2 Crore</h4>
+                                <button class="btn btn-outline-primary btn-sm mt-2">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Budget Allocation - FY 2024-25</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="budgetChart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Expenditure - FY 2024-25</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="expenditureChart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container mt-4">
+                    <h4 class="table-title">Detailed Budget Breakdown - FY 2024-25</h4>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Allocation (₹)</th>
+                                <th>Expenditure (₹)</th>
+                                <th>% of Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Infrastructure Development</td>
+                                <td>4,50,00,000</td>
+                                <td>3,80,00,000</td>
+                                <td>36%</td>
+                            </tr>
+                            <tr>
+                                <td>Health & Sanitation</td>
+                                <td>2,00,00,000</td>
+                                <td>1,75,00,000</td>
+                                <td>16%</td>
+                            </tr>
+                            <tr>
+                                <td>Education</td>
+                                <td>1,50,00,000</td>
+                                <td>1,30,00,000</td>
+                                <td>12%</td>
+                            </tr>
+                            <tr>
+                                <td>Water & Electricity</td>
+                                <td>1,25,00,000</td>
+                                <td>1,10,00,000</td>
+                                <td>10%</td>
+                            </tr>
+                            <tr>
+                                <td>Welfare Schemes</td>
+                                <td>1,00,00,000</td>
+                                <td>90,00,000</td>
+                                <td>8%</td>
+                            </tr>
+                            <tr>
+                                <td>Administrative Expenses</td>
+                                <td>75,00,000</td>
+                                <td>65,00,000</td>
+                                <td>6%</td>
+                            </tr>
+                            <tr>
+                                <td>Contingency Fund</td>
+                                <td>50,00,000</td>
+                                <td>25,00,000</td>
+                                <td>4%</td>
+                            </tr>
+                            <tr>
+                                <td>Other Expenses</td>
+                                <td>1,00,00,000</td>
+                                <td>75,00,000</td>
+                                <td>8%</td>
+                            </tr>
+                            <tr class="table-primary">
+                                <td><strong>Total</strong></td>
+                                <td><strong>₹12,50,00,000</strong></td>
+                                <td><strong>₹10,50,00,000</strong></td>
+                                <td><strong>100%</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="form-container mt-4">
+                    <h4 class="form-title">Request Budget Information</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="budgetRequestCategory" class="form-label">Category</label>
+                            <select class="form-select" id="budgetRequestCategory">
+                                <option value="">Select Category</option>
+                                <option value="infrastructure">Infrastructure Development</option>
+                                <option value="health">Health & Sanitation</option>
+                                <option value="education">Education</option>
+                                <option value="water">Water & Electricity</option>
+                                <option value="welfare">Welfare Schemes</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="budgetRequestDetails" class="form-label">Details</label>
+                            <textarea class="form-control" id="budgetRequestDetails" rows="3" placeholder="Provide details about your budget information request"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" onclick="handleFormSubmit(event, 'Budget Request')">Submit Request</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
