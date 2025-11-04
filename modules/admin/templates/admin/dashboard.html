@@ -1,0 +1,106 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - LokSevaGram{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Admin Dashboard</h2>
+            <p class="text-muted">Welcome to the admin portal, {{ user.username }}!</p>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="summary-card bg-card-blue">
+                <h5>Total Clerks</h5>
+                <div class="summary-number">{{ total_clerks|default:0 }}</div>
+                <i class="bi bi-person-badge summary-icon"></i>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="summary-card bg-card-green">
+                <h5>Total Citizens</h5>
+                <div class="summary-number">{{ total_citizens|default:0 }}</div>
+                <i class="bi bi-people summary-icon"></i>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="summary-card bg-card-saffron">
+                <h5>Active Schemes</h5>
+                <div class="summary-number">{{ active_schemes|default:0 }}</div>
+                <i class="bi bi-award summary-icon"></i>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="summary-card bg-success">
+                <h5>Total Users</h5>
+                <div class="summary-number">{{ total_users|default:0 }}</div>
+                <i class="bi bi-person-check summary-icon"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content-box mt-4">
+        <h3 class="content-box-title">Admin Services</h3>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{% url 'admin_module:manage_users' %}" class="action-card">
+                    <div class="icon-circle bg-card-blue"><i class="bi bi-people-fill"></i></div>
+                    <h6>Manage Users</h6>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{% url 'admin_module:manage_clerks' %}" class="action-card">
+                    <div class="icon-circle bg-card-green"><i class="bi bi-person-badge-fill"></i></div>
+                    <h6>Manage Clerks</h6>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{% url 'admin_module:create_clerk' %}" class="action-card">
+                    <div class="icon-circle bg-success"><i class="bi bi-person-plus-fill"></i></div>
+                    <h6>Create New Clerk</h6>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{% url 'admin_module:manage_citizens' %}" class="action-card">
+                    <div class="icon-circle bg-card-saffron"><i class="bi bi-person-fill"></i></div>
+                    <h6>Manage Citizens</h6>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{% url 'admin_module:system_settings' %}" class="action-card">
+                    <div class="icon-circle bg-secondary"><i class="bi bi-gear-fill"></i></div>
+                    <h6>System Settings</h6>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{% url 'admin_module:audit_logs' %}" class="action-card">
+                    <div class="icon-circle bg-info text-dark"><i class="bi bi-journal-text"></i></div>
+                    <h6>Audit Logs</h6>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{% url 'admin_module:reports' %}" class="action-card">
+                    <div class="icon-circle bg-warning text-dark"><i class="bi bi-bar-chart-fill"></i></div>
+                    <h6>Reports</h6>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

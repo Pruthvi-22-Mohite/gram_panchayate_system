@@ -16,17 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from gram_panchayate_system import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('django-admin/', admin.site.urls),  # Changed from 'admin/' to 'django-admin/'
-    path('', views.home, name='home'),
-    path('auth/', include('authentication.urls')),  # Include authentication URLs
-    path('pay-tax/', views.pay_tax, name='pay_tax'),
-    path('lodge-grievance/', views.lodge_grievance, name='lodge_grievance'),
-    path('view-schemes/', views.view_schemes, name='view_schemes'),
-    path('emergency-directory/', views.emergency_directory, name='emergency_directory'),
-    path('feedback-suggestions/', views.feedback_suggestions, name='feedback_suggestions'),
-    path('view-budget/', views.view_budget, name='view_budget'),
-    path('api/send-otp/', views.send_otp_api, name='send_otp_api'),
+    path('django-admin/', admin.site.urls),
+    path('', include('modules.urls')),
 ]
+
+# Serve static files during development
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

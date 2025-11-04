@@ -17,15 +17,7 @@
                         <a href="{% url 'auth:clerk_login' %}" class="btn btn-success w-100">Clerk Login</a>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <div class="dropdown">
-                            <button class="btn btn-info w-100 dropdown-toggle" type="button" id="citizenLoginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                Citizen Login
-                            </button>
-                            <ul class="dropdown-menu w-100" aria-labelledby="citizenLoginDropdown">
-                                <li><a class="dropdown-item" href="{% url 'auth:citizen_otp_request' %}">Mobile OTP Login</a></li>
-                                <li><a class="dropdown-item" href="{% url 'auth:citizen_aadhaar_otp_request' %}">Aadhaar OTP Login</a></li>
-                            </ul>
-                        </div>
+                        <a href="{% url 'auth:citizen_login' %}" class="btn btn-info w-100">Citizen Login</a>
                     </div>
                 </div>
                 

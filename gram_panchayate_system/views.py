@@ -35,7 +35,7 @@ def admin_login(request):
             if user is not None and user.user_type == 'admin':
                 login(request, user)
                 messages.success(request, f"Welcome, {user.username}!")
-                return redirect('admin_dashboard')
+                return redirect('auth:admin_dashboard')
             else:
                 messages.error(request, "Invalid credentials or not an admin user.")
         else:
@@ -57,7 +57,7 @@ def clerk_login(request):
             if user is not None and user.user_type == 'clerk':
                 login(request, user)
                 messages.success(request, f"Welcome, {user.username}!")
-                return redirect('clerk_dashboard')
+                return redirect('auth:clerk_dashboard')
             else:
                 messages.error(request, "Invalid credentials or not a clerk user.")
         else:
@@ -141,7 +141,7 @@ def citizen_otp_verify(request):
                     user = CustomUser.objects.get(mobile_number=mobile_number, user_type='citizen')
                     login(request, user)
                     messages.success(request, f"Welcome, {user.username}!")
-                    return redirect('citizen_dashboard')
+                    return redirect('auth:citizen_dashboard')
                 except ObjectDoesNotExist:
                     messages.error(request, "User account not found.")
                     return render(request, 'citizen_otp_request.html', {'form': CitizenOTPRequestForm()})
@@ -161,7 +161,7 @@ def citizen_otp_verify(request):
             })
     
     # If not POST, redirect to OTP request page
-    return redirect('citizen_otp_request')
+    return redirect('auth:citizen_otp_request')
 
 @login_required
 def logout_view(request):

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-nh48cxgrb)uqp)^=+%w+2&-7*zt&i8s&p&gz$04!zqx&zvu3u(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 
 # Application definition
@@ -38,8 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'gram_panchayate_system',  # Add our app
-    'authentication',  # Add authentication app
+    # Modular structure
+    'modules.common',
+    'modules.admin',
+    'modules.clerk',
+    'modules.citizen',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +62,10 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'authentication/templates'),  # Add authentication templates
+            os.path.join(BASE_DIR, 'modules/admin/templates'),
+            os.path.join(BASE_DIR, 'modules/clerk/templates'),
+            os.path.join(BASE_DIR, 'modules/citizen/templates'),
+            os.path.join(BASE_DIR, 'modules/common/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -141,7 +147,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
-AUTH_USER_MODEL = 'gram_panchayate_system.CustomUser'
+AUTH_USER_MODEL = 'common.CustomUser'
 
 # Login URLs
 LOGIN_URL = '/login/'
