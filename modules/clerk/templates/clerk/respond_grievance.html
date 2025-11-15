@@ -1,0 +1,157 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Respond to Grievance - Clerk Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="bi bi-reply-fill me-2"></i>Respond to Grievance #{{ grievance.id }}</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Grievance Details -->
+                    <div class="card mb-4 border-primary">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Grievance Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Submitted By:</strong> {{ grievance.submitted_by.username }}
+                                    {% if grievance.submitted_by.mobile_number %}
+                                        <br><small class="text-muted">Mobile: {{ grievance.submitted_by.mobile_number }}</small>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Submitted On:</strong> {{ grievance.submitted_at|date:"d M Y, h:i A" }}
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Title:</strong> {{ grievance.title }}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Category:</strong> {{ grievance.category }}
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Priority:</strong> 
+                                    {% if grievance.priority == 'urgent' %}
+                                        <span class="badge bg-danger">Urgent</span>
+                                    {% elif grievance.priority == 'high' %}
+                                        <span class="badge bg-warning text-dark">High</span>
+                                    {% elif grievance.priority == 'medium' %}
+                                        <span class="badge bg-info">Medium</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Low</span>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Current Status:</strong> 
+                                    {% if grievance.status == 'resolved' %}
+                                        <span class="badge bg-success">Resolved</span>
+                                    {% elif grievance.status == 'in_progress' %}
+                                        <span class="badge bg-warning text-dark">In Progress</span>
+                                    {% elif grievance.status == 'closed' %}
+                                        <span class="badge bg-secondary">Closed</span>
+                                    {% else %}
+                                        <span class="badge bg-primary">Open</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <strong>Description:</strong>
+                                    <p class="mt-2 p-3 bg-light rounded">{{ grievance.description }}</p>
+                                </div>
+                            </div>
+                            {% if grievance.photo %}
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <strong>Attached Photo:</strong>
+                                    <div class="mt-2">
+                                        <img src="{{ grievance.photo.url }}" alt="Grievance Photo" class="img-fluid" style="max-width: 500px; border-radius: 8px;">
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if grievance.assigned_to %}
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <strong>Currently Assigned To:</strong> {{ grievance.assigned_to.username }} ({{ grievance.assigned_to.user_type|title }})
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if grievance.resolution_notes %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="alert alert-info">
+                                        <strong><i class="bi bi-info-circle me-2"></i>Previous Response:</strong>
+                                        <p class="mb-0 mt-2">{{ grievance.resolution_notes }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Response Form -->
+                    <div class="card border-success">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Your Response</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="{{ form.status.id_for_label }}" class="form-label">Update Status *</label>
+                                        {{ form.status }}
+                                        {% if form.status.errors %}
+                                            <div class="text-danger">{{ form.status.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ form.priority.id_for_label }}" class="form-label">Update Priority *</label>
+                                        {{ form.priority }}
+                                        {% if form.priority.errors %}
+                                            <div class="text-danger">{{ form.priority.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.resolution_notes.id_for_label }}" class="form-label">Resolution Notes / Response *</label>
+                                    {{ form.resolution_notes }}
+                                    {% if form.resolution_notes.errors %}
+                                        <div class="text-danger">{{ form.resolution_notes.errors }}</div>
+                                    {% endif %}
+                                    <div class="form-text">Provide detailed response or action taken to resolve this grievance</div>
+                                </div>
+                                
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    <strong>Note:</strong> This response will be visible to the citizen who submitted the grievance. You will be automatically assigned to this grievance.
+                                </div>
+                                
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-check-circle-fill me-2"></i>Submit Response
+                                    </button>
+                                    <a href="{% url 'clerk:manage_grievances' %}" class="btn btn-secondary">
+                                        <i class="bi bi-x-circle me-2"></i>Cancel
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

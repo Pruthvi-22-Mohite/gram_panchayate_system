@@ -10,7 +10,7 @@ from modules.common.models import CustomUser
 from modules.common.decorators import admin_required
 from .models import AdminProfile, SystemSettings, AuditLog
 from .forms import AdminLoginForm, SystemSettingsForm, ClerkCreationForm
-from modules.clerk.models import ClerkProfile
+from modules.clerk.models import ClerkProfile, Grievance
 from modules.citizen.models import CitizenProfile
 
 
@@ -230,3 +230,20 @@ def reports(request):
         'user_trends': user_trends
     }
     return render(request, 'admin/reports.html', context)
+
+
+@admin_required
+def manage_grievances(request):
+    """View to manage all citizen grievances"""
+    grievances = Grievance.objects.all().order_by('-submitted_at')
+    
+    # Filter by status if provided
+    status_filter = request.GET.get('status')
+    if status_filter:
+        grievances = grievances.filter(status=status_filter)
+    
+    context = {
+        'grievances': grievances,
+        'status_filter': status_filter
+    }
+    return render(request, 'admin/manage_grievances.html', context)

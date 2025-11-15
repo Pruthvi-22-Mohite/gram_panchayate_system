@@ -87,6 +87,7 @@ class Grievance(models.Model):
     category = models.CharField(max_length=100)
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
+    photo = models.ImageField(upload_to='grievance_photos/', null=True, blank=True)
     
     submitted_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     assigned_to = models.ForeignKey(

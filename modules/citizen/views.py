@@ -166,7 +166,7 @@ def my_applications(request):
 def lodge_grievance(request):
     """Lodge a new grievance"""
     if request.method == 'POST':
-        form = GrievanceForm(request.POST)
+        form = GrievanceForm(request.POST, request.FILES)
         if form.is_valid():
             grievance = form.save(commit=False)
             grievance.submitted_by = request.user

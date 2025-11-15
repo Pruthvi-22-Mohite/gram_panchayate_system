@@ -13,4 +13,5 @@ urlpatterns = [
     path('settings/', views.system_settings, name='system_settings'),
     path('audit-logs/', views.audit_logs, name='audit_logs'),
     path('reports/', views.reports, name='reports'),
+    path('grievances/', views.manage_grievances, name='manage_grievances'),
 ]

@@ -16,7 +16,7 @@ def user_type_required(user_type):
                 return view_func(request, *args, **kwargs)
             else:
                 messages.error(request, f"Access denied. {user_type.title()} access required.")
-                return redirect('home')
+                return redirect('common:home')
         return _wrapped_view
     return decorator
 
@@ -61,5 +61,5 @@ def superuser_required(view_func):
             return view_func(request, *args, **kwargs)
         else:
             messages.error(request, "Superuser access required.")
-            return redirect('home')
+            return redirect('common:home')
     return _wrapped_view
