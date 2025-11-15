@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Feedback & Suggestions - Gram Panchayat Portal{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Citizen Engagement</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, Citizen!</span>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'citizen_dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-lightbulb-fill me-2"></i>Feedback & Suggestions
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="content-box">
+                <h3 class="content-box-title">Feedback & Suggestions</h3>
+                
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>Your feedback is valuable to us. Please share your suggestions to help us improve our services.
+                </div>
+                
+                <div class="form-container">
+                    <h4 class="form-title">Submit Your Feedback</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="feedbackCategory" class="form-label">Category</label>
+                            <select class="form-select" id="feedbackCategory">
+                                <option value="">Select Category</option>
+                                <option value="service">Service Quality</option>
+                                <option value="website">Website/Portal</option>
+                                <option value="staff">Staff Behavior</option>
+                                <option value="infrastructure">Infrastructure</option>
+                                <option value="schemes">Government Schemes</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="feedbackSubject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="feedbackSubject" placeholder="Enter subject of your feedback">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="feedbackDetails" class="form-label">Your Feedback</label>
+                            <textarea class="form-control" id="feedbackDetails" rows="5" placeholder="Please provide detailed feedback or suggestions"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="feedbackRating" class="form-label">Overall Rating</label>
+                            <div class="rating">
+                                <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                                <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                                <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                                <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" onclick="handleFormSubmit(event, 'Feedback')">Submit Feedback</button>
+                    </form>
+                </div>
+                
+                <div class="table-container mt-4">
+                    <h4 class="table-title">Recent Feedback from Citizens</h4>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Feedback ID</th>
+                                <th>Subject</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>FB-2025-012</td>
+                                <td>Website loading speed</td>
+                                <td>Website/Portal</td>
+                                <td>15 May 2025</td>
+                                <td><span class="badge bg-success">Addressed</span></td>
+                            </tr>
+                            <tr>
+                                <td>FB-2025-008</td>
+                                <td>Road maintenance in Ward 3</td>
+                                <td>Infrastructure</td>
+                                <td>10 May 2025</td>
+                                <td><span class="badge bg-warning">In Progress</span></td>
+                            </tr>
+                            <tr>
+                                <td>FB-2025-005</td>
+                                <td>Staff behavior at counter 2</td>
+                                <td>Staff Behavior</td>
+                                <td>05 May 2025</td>
+                                <td><span class="badge bg-success">Addressed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

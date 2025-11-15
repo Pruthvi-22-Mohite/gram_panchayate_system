@@ -1,0 +1,1 @@
+# Clerk module for Gram Panchayate System

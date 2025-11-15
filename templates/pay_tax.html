@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Pay Property Tax - Gram Panchayat Portal{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Financial Services</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, Citizen!</span>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'citizen_dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-cash-coin me-2"></i>Pay Property Tax
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-droplet-fill me-2"></i>Pay Water Bill
+                    </a>
+                    <a href="{% url 'view_budget' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-pie-chart-fill me-2"></i>View Panchayat Budget
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-journal-check me-2"></i>Social Audit Reports
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="content-box">
+                <h3 class="content-box-title">Property Tax Payment</h3>
+                
+                <div class="form-container">
+                    <h4 class="form-title">Search Property</h4>
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="propertyId" class="form-label">Property ID / Ghar Number</label>
+                                <input type="text" class="form-control" id="propertyId" placeholder="Enter property ID or house number">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="ownerName" class="form-label">Owner Name</label>
+                                <input type="text" class="form-control" id="ownerName" placeholder="Enter owner name">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Search Property</button>
+                    </form>
+                </div>
+                
+                <div class="table-container mt-4">
+                    <h4 class="table-title">Property Tax Details</h4>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Property ID</th>
+                                <th>Owner Name</th>
+                                <th>Amount (₹)</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-25</td>
+                                <td>PROP-2024-1245</td>
+                                <td>Ramesh Kumar</td>
+                                <td>2,450</td>
+                                <td><span class="badge bg-danger">Due</span></td>
+                                <td><button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Pay Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>2023-24</td>
+                                <td>PROP-2023-1245</td>
+                                <td>Ramesh Kumar</td>
+                                <td>2,200</td>
+                                <td><span class="badge bg-success">Paid</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary">View Receipt</button></td>
+                            </tr>
+                            <tr>
+                                <td>2022-23</td>
+                                <td>PROP-2022-1245</td>
+                                <td>Ramesh Kumar</td>
+                                <td>2,000</td>
+                                <td><span class="badge bg-success">Paid</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary">View Receipt</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">Property Tax Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Property ID</label>
+                    <input type="text" class="form-control" value="PROP-2024-1245" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Owner Name</label>
+                    <input type="text" class="form-control" value="Ramesh Kumar" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tax Amount</label>
+                    <input type="text" class="form-control" value="₹2,450" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="paymentMethod" class="form-label">Payment Method</label>
+                    <select class="form-select" id="paymentMethod">
+                        <option value="">Select Payment Method</option>
+                        <option value="upi">UPI</option>
+                        <option value="netbanking">Net Banking</option>
+                        <option value="creditcard">Credit Card</option>
+                        <option value="debitcard">Debit Card</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="upiId" class="form-label">UPI ID / Card Number</label>
+                    <input type="text" class="form-control" id="upiId" placeholder="Enter UPI ID or Card Number">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="handleFormSubmit(event, 'Payment')">Proceed to Pay</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

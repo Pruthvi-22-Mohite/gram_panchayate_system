@@ -1,0 +1,207 @@
+/* --- Google Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* --- Color & Style Variables --- */
+:root {
+    --saffron: #FF9933;
+    --green: #138808;
+    --primary-blue: #0d62a9;
+    --light-grey-bg: #f4f7fc;
+    --dark-footer-bg: #222222;
+    --text-color: #333;
+    --border-color: #e0e0e0;
+}
+
+/* --- General Body Styles --- */
+body {
+    background-color: var(--light-grey-bg);
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+/* =================================== */
+/* LOGIN PAGE BACKGROUND               */
+/* =================================== */
+body.login-page {
+    background: #0596f0;
+    background: radial-gradient(circle, rgba(5, 150, 240, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.min-vh-custom {
+    min-height: calc(100vh - 90px); /* 90px = approx header height + some gap */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px; /* extra gap below header */
+}
+
+/* Optional: Add a little shadow and border-radius to the login card for better separation */
+.login-card-width {
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    background: #fff;
+}
+
+
+
+/* =================================== */
+/* HEADER & NAVIGATION                 */
+/* =================================== */
+.app-header {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    border-bottom: 4px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to right, var(--saffron), white, var(--green));
+}
+.emblem { height: 60px; }
+.app-header .h5 { color: var(--primary-blue); font-weight: 700; }
+
+.language-selector { max-width: 120px; }
+
+.sub-navbar {
+    background-color: var(--primary-blue) !important;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+/* =================================== */
+/* DASHBOARD STYLES                    */
+/* =================================== */
+.dashboard-wrapper { display: flex; align-items: flex-start; }
+.sidebar {
+    width: 250px;
+    background-color: #fff;
+    padding: 15px;
+    flex-shrink: 0;
+    align-self: stretch;
+    border-right: 1px solid var(--border-color);
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+}
+.sidebar .list-group-item {
+    border: none;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+.sidebar .list-group-item i { font-size: 1.1rem; vertical-align: middle; }
+.sidebar .list-group-item:not(.active):hover { background-color: #f0f0f0; color: var(--primary-blue); }
+
+/* --- FIX APPLIED HERE --- */
+/* This rule forces the background and text color on the active link */
+.sidebar .list-group-item-action.active {
+    background-color: var(--primary-blue) !important;
+    color: #fff !important;
+}
+
+/* This rule explicitly forces the ICON'S color to be white */
+.sidebar .list-group-item-action.active i {
+    color: #fff !important;
+}
+/* --- END OF FIX --- */
+
+.main-content { flex-grow: 1; padding: 20px; }
+
+.summary-card { color: #fff; padding: 20px; border-radius: 8px; position: relative; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.summary-card h5 { font-size: 1rem; font-weight: 400; }
+.summary-card .summary-number { font-size: 2.5rem; font-weight: 700; }
+.summary-card .summary-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 4rem; opacity: 0.2; }
+.bg-card-blue { background: linear-gradient(135deg, #0d62a9, #1e88e5); }
+.bg-card-green { background: linear-gradient(135deg, #138808, #43a047); }
+.bg-card-saffron { background: linear-gradient(135deg, #f57c00, #fb8c00); }
+
+.action-card { display: block; background-color: #fff; padding: 20px; text-align: center; border-radius: 8px; border: 1px solid var(--border-color); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: var(--text-color); height: 100%; }
+.action-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); color: var(--primary-blue); }
+.action-card .icon-circle { width: 50px; height: 50px; line-height: 50px; border-radius: 50%; margin: 0 auto 15px; font-size: 1.5rem; color: #fff; }
+.action-card h6 { font-weight: 500; margin: 0; font-size: 14px; }
+
+.content-box { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.content-box-title { color: var(--primary-blue); font-size: 1.2rem; font-weight: 700; border-bottom: 2px solid var(--saffron); padding-bottom: 10px; margin-bottom: 20px; }
+
+/* =================================== */
+/* ACCESS GUIDE STYLES                 */
+/* =================================== */
+.access-guide-section .list-group-item {
+    background-color: transparent !important;
+    border-left: 3px solid #0d62a9; /* Adds a blue line on the left side */
+    margin-bottom: 15px;
+    padding-left: 1rem;
+    border-radius: 0;
+}
+
+.access-guide-section .list-group-item .fw-bold {
+    color: #0d62a9; /* Sets the color of the step title */
+    font-size: 1.1rem;
+}
+
+.access-guide-section ol.list-group-numbered {
+    counter-reset: my-custom-counter;
+}
+
+.access-guide-section ol.list-group-numbered li::before {
+    content: counter(my-custom-counter);
+    counter-increment: my-custom-counter;
+    font-weight: bold;
+    color: #fff;
+    background-color: #0d62a9; /* The blue background for the step number */
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* =================================== */
+/* IMAGE SLIDER STYLES                 */
+/* =================================== */
+.image-slider-container {
+    width: 100%;
+    max-width: 1200px;
+    height: 400px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-slider-container .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.image-slider-container .slide.active {
+    opacity: 1;
+}
+
+.image-slider-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* New: Make boxes fancy with hover effect */
+.fancy-box {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.fancy-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}

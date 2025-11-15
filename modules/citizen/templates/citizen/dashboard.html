@@ -1,0 +1,283 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Citizen Dashboard - LokSevaGram{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#" data-lang-key="citizen_portal">Citizen Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3" data-lang-key="welcome_citizen">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light" data-lang-key="logout">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <div class="sidebar">
+        <div class="list-group list-group-flush">
+            <a href="#dashboard" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                <i class="bi bi-house-door-fill me-2"></i><span data-lang-key="sidebar_dashboard">Dashboard</span>
+            </a>
+            <a href="#financial" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-cash-coin me-2"></i><span data-lang-key="sidebar_financial">Financial Services</span>
+            </a>
+            <a href="#grievances" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-exclamation-octagon-fill me-2"></i><span data-lang-key="sidebar_grievance">Grievance Redressal</span>
+            </a>
+            <a href="#schemes" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-award-fill me-2"></i><span data-lang-key="sidebar_schemes">Schemes & Subsidies</span>
+            </a>
+            <a href="#info" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-info-circle-fill me-2"></i><span data-lang-key="sidebar_info">Information Hub</span>
+            </a>
+            <a href="#requests" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-file-earmark-text-fill me-2"></i><span data-lang-key="sidebar_requests">Certificates & RTI</span>
+            </a>
+            <a href="#engagement" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                <i class="bi bi-people-fill me-2"></i><span data-lang-key="sidebar_engagement">Citizen Engagement</span>
+            </a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="dashboard">
+                <div class="row" id="summary-cards-container">
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="summary-card bg-card-blue">
+                            <h5>My Applications</h5>
+                            <div class="summary-number">{{ total_applications|default:0 }}</div>
+                            <i class="bi bi-file-earmark-check summary-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="summary-card bg-card-saffron">
+                            <h5>My Grievances</h5>
+                            <div class="summary-number">{{ total_grievances|default:0 }}</div>
+                            <i class="bi bi-megaphone summary-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="summary-card bg-card-green">
+                            <h5>Pending Taxes</h5>
+                            <div class="summary-number">₹{{ pending_tax_amount|default:0 }}</div>
+                            <i class="bi bi-cash-coin summary-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-box mt-4">
+                    <h3 class="content-box-title" data-lang-key="common_services">Common Services</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:lodge_grievance' %}" class="action-card">
+                                <div class="icon-circle bg-card-saffron"><i class="bi bi-megaphone-fill"></i></div>
+                                <h6 data-lang-key="action_lodge_grievance">Lodge Grievance</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:view_schemes' %}" class="action-card">
+                                <div class="icon-circle bg-card-green"><i class="bi bi-patch-check-fill"></i></div>
+                                <h6 data-lang-key="action_view_schemes">View Schemes</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:emergency_directory' %}" class="action-card">
+                                <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
+                                <h6 data-lang-key="action_emergency_dir">Emergency Directory</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:feedback_suggestions' %}" class="action-card">
+                                <div class="icon-circle bg-info text-dark"><i class="bi bi-lightbulb-fill"></i></div>
+                                <h6 data-lang-key="action_feedback">Feedback & Suggestions</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-box mt-4">
+                    <h3 class="content-box-title" data-lang-key="recent_activity">Recent Activity & Alerts</h3>
+                    <div id="quick-alerts">
+                        {% if recent_applications %}
+                            <h6>Recent Applications:</h6>
+                            <ul class="list-group">
+                                {% for application in recent_applications %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ application.scheme.name }}
+                                        <span class="badge bg-{{ application.status|yesno:'success,warning,danger' }} rounded-pill">{{ application.get_status_display }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div id="grievance-list">
+                        {% if recent_grievances %}
+                            <h6 class="mt-3">Recent Grievances:</h6>
+                            <ul class="list-group">
+                                {% for grievance in recent_grievances %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ grievance.title }}
+                                        <span class="badge bg-{{ grievance.status|yesno:'success,warning,danger' }} rounded-pill">{{ grievance.get_status_display }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="financial">
+                <div class="content-box">
+                    <h3 class="content-box-title" data-lang-key="sidebar_financial">Financial Services</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:pay_tax' %}" class="action-card">
+                                <div class="icon-circle bg-card-blue"><i class="bi bi-house-check-fill"></i></div>
+                                <h6 data-lang-key="action_pay_tax">Pay Property Tax</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-secondary"><i class="bi bi-droplet-fill"></i></div>
+                                <h6 data-lang-key="action_pay_water">Pay Water & Utility Bills</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:view_budget' %}" class="action-card">
+                                <div class="icon-circle bg-success"><i class="bi bi-pie-chart-fill"></i></div>
+                                <h6 data-lang-key="action_view_budget">View Panchayat Budget</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-info text-dark"><i class="bi bi-journal-check"></i></div>
+                                <h6 data-lang-key="action_audit_reports">Social Audit Reports</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="grievances">
+                <div class="content-box">
+                    <h3 class="content-box-title" data-lang-key="sidebar_grievance">Grievance Redressal</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:lodge_grievance' %}" class="action-card">
+                                <div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div>
+                                <h6 data-lang-key="action_lodge_new">Lodge New Complaint</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:my_grievances' %}" class="action-card">
+                                <div class="icon-circle bg-warning text-dark"><i class="bi bi-card-checklist"></i></div>
+                                <h6 data-lang-key="action_track_grievance">Track My Grievances</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="schemes">
+                <div class="content-box">
+                    <h3 class="content-box-title" data-lang-key="sidebar_schemes">Schemes & Subsidies</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:view_schemes' %}" class="action-card">
+                                <div class="icon-circle bg-card-green"><i class="bi bi-patch-check-fill"></i></div>
+                                <h6 data-lang-key="action_all_schemes">View All Schemes</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:my_applications' %}" class="action-card">
+                                <div class="icon-circle bg-primary"><i class="bi bi-person-check-fill"></i></div>
+                                <h6 data-lang-key="action_my_schemes">My Applied Schemes</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-info text-dark"><i class="bi bi-people-fill"></i></div>
+                                <h6 data-lang-key="action_beneficiary_list">Beneficiary Lists</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="info">
+                <div class="content-box">
+                    <h3 class="content-box-title" data-lang-key="sidebar_info">Information Hub</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-light text-dark border"><i class="bi bi-card-checklist"></i></div>
+                                <h6 data-lang-key="action_notices">Village Notices</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-secondary"><i class="bi bi-calendar-event-fill"></i></div>
+                                <h6 data-lang-key="action_meetings">Meeting Schedules</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-success"><i class="bi bi-cone-striped"></i></div>
+                                <h6 data-lang-key="action_asset_tracker">Asset & Project Tracker</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:emergency_directory' %}" class="action-card">
+                                <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
+                                <h6 data-lang-key="action_emergency_dir">Emergency Directory</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="requests">
+                <div class="content-box">
+                    <h3 class="content-box-title" data-lang-key="sidebar_requests">Certificates & RTI</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-primary"><i class="bi bi-file-earmark-text-fill"></i></div>
+                                <h6 data-lang-key="action_apply_cert">Apply Certificate</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-danger"><i class="bi bi-shield-lock-fill"></i></div>
+                                <h6 data-lang-key="action_submit_rti">Submit RTI Request</h6>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-success"><i class="bi bi-map-fill"></i></div>
+                                <h6 data-lang-key="action_link_land">Link Land Records</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-pane fade" id="engagement">
+                 <div class="content-box">
+                    <h3 class="content-box-title" data-lang-key="sidebar_engagement">Citizen Engagement</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                            <a href="{% url 'citizen:feedback_suggestions' %}" class="action-card">
+                                <div class="icon-circle bg-info text-dark"><i class="bi bi-lightbulb-fill"></i></div>
+                                <h6 data-lang-key="action_feedback">Feedback & Suggestions</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

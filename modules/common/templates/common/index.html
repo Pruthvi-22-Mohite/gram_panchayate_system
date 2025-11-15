@@ -1,0 +1,68 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}LokSevaGram - Gram Panchayat Digital Services{% endblock %}
+
+{% block body_class %} class="main-page"{% endblock %}
+
+{% block header_actions %}
+<a href="{% url 'common:login' %}" class="btn btn-primary btn-sm" data-lang-key="login_button">Login</a>
+{% endblock %}
+
+{% block content %}
+<br>
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white p-6 md:p-10 rounded-lg shadow-md fancy-box text-center">
+        <br>
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4" data-lang-key="welcome_main_title">Welcome to the LokSevaGram</h1>
+        <p class="text-lg md:text-xl text-gray-700 mb-6" data-lang-key="welcome_para_1">
+            LokSevaGram is a digital platform designed to empower our village community. We provide a single point of access for essential public services, community engagement, and transparent governance.
+        </p>
+        <p class="text-gray-500 text-sm md:text-base" data-lang-key="welcome_para_2">
+            Explore this website to find emergency contacts, submit feedback and suggestions, track the progress of local projects, and access important public records. Our goal is to make village administration more accessible and efficient for every resident.
+        </p>
+        <br>
+    </div>
+    <br>
+    
+    <main class="py-10 px-4 md:px-8">
+        <div class="image-slider-container fancy-box mb-4">
+            <div class="slide">
+                <img src="{% static 'images/20250207490355450.jpg' %}" alt="A group of people discussing community projects">
+            </div>
+            <div class="slide active">
+                <img src="{% static 'images/2024123093809381.jpeg' %}" alt="Digital services in a village setting">
+            </div>
+            <div class="slide">
+                <img src="{% static 'images/202502061433080426.jpeg' %}" alt="A person using a computer to access public records">
+            </div>
+        </div>
+
+        <br> 
+        <div class="bg-white p-6 md:p-10 rounded-lg shadow-md mt-8 fancy-box access-guide-section" data-lang-key="access_guide_section">
+            <br>
+            <h2 class="text-2xl font-bold mb-4 text-center" data-lang-key="access_guide_title">How to Access LokSevaGram</h2>
+            <p class="mb-4 text-center" data-lang-key="access_guide_intro">Follow these simple steps to log in and start using the services:</p>
+            
+            <ol class="list-group list-group-numbered w-100 access-guide-list" data-lang-key="access_guide_steps">
+                <li class="list-group-item d-flex flex-column align-items-center border-0" data-lang-key="access_guide_step1">
+                    <div class="fw-bold text-center" data-lang-key="access_guide_step1_title">Step 1: Go to the Login Page</div>
+                    <p class="mb-0 text-center" data-lang-key="access_guide_step1_desc">Click on the "Login" button at the top right corner of the home page or navigate directly to Login Page.</p>
+                </li>
+                <li class="list-group-item d-flex flex-column align-items-center border-0" data-lang-key="access_guide_step2">
+                    <div class="fw-bold text-center" data-lang-key="access_guide_step2_title">Step 2: Choose Your User Type</div>
+                    <p class="mb-0 text-center" data-lang-key="access_guide_step2_desc">Select whether you are logging in as an Admin, Clerk, or Citizen to access the appropriate services.</p>
+                </li>
+                <li class="list-group-item d-flex flex-column align-items-center border-0" data-lang-key="access_guide_step3">
+                    <div class="fw-bold text-center" data-lang-key="access_guide_step3_title">Step 3: Enter Your Credentials</div>
+                    <p class="mb-0 text-center" data-lang-key="access_guide_step3_desc">Enter your username and password to access your account. Citizens can register for a new account if needed.</p>
+                </li>
+                <li class="list-group-item d-flex flex-column align-items-center border-0" data-lang-key="access_guide_step4">
+                    <div class="fw-bold text-center" data-lang-key="access_guide_step4_title">Step 4: Access Your Dashboard</div>
+                    <p class="mb-0 text-center" data-lang-key="access_guide_step4_desc">Once logged in, you will be directed to your personalized dashboard where you can access all available services and information.</p>
+                </li>
+            </ol>
+        </div>
+    </main>
+</div>
+{% endblock %}
