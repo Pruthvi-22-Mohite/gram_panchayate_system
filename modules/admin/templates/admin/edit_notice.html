@@ -1,0 +1,50 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Edit Notice - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2><i class="bi bi-pencil"></i> Edit Notice</h2>
+    <div class="card mt-4">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Title *</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Notice Type *</label>
+                        {{ form.notice_type }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description *</label>
+                    {{ form.description }}
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Issued By *</label>
+                        {{ form.issued_by }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Date *</label>
+                        {{ form.date }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Attachment</label>
+                        {{ form.attachment }}
+                    </div>
+                </div>
+                <div class="form-check mb-3">
+                    {{ form.is_active }}
+                    <label class="form-check-label">Active</label>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Update Notice</button>
+                <a href="{% url 'admin_module:manage_notices' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

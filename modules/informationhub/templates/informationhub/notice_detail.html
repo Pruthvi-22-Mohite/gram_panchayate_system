@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ notice.title }} - Village Notice{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Notice Details Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-bell"></i> Notice Details
+                        </h4>
+                        <span class="badge {{ notice.get_badge_class }} fs-6">
+                            {{ notice.get_notice_type_display }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title mb-4">{{ notice.title }}</h3>
+                    
+                    <div class="notice-info mb-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <p class="mb-1"><strong><i class="fas fa-calendar"></i> Date Issued:</strong></p>
+                                <p class="text-muted">{{ notice.date|date:"F d, Y" }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <p class="mb-1"><strong><i class="fas fa-user"></i> Issued By:</strong></p>
+                                <p class="text-muted">{{ notice.issued_by }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="notice-description">
+                        <h5 class="mb-3">Description:</h5>
+                        <p class="text-justify" style="white-space: pre-line;">{{ notice.description }}</p>
+                    </div>
+                    
+                    {% if notice.attachment %}
+                    <div class="attachment-section mt-4 p-3 bg-light rounded">
+                        <h5 class="mb-3"><i class="fas fa-paperclip"></i> Attachment:</h5>
+                        <a href="{{ notice.attachment.url }}" class="btn btn-success" download>
+                            <i class="fas fa-download"></i> Download Attachment
+                        </a>
+                        <small class="text-muted d-block mt-2">
+                            Click to download the attached document
+                        </small>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'informationhub:notices_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Notices
+                        </a>
+                        <a href="{% url 'citizen:dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar with Related Notices -->
+        <div class="col-md-4">
+            {% if related_notices %}
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Related Notices</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for related in related_notices %}
+                    <a href="{% url 'informationhub:notice_detail' related.id %}" 
+                       class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ related.title|truncatewords:8 }}</h6>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar"></i> {{ related.date|date:"d M, Y" }}
+                                </small>
+                            </div>
+                            <span class="badge {{ related.get_badge_class }}">
+                                {{ related.get_notice_type_display }}
+                            </span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Quick Actions -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <a href="{% url 'informationhub:notices_list' %}" class="btn btn-outline-primary w-100 mb-2">
+                        <i class="fas fa-list"></i> All Notices
+                    </a>
+                    <a href="{% url 'informationhub:meetings_list' %}" class="btn btn-outline-success w-100 mb-2">
+                        <i class="fas fa-calendar-alt"></i> Meeting Schedules
+                    </a>
+                    <a href="{% url 'citizen:dashboard' %}" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.text-justify {
+    text-align: justify;
+}
+.card-header h4, .card-header h5 {
+    font-weight: 500;
+}
+.attachment-section {
+    border-left: 4px solid #28a745;
+}
+</style>
+{% endblock %}

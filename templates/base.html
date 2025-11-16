@@ -37,9 +37,9 @@
                     {% elif user.user_type == 'citizen' %}
                         <span class="navbar-text me-2">Citizen: {{ user.username }}</span>
                     {% endif %}
-                    <a href="{% url 'auth:logout' %}" class="btn btn-primary btn-sm">Logout</a>
+                    <a href="{% url 'common:logout' %}" class="btn btn-primary btn-sm">Logout</a>
                 {% else %}
-                    <a href="{% url 'auth:login' %}" class="btn btn-primary btn-sm">Login</a>
+                    <a href="{% url 'common:login' %}" class="btn btn-primary btn-sm">Login</a>
                 {% endif %}
             </div>
         </div>

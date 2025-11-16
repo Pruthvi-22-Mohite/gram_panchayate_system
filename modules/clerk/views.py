@@ -9,6 +9,8 @@ from modules.common.models import CustomUser
 from modules.common.decorators import clerk_required
 from .models import ClerkProfile, Scheme, SchemeApplication, Grievance, TaxRecord
 from .forms import ClerkLoginForm, SchemeForm, GrievanceResponseForm, TaxRecordForm
+from modules.informationhub.models import VillageNotice, MeetingSchedule
+from modules.informationhub.forms import VillageNoticeForm, MeetingScheduleForm
 
 
 def clerk_login(request):
@@ -77,7 +79,7 @@ def clerk_dashboard(request):
 def manage_schemes(request):
     """View to manage government schemes"""
     if request.method == 'POST':
-        form = SchemeForm(request.POST)
+        form = SchemeForm(request.POST, request.FILES)
         if form.is_valid():
             scheme = form.save(commit=False)
             scheme.created_by = request.user
@@ -94,6 +96,71 @@ def manage_schemes(request):
         'schemes': schemes
     }
     return render(request, 'clerk/manage_schemes.html', context)
+
+
+@clerk_required
+def edit_scheme(request, scheme_id):
+    """View to edit an existing scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id)
+    
+    # Check if the user is the creator or an admin
+    if request.user != scheme.created_by and request.user.user_type != 'admin':
+        messages.error(request, "You don't have permission to edit this scheme.")
+        return redirect('clerk:manage_schemes')
+    
+    if request.method == 'POST':
+        form = SchemeForm(request.POST, request.FILES, instance=scheme)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Scheme updated successfully!")
+            return redirect('clerk:manage_schemes')
+    else:
+        form = SchemeForm(instance=scheme)
+    
+    context = {
+        'form': form,
+        'scheme': scheme
+    }
+    return render(request, 'clerk/edit_scheme.html', context)
+
+
+@clerk_required
+def delete_scheme(request, scheme_id):
+    """View to delete a scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id)
+    
+    # Check if the user is the creator or an admin
+    if request.user != scheme.created_by and request.user.user_type != 'admin':
+        messages.error(request, "You don't have permission to delete this scheme.")
+        return redirect('clerk:manage_schemes')
+    
+    if request.method == 'POST':
+        scheme.delete()
+        messages.success(request, "Scheme deleted successfully!")
+        return redirect('clerk:manage_schemes')
+    
+    context = {
+        'scheme': scheme
+    }
+    return render(request, 'clerk/delete_scheme.html', context)
+
+
+@clerk_required
+def toggle_scheme_status(request, scheme_id):
+    """View to activate/deactivate a scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id)
+    
+    # Check if the user is the creator or an admin
+    if request.user != scheme.created_by and request.user.user_type != 'admin':
+        messages.error(request, "You don't have permission to modify this scheme.")
+        return redirect('clerk:manage_schemes')
+    
+    scheme.is_active = not scheme.is_active
+    scheme.save()
+    
+    status = "activated" if scheme.is_active else "deactivated"
+    messages.success(request, f"Scheme {status} successfully!")
+    return redirect('clerk:manage_schemes')
 
 
 @clerk_required
@@ -228,3 +295,121 @@ def reports(request):
         'tax_stats': tax_stats
     }
     return render(request, 'clerk/reports.html', context)
+
+
+# Information Hub Management Views
+
+@clerk_required
+def manage_notices(request):
+    """View to manage village notices"""
+    if request.method == 'POST':
+        form = VillageNoticeForm(request.POST, request.FILES)
+        if form.is_valid():
+            notice = form.save()
+            messages.success(request, "Notice created successfully!")
+            return redirect('clerk:manage_notices')
+    else:
+        form = VillageNoticeForm()
+    
+    notices = VillageNotice.objects.all().order_by('-date')
+    
+    context = {
+        'form': form,
+        'notices': notices
+    }
+    return render(request, 'clerk/manage_notices.html', context)
+
+
+@clerk_required
+def edit_notice(request, notice_id):
+    """View to edit an existing notice"""
+    notice = get_object_or_404(VillageNotice, id=notice_id)
+    
+    if request.method == 'POST':
+        form = VillageNoticeForm(request.POST, request.FILES, instance=notice)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Notice updated successfully!")
+            return redirect('clerk:manage_notices')
+    else:
+        form = VillageNoticeForm(instance=notice)
+    
+    context = {
+        'form': form,
+        'notice': notice
+    }
+    return render(request, 'clerk/edit_notice.html', context)
+
+
+@clerk_required
+def delete_notice(request, notice_id):
+    """View to delete a notice"""
+    notice = get_object_or_404(VillageNotice, id=notice_id)
+    
+    if request.method == 'POST':
+        notice.delete()
+        messages.success(request, "Notice deleted successfully!")
+        return redirect('clerk:manage_notices')
+    
+    context = {
+        'notice': notice
+    }
+    return render(request, 'clerk/delete_notice.html', context)
+
+
+@clerk_required
+def manage_meetings(request):
+    """View to manage meeting schedules"""
+    if request.method == 'POST':
+        form = MeetingScheduleForm(request.POST)
+        if form.is_valid():
+            meeting = form.save()
+            messages.success(request, "Meeting created successfully!")
+            return redirect('clerk:manage_meetings')
+    else:
+        form = MeetingScheduleForm()
+    
+    meetings = MeetingSchedule.objects.all().order_by('-meeting_date')
+    
+    context = {
+        'form': form,
+        'meetings': meetings
+    }
+    return render(request, 'clerk/manage_meetings.html', context)
+
+
+@clerk_required
+def edit_meeting(request, meeting_id):
+    """View to edit an existing meeting"""
+    meeting = get_object_or_404(MeetingSchedule, id=meeting_id)
+    
+    if request.method == 'POST':
+        form = MeetingScheduleForm(request.POST, instance=meeting)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Meeting updated successfully!")
+            return redirect('clerk:manage_meetings')
+    else:
+        form = MeetingScheduleForm(instance=meeting)
+    
+    context = {
+        'form': form,
+        'meeting': meeting
+    }
+    return render(request, 'clerk/edit_meeting.html', context)
+
+
+@clerk_required
+def delete_meeting(request, meeting_id):
+    """View to delete a meeting"""
+    meeting = get_object_or_404(MeetingSchedule, id=meeting_id)
+    
+    if request.method == 'POST':
+        meeting.delete()
+        messages.success(request, "Meeting deleted successfully!")
+        return redirect('clerk:manage_meetings')
+    
+    context = {
+        'meeting': meeting
+    }
+    return render(request, 'clerk/delete_meeting.html', context)
