@@ -93,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'gram_panchayate_system',
         'USER': 'root',
-        'PASSWORD': 'Pruthvi@22',  # Leave empty if no password, or add your password here
+        'PASSWORD': 'Vivek@M2007',  # Leave empty if no password, or add your password here
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
