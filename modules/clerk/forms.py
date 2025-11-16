@@ -29,7 +29,9 @@ class SchemeForm(forms.ModelForm):
     """
     class Meta:
         model = Scheme
-        fields = ['name', 'description', 'eligibility_criteria', 'required_documents', 'benefits', 'is_active']
+        fields = ['name', 'description', 'eligibility_criteria', 'required_documents', 
+                  'benefits', 'application_process', 'last_date', 'contact_person', 
+                  'downloadable_forms', 'is_active', 'scheme_image']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -55,8 +57,27 @@ class SchemeForm(forms.ModelForm):
                 'placeholder': 'Benefits provided by this scheme',
                 'rows': 3
             }),
+            'application_process': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Step-by-step application process',
+                'rows': 3
+            }),
+            'last_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'contact_person': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Name and contact details of the person to contact'
+            }),
+            'downloadable_forms': forms.FileInput(attrs={
+                'class': 'form-control'
+            }),
             'is_active': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
+            }),
+            'scheme_image': forms.FileInput(attrs={
+                'class': 'form-control'
             })
         }
 

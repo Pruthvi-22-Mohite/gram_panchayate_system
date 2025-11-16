@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Meeting Schedules - Gram Panchayat{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-calendar-alt"></i> Meeting Schedules</h2>
+                <a href="{% url 'citizen:dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="search" class="form-label">Search</label>
+                            <input type="text" class="form-control" id="search" name="search" 
+                                   value="{{ search_query }}" placeholder="Search meetings...">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="organizer" class="form-label">Organizer</label>
+                            <input type="text" class="form-control" id="organizer" name="organizer" 
+                                   value="{{ organizer }}" placeholder="Filter by organizer">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="date_from" class="form-label">From Date</label>
+                            <input type="date" class="form-control" id="date_from" name="date_from" 
+                                   value="{{ date_from }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="date_to" class="form-label">To Date</label>
+                            <input type="date" class="form-control" id="date_to" name="date_to" 
+                                   value="{{ date_to }}">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Upcoming Meetings -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-calendar-check"></i> Upcoming Meetings</h4>
+                </div>
+                <div class="card-body">
+                    {% if upcoming_meetings %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Meeting Title</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Location</th>
+                                    <th>Organized By</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for meeting in upcoming_meetings %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ meeting.meeting_title }}</strong>
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-calendar"></i> {{ meeting.meeting_date|date:"d M, Y" }}
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-clock"></i> {{ meeting.time|time:"h:i A" }}
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-map-marker-alt"></i> {{ meeting.location }}
+                                    </td>
+                                    <td>{{ meeting.organized_by }}</td>
+                                    <td>
+                                        <a href="{% url 'informationhub:meeting_detail' meeting.id %}" 
+                                           class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye"></i> Details
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle"></i> No upcoming meetings scheduled.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Past Meetings -->
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0"><i class="fas fa-history"></i> Past Meetings</h4>
+                </div>
+                <div class="card-body">
+                    {% if past_meetings %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Meeting Title</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Location</th>
+                                    <th>Organized By</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for meeting in past_meetings %}
+                                <tr class="text-muted">
+                                    <td>{{ meeting.meeting_title }}</td>
+                                    <td>
+                                        <i class="fas fa-calendar"></i> {{ meeting.meeting_date|date:"d M, Y" }}
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-clock"></i> {{ meeting.time|time:"h:i A" }}
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-map-marker-alt"></i> {{ meeting.location }}
+                                    </td>
+                                    <td>{{ meeting.organized_by }}</td>
+                                    <td>
+                                        <a href="{% url 'informationhub:meeting_detail' meeting.id %}" 
+                                           class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-eye"></i> Details
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle"></i> No past meetings found.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.table th {
+    font-weight: 600;
+}
+.card-header h4 {
+    font-weight: 500;
+}
+</style>
+{% endblock %}

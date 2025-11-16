@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
+# CSRF settings for development
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
+
 
 # Application definition
 
@@ -43,6 +46,8 @@ INSTALLED_APPS = [
     'modules.admin',
     'modules.clerk',
     'modules.citizen',
+    'modules.informationhub',
+    'modules.emergencydirectory',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +71,8 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'modules/clerk/templates'),
             os.path.join(BASE_DIR, 'modules/citizen/templates'),
             os.path.join(BASE_DIR, 'modules/common/templates'),
+            os.path.join(BASE_DIR, 'modules/informationhub/templates'),
+            os.path.join(BASE_DIR, 'modules/emergencydirectory/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -90,7 +97,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'gram_panchayate_system',
         'USER': 'root',
+<<<<<<< HEAD
         'PASSWORD': 'Sayali1106',  # Leave empty if no password, or add your password here
+=======
+        'PASSWORD': 'Sayali1106',  # Leave empty if no password, or add your password here
+>>>>>>> 1b3501b4981d7ff0c5f0e07a0b10b208f0063115
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
@@ -140,6 +151,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# Media files (User uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

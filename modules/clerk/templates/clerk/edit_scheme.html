@@ -1,0 +1,160 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Edit Scheme - Clerk Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Edit Scheme</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'clerk:dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="{% url 'clerk:manage_schemes' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-list-check me-2"></i>Manage Schemes
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="content-box">
+                <h3 class="content-box-title">Edit Scheme: {{ scheme.name }}</h3>
+                
+                <!-- Edit Scheme Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Edit Scheme Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.name.id_for_label }}" class="form-label">Scheme Name *</label>
+                                    {{ form.name }}
+                                    {% if form.name.errors %}
+                                        <div class="text-danger">{{ form.name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.is_active.id_for_label }}" class="form-label">Status</label>
+                                    <div class="form-check">
+                                        {{ form.is_active }}
+                                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                            Active
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.description.id_for_label }}" class="form-label">Description *</label>
+                                {{ form.description }}
+                                {% if form.description.errors %}
+                                    <div class="text-danger">{{ form.description.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.eligibility_criteria.id_for_label }}" class="form-label">Eligibility Criteria *</label>
+                                    {{ form.eligibility_criteria }}
+                                    {% if form.eligibility_criteria.errors %}
+                                        <div class="text-danger">{{ form.eligibility_criteria.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.required_documents.id_for_label }}" class="form-label">Required Documents *</label>
+                                    {{ form.required_documents }}
+                                    {% if form.required_documents.errors %}
+                                        <div class="text-danger">{{ form.required_documents.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.benefits.id_for_label }}" class="form-label">Benefits *</label>
+                                {{ form.benefits }}
+                                {% if form.benefits.errors %}
+                                    <div class="text-danger">{{ form.benefits.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.application_process.id_for_label }}" class="form-label">Application Process</label>
+                                {{ form.application_process }}
+                                {% if form.application_process.errors %}
+                                    <div class="text-danger">{{ form.application_process.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.last_date.id_for_label }}" class="form-label">Last Date</label>
+                                    {{ form.last_date }}
+                                    {% if form.last_date.errors %}
+                                        <div class="text-danger">{{ form.last_date.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.contact_person.id_for_label }}" class="form-label">Contact Person</label>
+                                    {{ form.contact_person }}
+                                    {% if form.contact_person.errors %}
+                                        <div class="text-danger">{{ form.contact_person.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.downloadable_forms.id_for_label }}" class="form-label">Downloadable Forms</label>
+                                    {{ form.downloadable_forms }}
+                                    {% if form.downloadable_forms.errors %}
+                                        <div class="text-danger">{{ form.downloadable_forms.errors }}</div>
+                                    {% endif %}
+                                    {% if scheme.downloadable_forms %}
+                                        <div class="mt-2">
+                                            <small class="text-muted">Current file: <a href="{{ scheme.downloadable_forms.url }}" target="_blank">{{ scheme.downloadable_forms.name }}</a></small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.scheme_image.id_for_label }}" class="form-label">Scheme Image/Banner</label>
+                                    {{ form.scheme_image }}
+                                    {% if form.scheme_image.errors %}
+                                        <div class="text-danger">{{ form.scheme_image.errors }}</div>
+                                    {% endif %}
+                                    {% if scheme.scheme_image %}
+                                        <div class="mt-2">
+                                            <small class="text-muted">Current image:</small>
+                                            <br>
+                                            <img src="{{ scheme.scheme_image.url }}" alt="Scheme Image" class="img-thumbnail mt-1" style="max-height: 100px;">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Update Scheme</button>
+                            <a href="{% url 'clerk:manage_schemes' %}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

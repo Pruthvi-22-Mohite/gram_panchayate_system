@@ -1,0 +1,57 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Delete Scheme - Clerk Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Delete Scheme</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'clerk:dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="{% url 'clerk:manage_schemes' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-list-check me-2"></i>Manage Schemes
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="content-box">
+                <h3 class="content-box-title">Delete Scheme: {{ scheme.name }}</h3>
+                
+                <!-- Delete Confirmation -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Confirm Deletion</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead">Are you sure you want to delete the scheme "<strong>{{ scheme.name }}</strong>"?</p>
+                        <p>This action cannot be undone. All data related to this scheme will be permanently removed.</p>
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Yes, Delete Scheme</button>
+                            <a href="{% url 'clerk:manage_schemes' %}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

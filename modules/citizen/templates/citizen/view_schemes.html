@@ -1,0 +1,103 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Government Schemes - Citizen Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Government Schemes</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'citizen:dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="{% url 'citizen:view_schemes' %}" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-award-fill me-2"></i>View All Schemes
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-check-fill me-2"></i>My Applied Schemes
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-people-fill me-2"></i>Beneficiary Lists
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="content-box">
+                <h3 class="content-box-title">Government Schemes & Subsidies</h3>
+                
+                <!-- Search and Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <form method="get">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="search" placeholder="Search schemes..." value="{{ search_query }}">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select">
+                            <option selected>All Categories</option>
+                            <option>Employment</option>
+                            <option>Housing</option>
+                            <option>Health</option>
+                            <option>Education</option>
+                            <option>Finance</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Schemes List -->
+                {% if schemes %}
+                    <div class="row">
+                        {% for scheme in schemes %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                {% if scheme.scheme_image %}
+                                    <img src="{{ scheme.scheme_image.url }}" class="card-img-top" alt="{{ scheme.name }}" style="height: 150px; object-fit: cover;">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ scheme.name }}</h5>
+                                    <p class="card-text">{{ scheme.description|truncatewords:20 }}</p>
+                                    <ul class="list-unstyled">
+                                        {% if scheme.benefits %}
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>{{ scheme.benefits|truncatewords:10 }}</li>
+                                        {% endif %}
+                                        {% if scheme.last_date %}
+                                            <li><i class="bi bi-calendar-event me-2"></i>Last Date: {{ scheme.last_date|date:"d M Y" }}</li>
+                                        {% endif %}
+                                    </ul>
+                                    <a href="{% url 'citizen:scheme_detail' scheme.id %}" class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <h5>No schemes found</h5>
+                        <p>There are currently no active government schemes available. Please check back later.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -177,7 +177,7 @@ class GrievanceForm(forms.ModelForm):
     """
     class Meta:
         model = Grievance
-        fields = ['title', 'description', 'category', 'priority']
+        fields = ['title', 'description', 'category', 'priority', 'photo']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -194,6 +194,10 @@ class GrievanceForm(forms.ModelForm):
             }),
             'priority': forms.Select(attrs={
                 'class': 'form-control'
+            }),
+            'photo': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
             })
         }
 
