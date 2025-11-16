@@ -25,10 +25,15 @@ class Scheme(models.Model):
     eligibility_criteria = models.TextField()
     required_documents = models.TextField()
     benefits = models.TextField()
+    application_process = models.TextField(blank=True)
+    last_date = models.DateField(null=True, blank=True)
+    contact_person = models.CharField(max_length=100, blank=True)
+    downloadable_forms = models.FileField(upload_to='scheme_forms/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    scheme_image = models.ImageField(upload_to='scheme_images/', null=True, blank=True)
     
     def __str__(self):
         return self.name

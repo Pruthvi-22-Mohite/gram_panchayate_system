@@ -77,7 +77,7 @@ def clerk_dashboard(request):
 def manage_schemes(request):
     """View to manage government schemes"""
     if request.method == 'POST':
-        form = SchemeForm(request.POST)
+        form = SchemeForm(request.POST, request.FILES)
         if form.is_valid():
             scheme = form.save(commit=False)
             scheme.created_by = request.user
@@ -94,6 +94,71 @@ def manage_schemes(request):
         'schemes': schemes
     }
     return render(request, 'clerk/manage_schemes.html', context)
+
+
+@clerk_required
+def edit_scheme(request, scheme_id):
+    """View to edit an existing scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id)
+    
+    # Check if the user is the creator or an admin
+    if request.user != scheme.created_by and request.user.user_type != 'admin':
+        messages.error(request, "You don't have permission to edit this scheme.")
+        return redirect('clerk:manage_schemes')
+    
+    if request.method == 'POST':
+        form = SchemeForm(request.POST, request.FILES, instance=scheme)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Scheme updated successfully!")
+            return redirect('clerk:manage_schemes')
+    else:
+        form = SchemeForm(instance=scheme)
+    
+    context = {
+        'form': form,
+        'scheme': scheme
+    }
+    return render(request, 'clerk/edit_scheme.html', context)
+
+
+@clerk_required
+def delete_scheme(request, scheme_id):
+    """View to delete a scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id)
+    
+    # Check if the user is the creator or an admin
+    if request.user != scheme.created_by and request.user.user_type != 'admin':
+        messages.error(request, "You don't have permission to delete this scheme.")
+        return redirect('clerk:manage_schemes')
+    
+    if request.method == 'POST':
+        scheme.delete()
+        messages.success(request, "Scheme deleted successfully!")
+        return redirect('clerk:manage_schemes')
+    
+    context = {
+        'scheme': scheme
+    }
+    return render(request, 'clerk/delete_scheme.html', context)
+
+
+@clerk_required
+def toggle_scheme_status(request, scheme_id):
+    """View to activate/deactivate a scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id)
+    
+    # Check if the user is the creator or an admin
+    if request.user != scheme.created_by and request.user.user_type != 'admin':
+        messages.error(request, "You don't have permission to modify this scheme.")
+        return redirect('clerk:manage_schemes')
+    
+    scheme.is_active = not scheme.is_active
+    scheme.save()
+    
+    status = "activated" if scheme.is_active else "deactivated"
+    messages.success(request, f"Scheme {status} successfully!")
+    return redirect('clerk:manage_schemes')
 
 
 @clerk_required

@@ -113,6 +113,17 @@ def view_schemes(request):
 
 
 @citizen_required
+def scheme_detail(request, scheme_id):
+    """View details of a specific scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id, is_active=True)
+    
+    context = {
+        'scheme': scheme
+    }
+    return render(request, 'citizen/scheme_detail.html', context)
+
+
+@citizen_required
 def apply_scheme(request, scheme_id):
     """Apply for a government scheme"""
     scheme = get_object_or_404(Scheme, id=scheme_id, is_active=True)

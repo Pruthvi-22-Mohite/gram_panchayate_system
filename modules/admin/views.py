@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -10,7 +10,8 @@ from modules.common.models import CustomUser
 from modules.common.decorators import admin_required
 from .models import AdminProfile, SystemSettings, AuditLog
 from .forms import AdminLoginForm, SystemSettingsForm, ClerkCreationForm
-from modules.clerk.models import ClerkProfile, Grievance
+from modules.clerk.models import ClerkProfile, Grievance, Scheme
+from modules.clerk.forms import SchemeForm
 from modules.citizen.models import CitizenProfile
 
 
@@ -247,3 +248,76 @@ def manage_grievances(request):
         'status_filter': status_filter
     }
     return render(request, 'admin/manage_grievances.html', context)
+
+
+@admin_required
+def manage_schemes(request):
+    """View to manage all government schemes"""
+    if request.method == 'POST':
+        form = SchemeForm(request.POST, request.FILES)
+        if form.is_valid():
+            scheme = form.save(commit=False)
+            scheme.created_by = request.user
+            scheme.save()
+            messages.success(request, "Scheme created successfully!")
+            return redirect('admin_module:manage_schemes')
+    else:
+        form = SchemeForm()
+    
+    schemes = Scheme.objects.all().order_by('-created_at')
+    
+    context = {
+        'schemes': schemes,
+        'form': form
+    }
+    return render(request, 'admin/manage_schemes.html', context)
+
+
+@admin_required
+def edit_scheme(request, scheme_id):
+    """View to edit an existing scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id)
+    
+    if request.method == 'POST':
+        form = SchemeForm(request.POST, request.FILES, instance=scheme)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Scheme updated successfully!")
+            return redirect('admin_module:manage_schemes')
+    else:
+        form = SchemeForm(instance=scheme)
+    
+    context = {
+        'form': form,
+        'scheme': scheme
+    }
+    return render(request, 'admin/edit_scheme.html', context)
+
+
+@admin_required
+def delete_scheme(request, scheme_id):
+    """View to delete a scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id)
+    
+    if request.method == 'POST':
+        scheme.delete()
+        messages.success(request, "Scheme deleted successfully!")
+        return redirect('admin_module:manage_schemes')
+    
+    context = {
+        'scheme': scheme
+    }
+    return render(request, 'admin/delete_scheme.html', context)
+
+
+@admin_required
+def toggle_scheme_status(request, scheme_id):
+    """View to activate/deactivate a scheme"""
+    scheme = get_object_or_404(Scheme, id=scheme_id)
+    
+    scheme.is_active = not scheme.is_active
+    scheme.save()
+    
+    status = "activated" if scheme.is_active else "deactivated"
+    messages.success(request, f"Scheme {status} successfully!")
+    return redirect('admin_module:manage_schemes')
