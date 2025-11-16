@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Citizen Dashboard - Gram Panchayat Portal{% endblock %}
+{% block title %}Citizen Dashboard - Gram Panchayat Portal v2{% endblock %}
 
 {% block content %}
+<!-- UPDATED VERSION 2024 -->
 <nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Citizen Portal</a>
+        <a class="navbar-brand" href="#">Citizen Portal [UPDATED]</a>
         <div class="ms-auto">
+            <a href="/citizen/certificates/apply/" class="btn btn-sm btn-success me-2">Apply Certificate</a>
+            <a href="/citizen/rti/submit/" class="btn btn-sm btn-warning me-2">Submit RTI</a>
+            <a href="/citizen/land-records/link/" class="btn btn-sm btn-info me-2">Link Land</a>
             <span class="navbar-text me-3">Welcome, Citizen!</span>
             <a href="{% url 'auth:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
         </div>
@@ -170,9 +174,9 @@
                 <div class="content-box">
                     <h3 class="content-box-title">Certificates & RTI</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-primary"><i class="bi bi-file-earmark-text-fill"></i></div><h6>Apply Certificate</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-shield-lock-fill"></i></div><h6>Submit RTI Request</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-map-fill"></i></div><h6>Link Land Records</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="/citizen/certificates/apply/" class="action-card"><div class="icon-circle bg-primary"><i class="bi bi-file-earmark-text-fill"></i></div><h6>Apply Certificate</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="/citizen/rti/submit/" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-shield-lock-fill"></i></div><h6>Submit RTI Request</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="/citizen/land-records/link/" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-map-fill"></i></div><h6>Link Land Records</h6></a></div>
                     </div>
                 </div>
             </div>

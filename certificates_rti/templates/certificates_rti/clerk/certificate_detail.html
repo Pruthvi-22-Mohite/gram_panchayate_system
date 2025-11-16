@@ -1,0 +1,134 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Certificate Details - Clerk Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'clerk:dashboard' %}">Clerk Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4><i class="bi bi-file-earmark-text"></i> Certificate Application #{{ application.id }}</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Applicant Information</h5>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="30%">Full Name</th>
+                            <td>{{ application.full_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Father's Name</th>
+                            <td>{{ application.father_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Mother's Name</th>
+                            <td>{{ application.mother_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Certificate Type</th>
+                            <td>{{ application.get_certificate_type_display }}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ application.address }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td>{{ application.phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Aadhar Number</th>
+                            <td>{{ application.aadhar }}</td>
+                        </tr>
+                        <tr>
+                            <th>Reason</th>
+                            <td>{{ application.reason }}</td>
+                        </tr>
+                        <tr>
+                            <th>Applied On</th>
+                            <td>{{ application.created_at|date:"M d, Y h:i A" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                {% if application.status == 'submitted' %}
+                                    <span class="badge bg-info">Submitted</span>
+                                {% elif application.status == 'under_review' %}
+                                    <span class="badge bg-warning">Under Review</span>
+                                {% elif application.status == 'approved' %}
+                                    <span class="badge bg-success">Approved</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h5 class="mt-4">Supporting Documents</h5>
+                    {% if documents %}
+                        <ul class="list-group">
+                            {% for doc in documents %}
+                            <li class="list-group-item">
+                                <a href="{{ doc.document.url }}" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf"></i> Document {{ forloop.counter }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No documents uploaded</p>
+                    {% endif %}
+
+                    <div class="mt-4">
+                        <a href="/clerk/certificates/" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h5>Update Status</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary w-100">Update Status</button>
+                    </form>
+                </div>
+            </div>
+
+            {% if application.status == 'approved' and not application.approved_certificate %}
+            <div class="card mt-3">
+                <div class="card-header bg-success text-white">
+                    <h5>Upload Certificate</h5>
+                </div>
+                <div class="card-body">
+                    <a href="/clerk/certificates/{{ application.id }}/upload/" class="btn btn-success w-100">
+                        <i class="bi bi-upload"></i> Upload Certificate PDF
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

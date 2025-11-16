@@ -1,0 +1,17 @@
+﻿{% extends 'common/base.html' %}
+{% block title %}RTI Details{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header"><h4>RTI Request Details</h4></div>
+        <div class="card-body">
+            <p><strong>Subject:</strong> {{ rti.subject }}</p>
+            <p><strong>Description:</strong> {{ rti.description }}</p>
+            <p><strong>Status:</strong> <span class="badge bg-info">{{ rti.get_status_display }}</span></p>
+            <p><strong>Category:</strong> {{ rti.get_category_display }}</p>
+            {% if rti.remarks %}<p><strong>Remarks:</strong> {{ rti.remarks }}</p>{% endif %}
+            <a href="{% url 'certificates_rti:citizen_rti_list' %}" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

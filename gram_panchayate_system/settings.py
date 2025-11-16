@@ -43,6 +43,10 @@ INSTALLED_APPS = [
     'modules.admin',
     'modules.clerk',
     'modules.citizen',
+    'modules.informationhub',
+    'modules.emergencydirectory',
+    # Certificates and RTI module
+    'certificates_rti',
 ]
 
 MIDDLEWARE = [

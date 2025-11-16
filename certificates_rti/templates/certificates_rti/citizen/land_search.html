@@ -1,0 +1,31 @@
+﻿{% extends 'common/base.html' %}
+{% block title %}Search Land Records{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Search Land Records</h2>
+    <div class="card">
+        <div class="card-body">
+            <form method="get">
+                <div class="input-group mb-3">
+                    <input type="text" name="search_query" class="form-control" placeholder="Search by Survey, Gat, or Property ID" value="{{ query }}">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+            {% if results %}
+            <table class="table">
+                <thead><tr><th>Property ID</th><th>Survey</th><th>Gat</th><th>Area</th><th>Location</th><th>Action</th></tr></thead>
+                <tbody>
+                {% for land in results %}
+                <tr>
+                    <td>{{ land.property_id }}</td><td>{{ land.survey_number }}</td><td>{{ land.gat_number }}</td>
+                    <td>{{ land.area }} acres</td><td>{{ land.location }}</td>
+                    <td><a href="{% url 'certificates_rti:citizen_land_link_request_id' land.property_id %}" class="btn btn-sm btn-success">Link</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

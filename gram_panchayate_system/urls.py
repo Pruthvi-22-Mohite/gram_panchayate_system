@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('django-admin/', admin.site.urls),
     path('', include('modules.urls')),
+    path('', include('certificates_rti.urls')),
 ]
 
 # Serve static and media files during development

@@ -1,0 +1,146 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Certificate Details - Gram Panchayat{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="bi bi-file-earmark-text"></i> Certificate Application Details</h4>
+                    {% if application.status == 'approved' %}
+                        <span class="badge bg-success">Approved</span>
+                    {% elif application.status == 'rejected' %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% elif application.status == 'under_review' %}
+                        <span class="badge bg-info">Under Review</span>
+                    {% else %}
+                        <span class="badge bg-warning">Submitted</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Application ID:</strong> #{{ application.id }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Applied Date:</strong> {{ application.created_at|date:"d M Y, h:i A" }}
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h5 class="mb-3">Application Information</h5>
+                    
+                    <div class="row mb-2">
+                        <div class="col-md-4"><strong>Certificate Type:</strong></div>
+                        <div class="col-md-8">{{ application.get_certificate_type_display }}</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><strong>Full Name:</strong></div>
+                        <div class="col-md-8">{{ application.full_name }}</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><strong>Father's Name:</strong></div>
+                        <div class="col-md-8">{{ application.father_name }}</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><strong>Mother's Name:</strong></div>
+                        <div class="col-md-8">{{ application.mother_name }}</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><strong>Address:</strong></div>
+                        <div class="col-md-8">{{ application.address }}</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><strong>Phone:</strong></div>
+                        <div class="col-md-8">{{ application.phone }}</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><strong>Aadhar Number:</strong></div>
+                        <div class="col-md-8">{{ application.aadhar }}</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4"><strong>Reason:</strong></div>
+                        <div class="col-md-8">{{ application.reason }}</div>
+                    </div>
+
+                    {% if application.remarks %}
+                    <hr>
+                    <div class="alert alert-info">
+                        <strong><i class="bi bi-chat-left-text"></i> Remarks:</strong><br>
+                        {{ application.remarks }}
+                    </div>
+                    {% endif %}
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'certificates_rti:citizen_certificate_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                        {% if application.status == 'approved' %}
+                        <a href="{% url 'certificates_rti:citizen_certificate_download' application.pk %}" class="btn btn-success">
+                            <i class="bi bi-download"></i> Download Certificate
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="bi bi-paperclip"></i> Uploaded Documents</h5>
+                </div>
+                <div class="card-body">
+                    {% if documents %}
+                        <ul class="list-group">
+                            {% for doc in documents %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Document {{ forloop.counter }}
+                                <a href="{{ doc.document.url }}" class="btn btn-sm btn-primary" target="_blank">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No documents uploaded</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-clock-history"></i> Timeline</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <strong>Submitted</strong><br>
+                            <small>{{ application.created_at|date:"d M Y, h:i A" }}</small>
+                        </div>
+                        {% if application.status != 'submitted' %}
+                        <div class="timeline-item mt-2">
+                            <strong>{{ application.get_status_display }}</strong><br>
+                            <small>{{ application.updated_at|date:"d M Y, h:i A" }}</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
