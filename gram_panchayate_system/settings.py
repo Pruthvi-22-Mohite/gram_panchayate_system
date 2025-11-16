@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'modules.admin',
     'modules.clerk',
     'modules.citizen',
+    'modules.informationhub',
+    'modules.emergencydirectory',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +71,8 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'modules/clerk/templates'),
             os.path.join(BASE_DIR, 'modules/citizen/templates'),
             os.path.join(BASE_DIR, 'modules/common/templates'),
+            os.path.join(BASE_DIR, 'modules/informationhub/templates'),
+            os.path.join(BASE_DIR, 'modules/emergencydirectory/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -93,7 +97,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'gram_panchayate_system',
         'USER': 'root',
-        'PASSWORD': 'Vivek@M2007',  # Leave empty if no password, or add your password here
+        'PASSWORD': 'Kashmira@2726',  # Leave empty if no password, or add your password here
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {

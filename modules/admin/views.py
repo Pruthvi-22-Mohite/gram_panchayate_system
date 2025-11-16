@@ -13,6 +13,8 @@ from .forms import AdminLoginForm, SystemSettingsForm, ClerkCreationForm
 from modules.clerk.models import ClerkProfile, Grievance, Scheme
 from modules.clerk.forms import SchemeForm
 from modules.citizen.models import CitizenProfile
+from modules.informationhub.models import VillageNotice, MeetingSchedule
+from modules.informationhub.forms import VillageNoticeForm, MeetingScheduleForm
 
 
 def admin_login(request):
@@ -321,3 +323,121 @@ def toggle_scheme_status(request, scheme_id):
     status = "activated" if scheme.is_active else "deactivated"
     messages.success(request, f"Scheme {status} successfully!")
     return redirect('admin_module:manage_schemes')
+
+
+# Information Hub Management Views
+
+@admin_required
+def manage_notices(request):
+    """View to manage village notices"""
+    if request.method == 'POST':
+        form = VillageNoticeForm(request.POST, request.FILES)
+        if form.is_valid():
+            notice = form.save()
+            messages.success(request, "Notice created successfully!")
+            return redirect('admin_module:manage_notices')
+    else:
+        form = VillageNoticeForm()
+    
+    notices = VillageNotice.objects.all().order_by('-date')
+    
+    context = {
+        'form': form,
+        'notices': notices
+    }
+    return render(request, 'admin/manage_notices.html', context)
+
+
+@admin_required
+def edit_notice(request, notice_id):
+    """View to edit an existing notice"""
+    notice = get_object_or_404(VillageNotice, id=notice_id)
+    
+    if request.method == 'POST':
+        form = VillageNoticeForm(request.POST, request.FILES, instance=notice)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Notice updated successfully!")
+            return redirect('admin_module:manage_notices')
+    else:
+        form = VillageNoticeForm(instance=notice)
+    
+    context = {
+        'form': form,
+        'notice': notice
+    }
+    return render(request, 'admin/edit_notice.html', context)
+
+
+@admin_required
+def delete_notice(request, notice_id):
+    """View to delete a notice"""
+    notice = get_object_or_404(VillageNotice, id=notice_id)
+    
+    if request.method == 'POST':
+        notice.delete()
+        messages.success(request, "Notice deleted successfully!")
+        return redirect('admin_module:manage_notices')
+    
+    context = {
+        'notice': notice
+    }
+    return render(request, 'admin/delete_notice.html', context)
+
+
+@admin_required
+def manage_meetings(request):
+    """View to manage meeting schedules"""
+    if request.method == 'POST':
+        form = MeetingScheduleForm(request.POST)
+        if form.is_valid():
+            meeting = form.save()
+            messages.success(request, "Meeting created successfully!")
+            return redirect('admin_module:manage_meetings')
+    else:
+        form = MeetingScheduleForm()
+    
+    meetings = MeetingSchedule.objects.all().order_by('-meeting_date')
+    
+    context = {
+        'form': form,
+        'meetings': meetings
+    }
+    return render(request, 'admin/manage_meetings.html', context)
+
+
+@admin_required
+def edit_meeting(request, meeting_id):
+    """View to edit an existing meeting"""
+    meeting = get_object_or_404(MeetingSchedule, id=meeting_id)
+    
+    if request.method == 'POST':
+        form = MeetingScheduleForm(request.POST, instance=meeting)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Meeting updated successfully!")
+            return redirect('admin_module:manage_meetings')
+    else:
+        form = MeetingScheduleForm(instance=meeting)
+    
+    context = {
+        'form': form,
+        'meeting': meeting
+    }
+    return render(request, 'admin/edit_meeting.html', context)
+
+
+@admin_required
+def delete_meeting(request, meeting_id):
+    """View to delete a meeting"""
+    meeting = get_object_or_404(MeetingSchedule, id=meeting_id)
+    
+    if request.method == 'POST':
+        meeting.delete()
+        messages.success(request, "Meeting deleted successfully!")
+        return redirect('admin_module:manage_meetings')
+    
+    context = {
+        'meeting': meeting
+    }
+    return render(request, 'admin/delete_meeting.html', context)

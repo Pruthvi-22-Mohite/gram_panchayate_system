@@ -3,11 +3,14 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.utils import timezone
 
 from modules.common.models import CustomUser
 from modules.common.decorators import citizen_required
 from modules.clerk.models import Scheme, SchemeApplication, Grievance, TaxRecord
-from .models import CitizenProfile, CitizenDocument, FeedbackSuggestion, EmergencyContact, BudgetItem
+from modules.informationhub.models import VillageNotice, MeetingSchedule
+from modules.emergencydirectory.models import EmergencyContact
+from .models import CitizenProfile, CitizenDocument, FeedbackSuggestion, EmergencyContact as CitizenEmergencyContact, BudgetItem
 from .forms import CitizenLoginForm, CitizenRegistrationForm, SchemeApplicationForm, GrievanceForm, FeedbackForm, DocumentUploadForm
 
 
@@ -81,13 +84,37 @@ def citizen_dashboard(request):
         status='pending'
     )
     
+    # Information Hub data
+    today = timezone.now().date()
+    
+    # Get latest 5 notices
+    latest_notices = VillageNotice.objects.filter(
+        is_active=True
+    ).order_by('-date')[:5]
+    
+    # Get next 3 upcoming meetings
+    upcoming_meetings = MeetingSchedule.objects.filter(
+        meeting_date__gte=today,
+        is_cancelled=False
+    ).order_by('meeting_date', 'time')[:3]
+    
+    # Get top 4 emergency contacts
+    emergency_contacts = EmergencyContact.objects.filter(
+        is_active=True
+    ).order_by('-available_24x7', 'contact_type')[:4]
+    
     context = {
         'recent_applications': recent_applications,
         'recent_grievances': recent_grievances,
         'pending_taxes': pending_taxes,
         'total_applications': recent_applications.count(),
         'total_grievances': recent_grievances.count(),
-        'pending_tax_amount': sum(tax.amount for tax in pending_taxes)
+        'pending_tax_amount': sum(tax.amount for tax in pending_taxes),
+        # Information Hub
+        'latest_notices': latest_notices,
+        'upcoming_meetings': upcoming_meetings,
+        # Emergency Directory
+        'emergency_contacts': emergency_contacts,
     }
     return render(request, 'citizen/dashboard.html', context)
 

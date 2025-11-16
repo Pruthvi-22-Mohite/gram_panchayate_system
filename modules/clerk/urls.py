@@ -17,4 +17,11 @@ urlpatterns = [
     path('grievances/<int:grievance_id>/respond/', views.respond_grievance, name='respond_grievance'),
     path('taxes/', views.manage_taxes, name='manage_taxes'),
     path('reports/', views.reports, name='reports'),
+    # Information Hub URLs
+    path('notices/', views.manage_notices, name='manage_notices'),
+    path('notices/<int:notice_id>/edit/', views.edit_notice, name='edit_notice'),
+    path('notices/<int:notice_id>/delete/', views.delete_notice, name='delete_notice'),
+    path('meetings/', views.manage_meetings, name='manage_meetings'),
+    path('meetings/<int:meeting_id>/edit/', views.edit_meeting, name='edit_meeting'),
+    path('meetings/<int:meeting_id>/delete/', views.delete_meeting, name='delete_meeting'),
 ]

@@ -84,7 +84,7 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-6 mb-4">
-                            <a href="{% url 'citizen:emergency_directory' %}" class="action-card">
+                            <a href="{% url 'emergencydirectory:emergency_list' %}" class="action-card">
                                 <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
                                 <h6 data-lang-key="action_emergency_dir">Emergency Directory</h6>
                             </a>
@@ -126,6 +126,79 @@
                         {% endif %}
                     </div>
                 </div>
+                
+                <!-- Village Notices Widget -->
+                <div class="content-box mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="content-box-title mb-0"><i class="bi bi-bell-fill"></i> Latest Village Notices</h3>
+                        <a href="{% url 'informationhub:notices_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                    {% if latest_notices %}
+                        <div class="row">
+                            {% for notice in latest_notices %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-start border-4 border-{{ notice.get_badge_class|slice:'3:' }} h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="card-title mb-0">{{ notice.title|truncatewords:8 }}</h6>
+                                            <span class="badge {{ notice.get_badge_class }}">{{ notice.get_notice_type_display }}</span>
+                                        </div>
+                                        <p class="card-text text-muted small">{{ notice.description|truncatewords:15 }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted"><i class="bi bi-calendar"></i> {{ notice.date|date:"M d, Y" }}</small>
+                                            <a href="{% url 'informationhub:notice_detail' notice.id %}" class="btn btn-sm btn-outline-secondary">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">No notices available at the moment.</div>
+                    {% endif %}
+                </div>
+                
+                <!-- Upcoming Meetings Widget -->
+                <div class="content-box mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="content-box-title mb-0"><i class="bi bi-calendar-event-fill"></i> Upcoming Meetings</h3>
+                        <a href="{% url 'informationhub:meetings_list' %}" class="btn btn-sm btn-outline-success">View All</a>
+                    </div>
+                    {% if upcoming_meetings %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Meeting</th>
+                                        <th>Date & Time</th>
+                                        <th>Location</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for meeting in upcoming_meetings %}
+                                    <tr>
+                                        <td><strong>{{ meeting.meeting_title|truncatewords:6 }}</strong></td>
+                                        <td>
+                                            <small class="d-block"><i class="bi bi-calendar"></i> {{ meeting.meeting_date|date:"M d, Y" }}</small>
+                                            <small class="text-muted"><i class="bi bi-clock"></i> {{ meeting.time|time:"h:i A" }}</small>
+                                        </td>
+                                        <td><small>{{ meeting.location|truncatewords:4 }}</small></td>
+                                        <td>
+                                            <a href="{% url 'informationhub:meeting_detail' meeting.id %}" class="btn btn-sm btn-primary">Details</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">No upcoming meetings scheduled.</div>
+                    {% endif %}
+                </div>
+                
+                <!-- Emergency Directory Widget -->
+                {% include 'emergencydirectory/dashboard_widget.html' %}
             </div>
 
             <div class="tab-pane fade" id="financial">
@@ -211,27 +284,27 @@
                     <h3 class="content-box-title" data-lang-key="sidebar_info">Information Hub</h3>
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-6 mb-4">
-                            <a href="#" class="action-card">
-                                <div class="icon-circle bg-light text-dark border"><i class="bi bi-card-checklist"></i></div>
+                            <a href="{% url 'informationhub:notices_list' %}" class="action-card">
+                                <div class="icon-circle bg-primary"><i class="bi bi-bell-fill"></i></div>
                                 <h6 data-lang-key="action_notices">Village Notices</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-6 mb-4">
-                            <a href="#" class="action-card">
-                                <div class="icon-circle bg-secondary"><i class="bi bi-calendar-event-fill"></i></div>
+                            <a href="{% url 'informationhub:meetings_list' %}" class="action-card">
+                                <div class="icon-circle bg-success"><i class="bi bi-calendar-event-fill"></i></div>
                                 <h6 data-lang-key="action_meetings">Meeting Schedules</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-6 mb-4">
-                            <a href="#" class="action-card">
-                                <div class="icon-circle bg-success"><i class="bi bi-cone-striped"></i></div>
-                                <h6 data-lang-key="action_asset_tracker">Asset & Project Tracker</h6>
+                            <a href="{% url 'emergencydirectory:emergency_list' %}" class="action-card">
+                                <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
+                                <h6 data-lang-key="action_emergency">Emergency Directory</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-6 mb-4">
-                            <a href="{% url 'citizen:emergency_directory' %}" class="action-card">
-                                <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
-                                <h6 data-lang-key="action_emergency_dir">Emergency Directory</h6>
+                            <a href="#" class="action-card">
+                                <div class="icon-circle bg-secondary"><i class="bi bi-cone-striped"></i></div>
+                                <h6 data-lang-key="action_asset_tracker">Asset & Project Tracker</h6>
                             </a>
                         </div>
                     </div>

@@ -1,0 +1,114 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Manage Meetings - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-calendar-event"></i> Manage Meeting Schedules</h2>
+        <a href="{% url 'admin_module:dashboard' %}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+    </div>
+
+    <!-- Create Meeting Form -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Schedule New Meeting</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Meeting Title *</label>
+                        {{ form.meeting_title }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Agenda *</label>
+                    {{ form.agenda }}
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Date *</label>
+                        {{ form.meeting_date }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Time *</label>
+                        {{ form.time }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Location *</label>
+                        {{ form.location }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Organized By *</label>
+                        {{ form.organized_by }}
+                    </div>
+                </div>
+                <div class="form-check mb-3">
+                    {{ form.is_cancelled }}
+                    <label class="form-check-label">Cancelled</label>
+                </div>
+                <button type="submit" class="btn btn-success"><i class="bi bi-save"></i> Create Meeting</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Meetings List -->
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0"><i class="bi bi-list"></i> All Meetings</h5>
+        </div>
+        <div class="card-body">
+            {% if meetings %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Meeting Title</th>
+                                <th>Date & Time</th>
+                                <th>Location</th>
+                                <th>Organized By</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for meeting in meetings %}
+                            <tr>
+                                <td><strong>{{ meeting.meeting_title|truncatewords:6 }}</strong></td>
+                                <td>
+                                    {{ meeting.meeting_date|date:"M d, Y" }}<br>
+                                    <small class="text-muted">{{ meeting.time|time:"h:i A" }}</small>
+                                </td>
+                                <td>{{ meeting.location|truncatewords:4 }}</td>
+                                <td>{{ meeting.organized_by }}</td>
+                                <td>
+                                    {% if meeting.is_cancelled %}
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    {% elif meeting.is_upcoming %}
+                                        <span class="badge bg-success">Upcoming</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Completed</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'admin_module:edit_meeting' meeting.id %}" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <a href="{% url 'admin_module:delete_meeting' meeting.id %}" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info"><i class="bi bi-info-circle"></i> No meetings found.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
