@@ -1,0 +1,86 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Manage RTI Requests - Clerk Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'clerk:dashboard' %}">Clerk Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-shield-lock"></i> RTI Requests</h2>
+                <a href="{% url 'clerk:dashboard' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- RTI Table -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">RTI Requests</h5>
+                    {% if rti_requests %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Citizen</th>
+                                    <th>Subject</th>
+                                    <th>Category</th>
+                                    <th>Submitted On</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rti in rti_requests %}
+                                <tr>
+                                    <td>#{{ rti.id }}</td>
+                                    <td>{{ rti.citizen.get_full_name }}</td>
+                                    <td>{{ rti.subject|truncatewords:5 }}</td>
+                                    <td>{{ rti.get_category_display }}</td>
+                                    <td>{{ rti.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        {% if rti.status == 'submitted' %}
+                                            <span class="badge bg-info">Submitted</span>
+                                        {% elif rti.status == 'under_review' %}
+                                            <span class="badge bg-warning">Under Review</span>
+                                        {% elif rti.status == 'responded' %}
+                                            <span class="badge bg-success">Responded</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="/clerk/rti/{{ rti.id }}/" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> No RTI requests found.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

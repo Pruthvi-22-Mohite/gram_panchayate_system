@@ -1,0 +1,115 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}RTI Details - Admin Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'admin_module:dashboard' %}">Admin Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4><i class="bi bi-shield-lock"></i> RTI Request #{{ rti.id }}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="30%">Citizen</th>
+                            <td>{{ rti.citizen.get_full_name }} ({{ rti.citizen.username }})</td>
+                        </tr>
+                        <tr>
+                            <th>Subject</th>
+                            <td>{{ rti.subject }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>{{ rti.description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Category</th>
+                            <td>{{ rti.get_category_display }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                {% if rti.status == 'submitted' %}
+                                    <span class="badge bg-info">Submitted</span>
+                                {% elif rti.status == 'under_review' %}
+                                    <span class="badge bg-warning">Under Review</span>
+                                {% elif rti.status == 'responded' %}
+                                    <span class="badge bg-success">Responded</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Submitted On</th>
+                            <td>{{ rti.created_at|date:"M d, Y h:i A" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Remarks</th>
+                            <td>{{ rti.remarks|default:"No remarks" }}</td>
+                        </tr>
+                        {% if rti.supporting_doc %}
+                        <tr>
+                            <th>Supporting Document</th>
+                            <td>
+                                <a href="{{ rti.supporting_doc.url }}" class="btn btn-sm btn-primary" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf"></i> View Document
+                                </a>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% if rti.response_file %}
+                        <tr>
+                            <th>Response File</th>
+                            <td>
+                                <a href="{{ rti.response_file.url }}" class="btn btn-sm btn-success" target="_blank">
+                                    <i class="bi bi-file-earmark-check"></i> View Response
+                                </a>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </table>
+
+                    <div class="mt-4">
+                        <a href="/admin-panel/rti/" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5><i class="bi bi-pencil-square"></i> Admin Actions</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-check2"></i> Update Status
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

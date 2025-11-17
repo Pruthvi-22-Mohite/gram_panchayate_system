@@ -1,0 +1,110 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Apply for Certificate - Gram Panchayat{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-file-earmark-plus"></i> Apply for Certificate</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.certificate_type.id_for_label }}" class="form-label">Certificate Type *</label>
+                            {{ form.certificate_type }}
+                            {% if form.certificate_type.errors %}
+                                <div class="text-danger">{{ form.certificate_type.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.full_name.id_for_label }}" class="form-label">Full Name *</label>
+                            {{ form.full_name }}
+                            {% if form.full_name.errors %}
+                                <div class="text-danger">{{ form.full_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.father_name.id_for_label }}" class="form-label">Father's Name *</label>
+                                {{ form.father_name }}
+                                {% if form.father_name.errors %}
+                                    <div class="text-danger">{{ form.father_name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.mother_name.id_for_label }}" class="form-label">Mother's Name *</label>
+                                {{ form.mother_name }}
+                                {% if form.mother_name.errors %}
+                                    <div class="text-danger">{{ form.mother_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.address.id_for_label }}" class="form-label">Address *</label>
+                            {{ form.address }}
+                            {% if form.address.errors %}
+                                <div class="text-danger">{{ form.address.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.phone.id_for_label }}" class="form-label">Phone Number *</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                    <div class="text-danger">{{ form.phone.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.aadhar.id_for_label }}" class="form-label">Aadhar Number *</label>
+                                {{ form.aadhar }}
+                                {% if form.aadhar.errors %}
+                                    <div class="text-danger">{{ form.aadhar.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.reason.id_for_label }}" class="form-label">Reason for Certificate *</label>
+                            {{ form.reason }}
+                            {% if form.reason.errors %}
+                                <div class="text-danger">{{ form.reason.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="documents" class="form-label">Supporting Documents</label>
+                            <input type="file" class="form-control" name="documents" id="documents" multiple>
+                            <small class="form-text text-muted">You can upload multiple files (Aadhar copy, photos, etc.)</small>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> <strong>Note:</strong> All fields marked with * are mandatory. Please ensure all information is accurate.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'certificates_rti:citizen_certificate_list' %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Submit Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

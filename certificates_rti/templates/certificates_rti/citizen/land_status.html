@@ -1,0 +1,28 @@
+﻿{% extends 'common/base.html' %}
+{% block title %}Land Record Status{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>My Land Record Requests</h2>
+    <div class="card">
+        <div class="card-body">
+            {% if land_records %}
+            <table class="table">
+                <thead><tr><th>Survey</th><th>Gat</th><th>Property ID</th><th>Status</th><th>Date</th></tr></thead>
+                <tbody>
+                {% for record in land_records %}
+                <tr>
+                    <td>{{ record.survey_number }}</td><td>{{ record.gat_number }}</td><td>{{ record.property_id }}</td>
+                    <td><span class="badge bg-{% if record.status == 'verified' %}success{% else %}warning{% endif %}">{{ record.get_status_display }}</span></td>
+                    <td>{{ record.created_at|date:"d M Y" }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No land records linked yet.</p>
+            <a href="{% url 'certificates_rti:citizen_land_search' %}" class="btn btn-primary">Search Land Records</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
