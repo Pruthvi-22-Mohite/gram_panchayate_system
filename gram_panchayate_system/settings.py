@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'modules.emergencydirectory',
     # Certificates and RTI module
     'certificates_rti',
+    # Panchayat Budget module
+    'modules.panchayat_budget',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +72,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'modules/clerk/templates'),
             os.path.join(BASE_DIR, 'modules/citizen/templates'),
             os.path.join(BASE_DIR, 'modules/common/templates'),
+            os.path.join(BASE_DIR, 'modules/panchayat_budget/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -143,6 +146,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'modules/panchayat_budget/static'),
 ]
 
 # Default primary key field type

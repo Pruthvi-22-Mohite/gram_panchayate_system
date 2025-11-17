@@ -1,0 +1,138 @@
+/* Panchayat Budget Module - Blue-White Theme */
+
+/* Primary color variables */
+:root {
+    --primary-blue: #007bff;
+    --primary-blue-hover: #0069d9;
+    --secondary-blue: #0056b3;
+    --light-blue: #e7f3ff;
+    --dark-blue: #004085;
+    --white: #ffffff;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+    --border-color: #dee2e6;
+}
+
+/* Card styling */
+.budget-card {
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+}
+
+.budget-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 123, 255, 0.15);
+}
+
+.budget-card .card-header {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 500;
+}
+
+/* Table styling */
+.table-primary {
+    background-color: var(--light-blue);
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--light-blue);
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-blue-hover);
+    border-color: var(--primary-blue-hover);
+}
+
+.btn-outline-primary {
+    color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+/* Form styling */
+.form-control:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Pagination styling */
+.page-item.active .page-link {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.page-link {
+    color: var(--primary-blue);
+}
+
+.page-link:hover {
+    color: var(--primary-blue-hover);
+}
+
+/* Alert styling */
+.alert-primary {
+    background-color: var(--light-blue);
+    border-color: var(--primary-blue);
+    color: var(--dark-blue);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .budget-card {
+        margin-bottom: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .btn {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Detail view styling */
+.detail-section {
+    background-color: var(--light-gray);
+    border-radius: 0.375rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.detail-value {
+    color: var(--dark-gray);
+}
+
+/* Calculation summary */
+.calculation-summary {
+    background-color: var(--light-blue);
+    border-left: 4px solid var(--primary-blue);
+}
+
+/* Document section */
+.document-section {
+    border: 1px dashed var(--border-color);
+    border-radius: 0.375rem;
+    padding: 1rem;
+    text-align: center;
+}

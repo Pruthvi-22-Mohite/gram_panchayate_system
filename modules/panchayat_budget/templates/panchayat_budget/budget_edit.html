@@ -1,0 +1,96 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Edit Budget Entry{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Edit Budget Entry</h2>
+        <a href="{% url 'panchayat_budget:budget_detail' budget.pk %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Details
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.budget_head.id_for_label }}" class="form-label">Budget Head *</label>
+                        {{ form.budget_head }}
+                        {% if form.budget_head.errors %}
+                            <div class="text-danger">{{ form.budget_head.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.previous_year_amount.id_for_label }}" class="form-label">Previous Year Amount (₹) *</label>
+                        {{ form.previous_year_amount }}
+                        {% if form.previous_year_amount.errors %}
+                            <div class="text-danger">{{ form.previous_year_amount.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.revenue_income.id_for_label }}" class="form-label">Revenue Income (₹) *</label>
+                        {{ form.revenue_income }}
+                        {% if form.revenue_income.errors %}
+                            <div class="text-danger">{{ form.revenue_income.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.revenue_collection.id_for_label }}" class="form-label">Revenue Collection (₹) *</label>
+                        {{ form.revenue_collection }}
+                        {% if form.revenue_collection.errors %}
+                            <div class="text-danger">{{ form.revenue_collection.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.expenditure_allotted.id_for_label }}" class="form-label">Expenditure Allotted (₹) *</label>
+                        {{ form.expenditure_allotted }}
+                        {% if form.expenditure_allotted.errors %}
+                            <div class="text-danger">{{ form.expenditure_allotted.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.expenditure_spent.id_for_label }}" class="form-label">Expenditure Spent (₹) *</label>
+                        {{ form.expenditure_spent }}
+                        {% if form.expenditure_spent.errors %}
+                            <div class="text-danger">{{ form.expenditure_spent.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.document.id_for_label }}" class="form-label">Supporting Document (PDF, optional)</label>
+                        {{ form.document }}
+                        {% if form.document.errors %}
+                            <div class="text-danger">{{ form.document.errors }}</div>
+                        {% endif %}
+                        {% if budget.document %}
+                            <div class="mt-2">
+                                <a href="{{ budget.document.url }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-file-earmark-pdf"></i> View Current Document
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Upload any supporting documents (PDF format recommended)</div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Update Budget Entry
+                    </button>
+                    <a href="{% url 'panchayat_budget:budget_detail' budget.pk %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

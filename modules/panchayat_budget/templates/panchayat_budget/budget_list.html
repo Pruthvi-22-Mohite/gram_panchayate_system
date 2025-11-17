@@ -1,0 +1,129 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Budget List{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Budget Management</h2>
+        <a href="{% url 'panchayat_budget:budget_add' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add New Budget Entry
+        </a>
+    </div>
+
+    <!-- Search Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="search" 
+                           placeholder="Search by budget head..." value="{{ search_query }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-outline-primary">Search</button>
+                </div>
+                {% if search_query %}
+                <div class="col-md-2">
+                    <a href="{% url 'panchayat_budget:budget_list' %}" class="btn btn-outline-secondary">Clear</a>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <!-- Budget Table -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Budget Head</th>
+                            <th>Previous Year Amount</th>
+                            <th>Revenue Income</th>
+                            <th>Revenue Collection</th>
+                            <th>Expenditure Spent</th>
+                            <th>Total Amount</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for budget in page_obj %}
+                        <tr>
+                            <td>{{ budget.id }}</td>
+                            <td>{{ budget.budget_head }}</td>
+                            <td>₹{{ budget.previous_year_amount|floatformat:2 }}</td>
+                            <td>₹{{ budget.revenue_income|floatformat:2 }}</td>
+                            <td>₹{{ budget.revenue_collection|floatformat:2 }}</td>
+                            <td>₹{{ budget.expenditure_spent|floatformat:2 }}</td>
+                            <td>₹{{ budget.total_amount|floatformat:2 }}</td>
+                            <td>{{ budget.created_at|date:"d M Y" }}</td>
+                            <td>
+                                <a href="{% url 'panchayat_budget:budget_detail' budget.pk %}" 
+                                   class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{% url 'panchayat_budget:budget_edit' budget.pk %}" 
+                                   class="btn btn-sm btn-outline-primary" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                {% if user.user_type == 'ADMIN' %}
+                                <a href="{% url 'panchayat_budget:budget_delete' budget.pk %}" 
+                                   class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" class="text-center">No budget entries found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Budget entries pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
