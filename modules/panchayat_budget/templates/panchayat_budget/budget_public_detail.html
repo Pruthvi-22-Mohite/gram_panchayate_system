@@ -1,0 +1,84 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Budget Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Budget Details</h2>
+        <a href="{% url 'panchayat_budget:budget_public_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{{ budget.budget_head }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Sr. No.:</strong> {{ budget.id }}</p>
+                            <p><strong>Budget Head:</strong> {{ budget.budget_head }}</p>
+                            <p><strong>Previous Year Amount:</strong> ₹{{ budget.previous_year_amount|floatformat:2 }}</p>
+                            <p><strong>Revenue Income:</strong> ₹{{ budget.revenue_income|floatformat:2 }}</p>
+                            <p><strong>Revenue Collection:</strong> ₹{{ budget.revenue_collection|floatformat:2 }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Expenditure Allotted:</strong> ₹{{ budget.expenditure_allotted|floatformat:2 }}</p>
+                            <p><strong>Expenditure Spent:</strong> ₹{{ budget.expenditure_spent|floatformat:2 }}</p>
+                            <p><strong>Total Amount:</strong> ₹{{ budget.total_amount|floatformat:2 }}</p>
+                            <p><strong>Created At:</strong> {{ budget.created_at|date:"d M Y, H:i" }}</p>
+                            <p><strong>Last Updated:</strong> {{ budget.updated_at|date:"d M Y, H:i" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Supporting Documents</h5>
+                </div>
+                <div class="card-body">
+                    {% if budget.document %}
+                        <a href="{{ budget.document.url }}" target="_blank" class="btn btn-outline-info w-100">
+                            <i class="bi bi-file-earmark-pdf"></i> View Document
+                        </a>
+                        <p class="mt-2 mb-0 text-muted">
+                            <small>File: {{ budget.document.name|truncatechars:30 }}</small>
+                        </p>
+                    {% else %}
+                        <p class="text-muted text-center">No supporting documents available.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Calculation Summary</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Formula:</strong></p>
+                    <p class="text-muted">
+                        Total = Previous Year + Revenue Income + Revenue Collection - Expenditure Spent
+                    </p>
+                    <p><strong>Calculation:</strong></p>
+                    <p class="mb-1">
+                        ₹{{ budget.previous_year_amount|floatformat:2 }} + 
+                        ₹{{ budget.revenue_income|floatformat:2 }} + 
+                        ₹{{ budget.revenue_collection|floatformat:2 }} - 
+                        ₹{{ budget.expenditure_spent|floatformat:2 }}
+                    </p>
+                    <hr>
+                    <p class="mb-0"><strong>= ₹{{ budget.total_amount|floatformat:2 }}</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
