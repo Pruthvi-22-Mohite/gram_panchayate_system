@@ -25,4 +25,8 @@ urlpatterns = [
     path('meetings/', views.manage_meetings, name='manage_meetings'),
     path('meetings/<int:meeting_id>/edit/', views.edit_meeting, name='edit_meeting'),
     path('meetings/<int:meeting_id>/delete/', views.delete_meeting, name='delete_meeting'),
+    # Feedback & Suggestions URLs
+    path('feedback/', views.manage_feedback, name='manage_feedback'),
+    path('feedback/<int:feedback_id>/', views.feedback_detail, name='feedback_detail'),
+    path('feedback/<int:feedback_id>/delete/', views.delete_feedback, name='delete_feedback'),
 ]

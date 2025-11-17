@@ -290,7 +290,7 @@ def emergency_directory(request):
 def feedback_suggestions(request):
     """Submit feedback and suggestions"""
     if request.method == 'POST':
-        form = FeedbackForm(request.POST)
+        form = FeedbackForm(request.POST, request.FILES)
         if form.is_valid():
             feedback = form.save(commit=False)
             feedback.citizen = request.user
@@ -304,7 +304,7 @@ def feedback_suggestions(request):
     # Show user's previous feedback
     previous_feedback = FeedbackSuggestion.objects.filter(
         citizen=request.user
-    ).order_by('-submitted_at')[:5]
+    ).order_by('-submitted_at')
     
     context = {
         'form': form,

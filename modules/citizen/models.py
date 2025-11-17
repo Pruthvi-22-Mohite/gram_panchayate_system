@@ -46,20 +46,45 @@ class FeedbackSuggestion(models.Model):
     Model for citizen feedback and suggestions
     """
     FEEDBACK_TYPES = [
-        ('feedback', 'Feedback'),
         ('suggestion', 'Suggestion'),
         ('complaint', 'Complaint'),
+        ('query', 'Query'),
+        ('appreciation', 'Appreciation'),
     ]
     
-    citizen = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('reviewed', 'Reviewed'),
+        ('resolved', 'Resolved'),
+    ]
+    
+    citizen = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='feedbacks')
     feedback_type = models.CharField(max_length=20, choices=FEEDBACK_TYPES)
     subject = models.CharField(max_length=200)
     message = models.TextField()
+    attachment = models.FileField(upload_to='feedback_attachments/', blank=True, null=True)
     submitted_at = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    admin_response = models.TextField(blank=True, null=True)
+    responded_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='feedback_responses')
+    responded_at = models.DateTimeField(null=True, blank=True)
     is_anonymous = models.BooleanField(default=False)
     
+    class Meta:
+        ordering = ['-submitted_at']
+        verbose_name = 'Feedback/Suggestion'
+        verbose_name_plural = 'Feedback/Suggestions'
+    
     def __str__(self):
-        return f"{self.feedback_type}: {self.subject}"
+        return f"{self.get_feedback_type_display()}: {self.subject}"
+    
+    def get_status_badge_class(self):
+        badge_map = {
+            'pending': 'bg-warning',
+            'reviewed': 'bg-info',
+            'resolved': 'bg-success',
+        }
+        return badge_map.get(self.status, 'bg-secondary')
 
 
 class EmergencyContact(models.Model):

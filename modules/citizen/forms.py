@@ -208,7 +208,7 @@ class FeedbackForm(forms.ModelForm):
     """
     class Meta:
         model = FeedbackSuggestion
-        fields = ['feedback_type', 'subject', 'message', 'is_anonymous']
+        fields = ['feedback_type', 'subject', 'message', 'attachment', 'is_anonymous']
         widgets = {
             'feedback_type': forms.Select(attrs={
                 'class': 'form-control'
@@ -222,8 +222,31 @@ class FeedbackForm(forms.ModelForm):
                 'placeholder': 'Your detailed feedback or suggestion',
                 'rows': 5
             }),
+            'attachment': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*,.pdf,.doc,.docx'
+            }),
             'is_anonymous': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
+            })
+        }
+
+
+class FeedbackResponseForm(forms.ModelForm):
+    """
+    Form for admin/clerk to respond to feedback
+    """
+    class Meta:
+        model = FeedbackSuggestion
+        fields = ['status', 'admin_response']
+        widgets = {
+            'status': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'admin_response': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your response here...',
+                'rows': 4
             })
         }
 

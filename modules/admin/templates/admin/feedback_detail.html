@@ -1,0 +1,140 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Feedback Details - Admin Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, Admin {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="bi bi-file-text-fill me-2"></i>Feedback Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Feedback ID:</strong> #{{ feedback.id }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Type:</strong> <span class="badge bg-primary">{{ feedback.get_feedback_type_display }}</span></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Citizen:</strong> 
+                                {% if feedback.is_anonymous %}
+                                    <span class="text-muted"><i class="bi bi-incognito"></i> Anonymous</span>
+                                {% else %}
+                                    {{ feedback.citizen.username }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Submitted:</strong> {{ feedback.submitted_at|date:"d M Y, h:i A" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <p><strong>Status:</strong> 
+                                <span class="badge {{ feedback.get_status_badge_class }}">{{ feedback.get_status_display }}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <h5><i class="bi bi-chat-text me-2"></i>Subject</h5>
+                        <p class="border p-3 bg-light">{{ feedback.subject }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5><i class="bi bi-file-text me-2"></i>Message/Description</h5>
+                        <div class="border p-3 bg-light" style="white-space: pre-wrap;">{{ feedback.message }}</div>
+                    </div>
+
+                    {% if feedback.attachment %}
+                    <div class="mb-3">
+                        <h5><i class="bi bi-paperclip me-2"></i>Attachment</h5>
+                        <a href="{{ feedback.attachment.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-download me-1"></i>Download Attachment
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if feedback.admin_response %}
+                    <hr>
+                    <div class="alert alert-success">
+                        <h5><i class="bi bi-reply-fill me-2"></i>Previous Response</h5>
+                        <p>{{ feedback.admin_response }}</p>
+                        <small class="text-muted">
+                            Responded by: {{ feedback.responded_by.username }}<br>
+                            On: {{ feedback.responded_at|date:"d M Y, h:i A" }}
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Add/Update Response</h5>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label">Update Status *</label>
+                            {{ form.status }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.admin_response.id_for_label }}" class="form-label">Your Response *</label>
+                            {{ form.admin_response }}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle-fill me-1"></i>Submit Response
+                            </button>
+                            <a href="{% url 'admin_module:manage_feedback' %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>Back to List
+                            </a>
+                            <a href="{% url 'admin_module:delete_feedback' feedback.id %}" class="btn btn-danger">
+                                <i class="bi bi-trash-fill me-1"></i>Delete Feedback
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

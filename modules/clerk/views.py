@@ -11,6 +11,8 @@ from .models import ClerkProfile, Scheme, SchemeApplication, Grievance, TaxRecor
 from .forms import ClerkLoginForm, SchemeForm, GrievanceResponseForm, TaxRecordForm
 from modules.informationhub.models import VillageNotice, MeetingSchedule
 from modules.informationhub.forms import VillageNoticeForm, MeetingScheduleForm
+from modules.citizen.models import FeedbackSuggestion
+from modules.citizen.forms import FeedbackResponseForm
 
 
 def clerk_login(request):
@@ -400,7 +402,7 @@ def edit_meeting(request, meeting_id):
 
 
 @clerk_required
-def delete_meeting(request, meeting_id):
+def delete_meeting(request, meeting_id):  
     """View to delete a meeting"""
     meeting = get_object_or_404(MeetingSchedule, id=meeting_id)
     
@@ -413,3 +415,62 @@ def delete_meeting(request, meeting_id):
         'meeting': meeting
     }
     return render(request, 'clerk/delete_meeting.html', context)
+
+
+# ==================== FEEDBACK & SUGGESTIONS MANAGEMENT ====================
+
+@clerk_required
+def manage_feedback(request):
+    """View all citizen feedback and suggestions"""
+    feedbacks = FeedbackSuggestion.objects.all().select_related('citizen', 'responded_by').order_by('-submitted_at')
+    
+    # Filter by status
+    status_filter = request.GET.get('status')
+    if status_filter:
+        feedbacks = feedbacks.filter(status=status_filter)
+    
+    # Filter by type
+    type_filter = request.GET.get('type')
+    if type_filter:
+        feedbacks = feedbacks.filter(feedback_type=type_filter)
+    
+    # Search
+    search_query = request.GET.get('search')
+    if search_query:
+        feedbacks = feedbacks.filter(
+            Q(subject__icontains=search_query) |
+            Q(message__icontains=search_query) |
+            Q(citizen__username__icontains=search_query)
+        )
+    
+    context = {
+        'feedbacks': feedbacks,
+        'status_filter': status_filter,
+        'type_filter': type_filter,
+        'search_query': search_query,
+    }
+    return render(request, 'clerk/manage_feedback.html', context)
+
+
+@clerk_required
+def feedback_detail(request, feedback_id):
+    """View and respond to specific feedback"""
+    feedback = get_object_or_404(FeedbackSuggestion, id=feedback_id)
+    
+    if request.method == 'POST':
+        form = FeedbackResponseForm(request.POST, instance=feedback)
+        if form.is_valid():
+            feedback_obj = form.save(commit=False)
+            feedback_obj.responded_by = request.user
+            feedback_obj.responded_at = timezone.now()
+            feedback_obj.save()
+            messages.success(request, "Response added successfully!")
+            return redirect('clerk:manage_feedback')
+    else:
+        form = FeedbackResponseForm(instance=feedback)
+    
+    context = {
+        'feedback': feedback,
+        'form': form
+    }
+    return render(request, 'clerk/feedback_detail.html', context)

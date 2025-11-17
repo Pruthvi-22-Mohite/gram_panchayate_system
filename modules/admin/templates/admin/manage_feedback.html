@@ -1,0 +1,151 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Manage Feedback & Suggestions - Admin Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, Admin {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="bi bi-chat-quote-fill me-2"></i>Manage Feedback & Suggestions</h4>
+                    <a href="{% url 'admin_module:dashboard' %}" class="btn btn-light btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                        <script>
+                            setTimeout(function() {
+                                var alerts = document.querySelectorAll('.alert');
+                                alerts.forEach(function(alert) {
+                                    var bsAlert = new bootstrap.Alert(alert);
+                                    bsAlert.close();
+                                });
+                            }, 3000);
+                        </script>
+                    {% endif %}
+
+                    <!-- Filters -->
+                    <form method="get" class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <label class="form-label">Filter by Status</label>
+                            <select name="status" class="form-select" onchange="this.form.submit()">
+                                <option value="">All Status</option>
+                                <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="reviewed" {% if status_filter == 'reviewed' %}selected{% endif %}>Reviewed</option>
+                                <option value="resolved" {% if status_filter == 'resolved' %}selected{% endif %}>Resolved</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Filter by Type</label>
+                            <select name="type" class="form-select" onchange="this.form.submit()">
+                                <option value="">All Types</option>
+                                <option value="suggestion" {% if type_filter == 'suggestion' %}selected{% endif %}>Suggestion</option>
+                                <option value="complaint" {% if type_filter == 'complaint' %}selected{% endif %}>Complaint</option>
+                                <option value="query" {% if type_filter == 'query' %}selected{% endif %}>Query</option>
+                                <option value="appreciation" {% if type_filter == 'appreciation' %}selected{% endif %}>Appreciation</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="search" class="form-control" placeholder="Search by subject or citizen..." value="{{ search_query }}">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-danger w-100"><i class="bi bi-search me-1"></i>Search</button>
+                        </div>
+                    </form>
+
+                    <!-- Feedback List -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Feedback ID</th>
+                                    <th>Citizen Name</th>
+                                    <th>Type</th>
+                                    <th>Subject</th>
+                                    <th>Date Submitted</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if feedbacks %}
+                                    {% for feedback in feedbacks %}
+                                    <tr>
+                                        <td><strong>#{{ feedback.id }}</strong></td>
+                                        <td>
+                                            {% if feedback.is_anonymous %}
+                                                <span class="text-muted"><i class="bi bi-incognito"></i> Anonymous</span>
+                                            {% else %}
+                                                {{ feedback.citizen.username }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ feedback.get_feedback_type_display }}</span>
+                                        </td>
+                                        <td>{{ feedback.subject|truncatewords:6 }}</td>
+                                        <td>{{ feedback.submitted_at|date:"d M Y" }}</td>
+                                        <td>
+                                            <span class="badge {{ feedback.get_status_badge_class }}">
+                                                {{ feedback.get_status_display }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{% url 'admin_module:feedback_detail' feedback.id %}" class="btn btn-sm btn-info">
+                                                    <i class="bi bi-eye-fill"></i>
+                                                </a>
+                                                <a href="{% url 'admin_module:delete_feedback' feedback.id %}" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4">
+                                            <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                                            <p class="text-muted">No feedback found</p>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <strong>Total Feedback:</strong> {{ feedbacks.count }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

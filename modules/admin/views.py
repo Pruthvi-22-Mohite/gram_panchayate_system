@@ -12,7 +12,8 @@ from .models import AdminProfile, SystemSettings, AuditLog
 from .forms import AdminLoginForm, SystemSettingsForm, ClerkCreationForm
 from modules.clerk.models import ClerkProfile, Grievance, Scheme
 from modules.clerk.forms import SchemeForm
-from modules.citizen.models import CitizenProfile
+from modules.citizen.models import CitizenProfile, FeedbackSuggestion
+from modules.citizen.forms import FeedbackResponseForm
 from modules.informationhub.models import VillageNotice, MeetingSchedule
 from modules.informationhub.forms import VillageNoticeForm, MeetingScheduleForm
 
@@ -441,3 +442,101 @@ def delete_meeting(request, meeting_id):
         'meeting': meeting
     }
     return render(request, 'admin/delete_meeting.html', context)
+
+
+# ==================== FEEDBACK & SUGGESTIONS MANAGEMENT ====================
+
+@admin_required
+def manage_feedback(request):
+    """View and manage all citizen feedback and suggestions"""
+    from django.db.models import Q
+    
+    feedbacks = FeedbackSuggestion.objects.all().select_related('citizen', 'responded_by').order_by('-submitted_at')
+    
+    # Filter by status
+    status_filter = request.GET.get('status')
+    if status_filter:
+        feedbacks = feedbacks.filter(status=status_filter)
+    
+    # Filter by type
+    type_filter = request.GET.get('type')
+    if type_filter:
+        feedbacks = feedbacks.filter(feedback_type=type_filter)
+    
+    # Search
+    search_query = request.GET.get('search')
+    if search_query:
+        feedbacks = feedbacks.filter(
+            Q(subject__icontains=search_query) |
+            Q(message__icontains=search_query) |
+            Q(citizen__username__icontains=search_query)
+        )
+    
+    context = {
+        'feedbacks': feedbacks,
+        'status_filter': status_filter,
+        'type_filter': type_filter,
+        'search_query': search_query,
+    }
+    return render(request, 'admin/manage_feedback.html', context)
+
+
+@admin_required
+def feedback_detail(request, feedback_id):
+    """View and respond to specific feedback"""
+    feedback = get_object_or_404(FeedbackSuggestion, id=feedback_id)
+    
+    if request.method == 'POST':
+        form = FeedbackResponseForm(request.POST, instance=feedback)
+        if form.is_valid():
+            feedback_obj = form.save(commit=False)
+            feedback_obj.responded_by = request.user
+            feedback_obj.responded_at = timezone.now()
+            feedback_obj.save()
+            
+            # Log the action
+            AuditLog.objects.create(
+                admin_user=request.user,
+                action="Feedback Response Added",
+                target_model="FeedbackSuggestion",
+                target_id=str(feedback.id),
+                details=f"Responded to feedback: {feedback.subject}"
+            )
+            
+            messages.success(request, "Response added successfully!")
+            return redirect('admin_module:manage_feedback')
+    else:
+        form = FeedbackResponseForm(instance=feedback)
+    
+    context = {
+        'feedback': feedback,
+        'form': form
+    }
+    return render(request, 'admin/feedback_detail.html', context)
+
+
+@admin_required
+def delete_feedback(request, feedback_id):
+    """Delete a feedback entry"""
+    feedback = get_object_or_404(FeedbackSuggestion, id=feedback_id)
+    
+    if request.method == 'POST':
+        subject = feedback.subject
+        feedback.delete()
+        
+        # Log the action
+        AuditLog.objects.create(
+            admin_user=request.user,
+            action="Feedback Deleted",
+            target_model="FeedbackSuggestion",
+            target_id=str(feedback_id),
+            details=f"Deleted feedback: {subject}"
+        )
+        
+        messages.success(request, "Feedback deleted successfully!")
+        return redirect('admin_module:manage_feedback')
+    
+    context = {
+        'feedback': feedback
+    }
+    return render(request, 'admin/delete_feedback.html', context)
