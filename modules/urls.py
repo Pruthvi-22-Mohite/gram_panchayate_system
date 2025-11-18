@@ -8,4 +8,5 @@ urlpatterns = [
     path('infohub/', include('modules.informationhub.urls')),
     path('emergency/', include('modules.emergencydirectory.urls')),
     path('budget/', include('modules.panchayat_budget.urls')),
+    path('assets-projects/', include('modules.asset_project_tracker.urls')),
 ]

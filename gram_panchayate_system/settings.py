@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'certificates_rti',
     # Panchayat Budget module
     'modules.panchayat_budget',
+    # Asset and Project Tracker module
+    'modules.asset_project_tracker',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +75,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'modules/citizen/templates'),
             os.path.join(BASE_DIR, 'modules/common/templates'),
             os.path.join(BASE_DIR, 'modules/panchayat_budget/templates'),
+            os.path.join(BASE_DIR, 'modules/asset_project_tracker/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -94,19 +97,27 @@ WSGI_APPLICATION = 'gram_panchayate_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'gram_panchayate_system',
-        'USER': 'root',
-        'PASSWORD': 'Kashmira@2726',  # Leave empty if no password, or add your password here
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',
-        },
-        'CONN_MAX_AGE': 60,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# MySQL Configuration (commented out, uncomment if you want to use MySQL)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'gram_panchayate_system',
+#         'USER': 'root',
+#         'PASSWORD': 'Kashmira@2726',  # Update with your MySQL password
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#             'charset': 'utf8mb4',
+#         },
+#         'CONN_MAX_AGE': 60,
+#     }
+# }
 
 
 # Password validation

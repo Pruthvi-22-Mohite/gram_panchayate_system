@@ -1,0 +1,215 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Assets & Projects - Village Services{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mt-4"><i class="bi bi-building me-2"></i>Assets & Project Tracker</h1>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Assets</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_assets }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-box-seam text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Completed Projects</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ completed_projects }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Ongoing Projects</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ ongoing_projects }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-hourglass-split text-warning" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Projects</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_projects }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-diagram-3 text-info" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" name="search" class="form-control" placeholder="Search assets or projects..." value="{{ search_query }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Development Projects Section -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3><i class="bi bi-hammer me-2"></i>Development Projects</h3>
+        </div>
+
+        {% if projects %}
+        <div class="row">
+            {% for project in projects %}
+            <div class="col-lg-6 col-xl-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if project.photo %}
+                    <img src="{{ project.photo.url }}" class="card-img-top" alt="{{ project.project_name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-light text-center py-5">
+                        <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title">{{ project.project_name|truncatewords:8 }}</h5>
+                            <span class="badge {{ project.get_status_badge_class }}">{{ project.get_status_display }}</span>
+                        </div>
+                        
+                        <p class="card-text text-muted small">{{ project.description|truncatewords:15 }}</p>
+                        
+                        <div class="mb-2">
+                            <small class="text-muted"><i class="bi bi-geo-alt"></i> {{ project.location }}</small>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <small class="text-muted"><i class="bi bi-cash-stack"></i> Budget: ₹{{ project.budget_allocated|floatformat:0 }}</small>
+                        </div>
+                        
+                        <div class="progress mb-2" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ project.progress_percentage }}%;" 
+                                 aria-valuenow="{{ project.progress_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ project.progress_percentage }}%
+                            </div>
+                        </div>
+                        
+                        <a href="{% url 'asset_project_tracker:project_detail' project.id %}" class="btn btn-sm btn-outline-primary w-100 mt-2">
+                            <i class="bi bi-eye"></i> View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No projects found.
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Gram Panchayat Assets Section -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3><i class="bi bi-box-seam me-2"></i>Public Assets</h3>
+        </div>
+
+        {% if assets %}
+        <div class="row">
+            {% for asset in assets %}
+            <div class="col-lg-4 col-xl-3 mb-4">
+                <div class="card h-100 shadow-sm border-start border-4 border-{{ asset.get_condition_badge_class|slice:'3:' }}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-1">{{ asset.asset_name|truncatewords:5 }}</h5>
+                            <span class="badge {{ asset.get_condition_badge_class }}">{{ asset.get_condition_display }}</span>
+                        </div>
+                        
+                        <span class="badge bg-secondary mb-2">{{ asset.get_asset_type_display }}</span>
+                        
+                        <p class="card-text text-muted small">{{ asset.description|truncatewords:12 }}</p>
+                        
+                        <div class="mb-1">
+                            <small class="text-muted"><i class="bi bi-geo-alt"></i> {{ asset.location }}</small>
+                        </div>
+                        
+                        <div class="mb-1">
+                            <small class="text-muted"><i class="bi bi-calendar-check"></i> Purchased: {{ asset.purchase_date|date:"d M Y" }}</small>
+                        </div>
+                        
+                        {% if asset.responsible_person %}
+                        <div class="mb-2">
+                            <small class="text-muted"><i class="bi bi-person"></i> {{ asset.responsible_person }}</small>
+                        </div>
+                        {% endif %}
+                        
+                        <a href="{% url 'asset_project_tracker:asset_detail' asset.id %}" class="btn btn-sm btn-outline-primary w-100 mt-2">
+                            <i class="bi bi-eye"></i> View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No assets found.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.border-left-primary {
+    border-left: 4px solid #4e73df !important;
+}
+.border-left-success {
+    border-left: 4px solid #1cc88a !important;
+}
+.border-left-warning {
+    border-left: 4px solid #f6c23e !important;
+}
+.border-left-info {
+    border-left: 4px solid #36b9cc !important;
+}
+</style>
+{% endblock %}

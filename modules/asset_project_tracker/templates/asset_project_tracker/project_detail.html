@@ -1,0 +1,113 @@
+{% extends 'common/base.html' %}
+
+{% block title %}{{ project.project_name }} - Project Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mt-4"><i class="bi bi-hammer me-2"></i>Project Details</h1>
+        <a href="{% url 'asset_project_tracker:list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                {% if project.photo %}
+                <img src="{{ project.photo.url }}" class="card-img-top" alt="{{ project.project_name }}" style="max-height: 400px; object-fit: cover;">
+                {% endif %}
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h2 class="card-title">{{ project.project_name }}</h2>
+                        <span class="badge {{ project.get_status_badge_class }} fs-6">{{ project.get_status_display }}</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-info">{{ project.get_project_type_display }}</span>
+                        <span class="badge bg-secondary">{{ project.get_funding_source_display }}</span>
+                    </div>
+                    
+                    <h5>Description</h5>
+                    <p class="text-muted">{{ project.description }}</p>
+                    
+                    <h5 class="mt-4">Progress</h5>
+                    <div class="progress mb-3" style="height: 30px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ project.progress_percentage }}%;">
+                            {{ project.progress_percentage }}% Complete
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Project Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong><i class="bi bi-geo-alt"></i> Location:</strong><br>
+                        {{ project.location }}
+                        {% if project.ward_number %}
+                        <br><small class="text-muted">Ward: {{ project.ward_number }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong><i class="bi bi-cash-stack"></i> Budget:</strong><br>
+                        Allocated: ₹{{ project.budget_allocated|floatformat:2 }}<br>
+                        Spent: ₹{{ project.budget_spent|floatformat:2 }}<br>
+                        <small class="text-muted">{{ project.get_budget_utilization_percentage }}% utilized</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong><i class="bi bi-calendar"></i> Timeline:</strong><br>
+                        Start: {{ project.start_date|date:"d M Y" }}<br>
+                        Target: {{ project.target_completion_date|date:"d M Y" }}
+                        {% if project.actual_completion_date %}
+                        <br>Completed: {{ project.actual_completion_date|date:"d M Y" }}
+                        {% endif %}
+                    </div>
+                    
+                    {% if project.contractor_name %}
+                    <div class="mb-3">
+                        <strong><i class="bi bi-person-badge"></i> Contractor:</strong><br>
+                        {{ project.contractor_name }}
+                        {% if project.contractor_contact %}
+                        <br><a href="tel:{{ project.contractor_contact }}">{{ project.contractor_contact }}</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <strong><i class="bi bi-people"></i> Beneficiaries:</strong><br>
+                        {{ project.beneficiaries_count }} people
+                    </div>
+                    
+                    {% if project.document %}
+                    <div class="mb-3">
+                        <a href="{{ project.document.url }}" class="btn btn-outline-primary w-100" target="_blank">
+                            <i class="bi bi-file-earmark-pdf"></i> View Document
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if project.remarks %}
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Remarks</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ project.remarks }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
