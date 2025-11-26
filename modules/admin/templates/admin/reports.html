@@ -1,0 +1,293 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Reports & Analytics - Admin Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'admin_module:dashboard' %}">Admin Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="content-box">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="content-box-title mb-0">Reports & Analytics</h3>
+            <div>
+                <button class="btn btn-success" onclick="exportReport()">
+                    <i class="bi bi-download me-2"></i>Export Report
+                </button>
+            </div>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <!-- Report Filters -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Report Filters</h5>
+            </div>
+            <div class="card-body">
+                <form class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Report Type</label>
+                        <select class="form-select">
+                            <option>User Registration Trends</option>
+                            <option>Grievance Statistics</option>
+                            <option>Tax Collection Report</option>
+                            <option>Scheme Application Report</option>
+                            <option>System Activity Log</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date Range</label>
+                        <select class="form-select">
+                            <option>Last 7 Days</option>
+                            <option selected>Last 30 Days</option>
+                            <option>Last 90 Days</option>
+                            <option>This Year</option>
+                            <option>Custom Range</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Format</label>
+                        <select class="form-select">
+                            <option>PDF</option>
+                            <option>Excel</option>
+                            <option>CSV</option>
+                            <option>JSON</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-primary w-100">
+                            <i class="bi bi-search me-2"></i>Generate Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Charts Section -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>User Registration Trends</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="userRegistrationChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>User Distribution by Type</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="userTypeChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Data Tables -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Summary Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Current Value</th>
+                                        <th>Previous Period</th>
+                                        <th>Change (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Total Users</td>
+                                        <td>2,845</td>
+                                        <td>2,567</td>
+                                        <td class="text-success">+10.8%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Clerks</td>
+                                        <td>42</td>
+                                        <td>38</td>
+                                        <td class="text-success">+10.5%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Citizens</td>
+                                        <td>2,798</td>
+                                        <td>2,524</td>
+                                        <td class="text-success">+10.9%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Grievances Submitted</td>
+                                        <td>342</td>
+                                        <td>298</td>
+                                        <td class="text-success">+14.8%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Grievances Resolved</td>
+                                        <td>287</td>
+                                        <td>245</td>
+                                        <td class="text-success">+17.1%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tax Collections (₹)</td>
+                                        <td>12,45,000</td>
+                                        <td>10,87,500</td>
+                                        <td class="text-success">+14.5%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Recent System Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>User</th>
+                                        <th>Timestamp</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>User Registration</td>
+                                        <td>Ramesh Kumar</td>
+                                        <td>Today, 10:30 AM</td>
+                                        <td>New citizen registered from Ward 3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Grievance Submitted</td>
+                                        <td>Sunita Devi</td>
+                                        <td>Today, 09:45 AM</td>
+                                        <td>Road repair request in Main Street</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tax Payment</td>
+                                        <td>Mahesh Patil</td>
+                                        <td>Yesterday, 04:20 PM</td>
+                                        <td>Property tax payment of ₹12,500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Scheme Application</td>
+                                        <td>Priya Sharma</td>
+                                        <td>Yesterday, 02:15 PM</td>
+                                        <td>Scholarship application submitted</td>
+                                    </tr>
+                                    <tr>
+                                        <td>User Deactivation</td>
+                                        <td>Admin</td>
+                                        <td>Yesterday, 11:30 AM</td>
+                                        <td>Deactivated inactive citizen account</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Initialize charts when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // User Registration Chart
+        const userRegCtx = document.getElementById('userRegistrationChart').getContext('2d');
+        const userRegChart = new Chart(userRegCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'New Registrations',
+                    data: [120, 190, 130, 180, 220, 250, 210, 280, 310, 290, 320, 350],
+                    borderColor: '#0d6efd',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // User Type Chart
+        const userTypeCtx = document.getElementById('userTypeChart').getContext('2d');
+        const userTypeChart = new Chart(userTypeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Citizens', 'Clerks', 'Admins'],
+                datasets: [{
+                    data: [2798, 42, 5],
+                    backgroundColor: [
+                        '#198754',
+                        '#0d6efd',
+                        '#dc3545'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    });
+    
+    // Export report function
+    function exportReport() {
+        const format = document.querySelector('select:nth-child(3)').value;
+        alert(`Report exported in ${format} format. Download will start shortly.`);
+    }
+</script>
+{% endblock %}

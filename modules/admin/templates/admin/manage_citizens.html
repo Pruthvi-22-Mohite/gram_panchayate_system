@@ -1,0 +1,224 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Manage Citizens - Admin Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'admin_module:dashboard' %}">Admin Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="content-box">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="content-box-title mb-0">Manage Citizens ({{ total_citizens }})</h3>
+            <div>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bulkActionModal">
+                    <i class="bi bi-tools me-2"></i>Bulk Actions
+                </button>
+            </div>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% if citizens %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
+                            <th>Citizen ID</th>
+                            <th>Name</th>
+                            <th>Mobile Number</th>
+                            <th>Aadhaar Number</th>
+                            <th>Village</th>
+                            <th>Status</th>
+                            <th>Registered</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for citizen in citizens %}
+                        <tr>
+                            <td><input type="checkbox" class="citizen-checkbox" value="{{ citizen.id }}"></td>
+                            <td>{{ citizen.id }}</td>
+                            <td>{{ citizen.user.first_name }} {{ citizen.user.last_name }}</td>
+                            <td>{{ citizen.user.mobile_number }}</td>
+                            <td>{{ citizen.aadhaar_number|default:"-" }}</td>
+                            <td>{{ citizen.village }}</td>
+                            <td>
+                                {% if citizen.user.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ citizen.user.created_at|date:"d M Y" }}</td>
+                            <td>
+                                {% if citizen.user.last_login %}
+                                    {{ citizen.user.last_login|date:"d M Y" }}
+                                {% else %}
+                                    <span class="text-muted">Never</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-outline-primary" title="View Details">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    {% if citizen.user.is_active %}
+                                        <button type="button" class="btn btn-outline-warning" title="Deactivate" onclick="confirmAction({{ citizen.id }}, 'deactivate')">
+                                            <i class="bi bi-pause"></i>
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-outline-success" title="Activate" onclick="confirmAction({{ citizen.id }}, 'activate')">
+                                            <i class="bi bi-play"></i>
+                                        </button>
+                                    {% endif %}
+                                    <button type="button" class="btn btn-outline-danger" title="Delete" onclick="confirmAction({{ citizen.id }}, 'delete')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                    <p class="text-muted mb-0">Showing {{ citizens|length }} of {{ total_citizens }} citizens</p>
+                </div>
+                <div>
+                    <!-- Add pagination controls here if needed -->
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-people display-1 text-muted"></i>
+                <h4 class="mt-3">No Citizens Found</h4>
+                <p class="text-muted">No citizen accounts have been registered yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Bulk Action Modal -->
+<div class="modal fade" id="bulkActionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Bulk Citizen Actions</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="bulkActionForm">
+                    <div class="mb-3">
+                        <label class="form-label">Select Action:</label>
+                        <select class="form-select" id="bulkActionSelect">
+                            <option value="">-- Select Action --</option>
+                            <option value="activate">Activate Selected Citizens</option>
+                            <option value="deactivate">Deactivate Selected Citizens</option>
+                            <option value="delete">Delete Selected Citizens</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <p id="selectedCitizensCount">Selected Citizens: 0</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="performBulkAction()">Apply Action</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Select all checkboxes
+    document.getElementById('selectAll').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('.citizen-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+        updateSelectedCount();
+    });
+
+    // Update selected count when individual checkbox changes
+    document.querySelectorAll('.citizen-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
+
+    function updateSelectedCount() {
+        const selectedCount = document.querySelectorAll('.citizen-checkbox:checked').length;
+        document.getElementById('selectedCitizensCount').textContent = `Selected Citizens: ${selectedCount}`;
+    }
+
+    function confirmAction(citizenId, action) {
+        let actionText = '';
+        if (action === 'activate') {
+            actionText = 'activate this citizen';
+        } else if (action === 'deactivate') {
+            actionText = 'deactivate this citizen';
+        } else if (action === 'delete') {
+            actionText = 'delete this citizen';
+        }
+
+        if (confirm(`Are you sure you want to ${actionText}?`)) {
+            // In a real implementation, this would submit a form or make an AJAX request
+            alert(`Action '${action}' would be performed on citizen ID: ${citizenId}`);
+        }
+    }
+
+    function performBulkAction() {
+        const action = document.getElementById('bulkActionSelect').value;
+        if (!action) {
+            alert('Please select an action');
+            return;
+        }
+
+        const selectedCitizens = Array.from(document.querySelectorAll('.citizen-checkbox:checked'))
+                                   .map(checkbox => checkbox.value);
+
+        if (selectedCitizens.length === 0) {
+            alert('Please select at least one citizen');
+            return;
+        }
+
+        let actionText = '';
+        if (action === 'activate') {
+            actionText = 'activate';
+        } else if (action === 'deactivate') {
+            actionText = 'deactivate';
+        } else if (action === 'delete') {
+            actionText = 'delete';
+        }
+
+        if (confirm(`Are you sure you want to ${actionText} ${selectedCitizens.length} selected citizens?`)) {
+            // In a real implementation, this would submit a form or make an AJAX request
+            alert(`Bulk action '${action}' would be performed on ${selectedCitizens.length} citizens`);
+            // Close the modal
+            bootstrap.Modal.getInstance(document.getElementById('bulkActionModal')).hide();
+        }
+    }
+</script>
+{% endblock %}
