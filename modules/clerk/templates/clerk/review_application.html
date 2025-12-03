@@ -1,0 +1,142 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Review Application - Clerk Panel{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Review Application #{{ application.id }}</h2>
+        <a href="{% url 'clerk:scheme_applications' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Applications
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Application Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Scheme:</strong>
+                            <p class="mb-0">{{ application.scheme.name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Applicant:</strong>
+                            <p class="mb-0">{{ application.applicant.first_name }} {{ application.applicant.last_name }}</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Applied Date:</strong>
+                            <p class="mb-0">{{ application.applied_at|date:"d M Y, H:i" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Status:</strong>
+                            <p class="mb-0">
+                                {% if application.status == 'pending' %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% elif application.status == 'under_review' %}
+                                    <span class="badge bg-info">Under Review</span>
+                                {% elif application.status == 'approved' %}
+                                    <span class="badge bg-success">Approved</span>
+                                {% elif application.status == 'rejected' %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    {% if application.application_data %}
+                    <div class="mb-3">
+                        <strong>Application Data:</strong>
+                        <div class="table-responsive mt-2">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    {% for key, value in application.application_data.items %}
+                                    <tr>
+                                        <td><strong>{{ key|title }}</strong></td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Review Application</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select" required>
+                                <option value="">Select Status</option>
+                                <option value="under_review" {% if application.status == 'under_review' %}selected{% endif %}{% if application.status == 'under_review' %} disabled{% endif %}>Under Review</option>
+                                <option value="approved" {% if application.status == 'approved' %}selected{% endif %}{% if application.status == 'approved' or application.status == 'rejected' %} disabled{% endif %}>Approve</option>
+                                <option value="rejected" {% if application.status == 'rejected' %}selected{% endif %}{% if application.status == 'approved' or application.status == 'rejected' %} disabled{% endif %}>Reject</option>
+                            </select>
+                            {% if application.status == 'approved' or application.status == 'rejected' %}
+                                <div class="form-text text-muted">
+                                    Note: This application has already been finalized. Further changes to the status are not allowed.
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Review Notes</label>
+                            <textarea name="review_notes" class="form-control" rows="4" placeholder="Enter review notes...">{{ application.review_notes }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-check-circle me-2"></i>Submit Review
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            {% if application.reviewed_by %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Review History</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <strong>Reviewed By:</strong>
+                        <p class="mb-0">{{ application.reviewed_by.first_name }} {{ application.reviewed_by.last_name }}</p>
+                    </div>
+                    <div class="mb-2">
+                        <strong>Reviewed At:</strong>
+                        <p class="mb-0">{{ application.reviewed_at|date:"d M Y, H:i" }}</p>
+                    </div>
+                    {% if application.review_notes %}
+                    <div>
+                        <strong>Review Notes:</strong>
+                        <p class="mb-0">{{ application.review_notes }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

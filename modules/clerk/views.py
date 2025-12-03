@@ -175,9 +175,19 @@ def scheme_applications(request):
     if status_filter:
         applications = applications.filter(status=status_filter)
     
+    # Get counts for each status
+    pending_count = SchemeApplication.objects.filter(status='pending').count()
+    under_review_count = SchemeApplication.objects.filter(status='under_review').count()
+    approved_count = SchemeApplication.objects.filter(status='approved').count()
+    rejected_count = SchemeApplication.objects.filter(status='rejected').count()
+    
     context = {
         'applications': applications,
-        'status_filter': status_filter
+        'status_filter': status_filter,
+        'pending_count': pending_count,
+        'under_review_count': under_review_count,
+        'approved_count': approved_count,
+        'rejected_count': rejected_count,
     }
     return render(request, 'clerk/scheme_applications.html', context)
 
@@ -187,19 +197,37 @@ def review_application(request, application_id):
     """View to review a specific scheme application"""
     application = get_object_or_404(SchemeApplication, id=application_id)
     
+    # Automatically set status to under_review when clerk opens the application
+    # Only if it's currently pending
+    if application.status == 'pending':
+        application.status = 'under_review'
+        application.save()
+        messages.info(request, "Application status automatically updated to Under Review.")
+    
     if request.method == 'POST':
         status = request.POST.get('status')
         notes = request.POST.get('review_notes', '')
         
-        if status in ['approved', 'rejected']:
-            application.status = status
-            application.reviewed_by = request.user
-            application.review_notes = notes
-            application.reviewed_at = timezone.now()
-            application.save()
-            
-            messages.success(request, f"Application {status} successfully!")
-            return redirect('clerk:scheme_applications')
+        # Validate status
+        valid_statuses = ['approved', 'rejected', 'under_review']
+        if status in valid_statuses:
+            # Prevent invalid status transitions
+            if application.status == 'approved' and status == 'under_review':
+                messages.error(request, "Cannot move an approved application back to under review.")
+            elif application.status == 'rejected' and status == 'under_review':
+                messages.error(request, "Cannot move a rejected application back to under review.")
+            else:
+                application.status = status
+                application.reviewed_by = request.user
+                application.review_notes = notes
+                application.reviewed_at = timezone.now()
+                application.save()
+                
+                status_display = status.replace('_', ' ').title()
+                messages.success(request, f"Application successfully {status_display.lower()}.")
+                return redirect('clerk:scheme_applications')
+        else:
+            messages.error(request, "Invalid status selected.")
     
     context = {
         'application': application

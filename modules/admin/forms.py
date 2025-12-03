@@ -2,8 +2,6 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from modules.common.models import CustomUser
 from modules.clerk.models import ClerkProfile
-from .models import SystemSettings
-
 
 class AdminLoginForm(AuthenticationForm):
     """
@@ -22,31 +20,6 @@ class AdminLoginForm(AuthenticationForm):
             'placeholder': 'Enter your password'
         })
     )
-
-
-class SystemSettingsForm(forms.ModelForm):
-    """
-    Form for managing system settings
-    """
-    class Meta:
-        model = SystemSettings
-        fields = ['setting_key', 'setting_value', 'description']
-        widgets = {
-            'setting_key': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Setting key (e.g., site_name)'
-            }),
-            'setting_value': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Setting value',
-                'rows': 3
-            }),
-            'description': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Description of this setting',
-                'rows': 2
-            })
-        }
 
 
 class ClerkCreationForm(forms.ModelForm):

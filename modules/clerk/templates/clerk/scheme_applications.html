@@ -1,0 +1,154 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Scheme Applications - Clerk Panel{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Scheme Applications</h2>
+        <a href="{% url 'clerk:dashboard' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Pending</h5>
+                    <h3 class="mb-0">{{ pending_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Under Review</h5>
+                    <h3 class="mb-0">{{ under_review_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Approved</h5>
+                    <h3 class="mb-0">{{ approved_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Rejected</h5>
+                    <h3 class="mb-0">{{ rejected_count }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Filter Applications</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Status:</label>
+                    <select name="status" class="form-select" onchange="this.form.submit()">
+                        <option value="">All Applications</option>
+                        <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending ({{ pending_count }})</option>
+                        <option value="under_review" {% if status_filter == 'under_review' %}selected{% endif %}>Under Review ({{ under_review_count }})</option>
+                        <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approved ({{ approved_count }})</option>
+                        <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected ({{ rejected_count }})</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">&nbsp;</label>
+                    <div>
+                        <a href="{% url 'clerk:scheme_applications' %}" class="btn btn-secondary">Clear Filters</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if applications %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Applications List</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Application ID</th>
+                                <th>Scheme Name</th>
+                                <th>Applicant</th>
+                                <th>Applied Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for application in applications %}
+                            <tr>
+                                <td>#{{ application.id }}</td>
+                                <td>{{ application.scheme.name }}</td>
+                                <td>{{ application.applicant.first_name }} {{ application.applicant.last_name }}</td>
+                                <td>{{ application.applied_at|date:"d M Y" }}</td>
+                                <td>
+                                    {% if application.status == 'pending' %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% elif application.status == 'under_review' %}
+                                        <span class="badge bg-info">Under Review</span>
+                                    {% elif application.status == 'approved' %}
+                                        <span class="badge bg-success">Approved</span>
+                                    {% elif application.status == 'rejected' %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'clerk:review_application' application.id %}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye me-1"></i>
+                                        {% if application.status == 'pending' or application.status == 'under_review' %}
+                                            Review
+                                        {% else %}
+                                            View
+                                        {% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #ccc;"></i>
+            <h4 class="mt-3">No Applications Found</h4>
+            <p class="text-muted">
+                {% if status_filter %}
+                    No applications found with status "{{ status_filter }}".
+                {% else %}
+                    No scheme applications have been submitted yet.
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

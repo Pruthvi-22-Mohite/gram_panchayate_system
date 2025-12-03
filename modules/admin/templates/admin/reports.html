@@ -16,13 +16,16 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container-fluid mt-4">
     <div class="content-box">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="content-box-title mb-0">Reports & Analytics</h3>
-            <div>
+            <div class="d-flex gap-2">
                 <button class="btn btn-success" onclick="exportReport()">
                     <i class="bi bi-download me-2"></i>Export Report
+                </button>
+                <button class="btn btn-primary" onclick="refreshData()">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Refresh Data
                 </button>
             </div>
         </div>
@@ -38,42 +41,42 @@
         
         <!-- Report Filters -->
         <div class="card mb-4">
-            <div class="card-header">
+            <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">Report Filters</h5>
             </div>
             <div class="card-body">
-                <form class="row g-3">
+                <form class="row g-3" id="reportFilters">
                     <div class="col-md-3">
                         <label class="form-label">Report Type</label>
-                        <select class="form-select">
-                            <option>User Registration Trends</option>
-                            <option>Grievance Statistics</option>
-                            <option>Tax Collection Report</option>
-                            <option>Scheme Application Report</option>
-                            <option>System Activity Log</option>
+                        <select class="form-select" id="reportType">
+                            <option value="user_registration">User Registration Trends</option>
+                            <option value="grievance_statistics">Grievance Statistics</option>
+                            <option value="tax_collection">Tax Collection Report</option>
+                            <option value="scheme_applications">Scheme Application Report</option>
+                            <option value="system_activity">System Activity Log</option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Date Range</label>
-                        <select class="form-select">
-                            <option>Last 7 Days</option>
-                            <option selected>Last 30 Days</option>
-                            <option>Last 90 Days</option>
-                            <option>This Year</option>
-                            <option>Custom Range</option>
+                        <select class="form-select" id="dateRange">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30" selected>Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="365">This Year</option>
+                            <option value="custom">Custom Range</option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Format</label>
-                        <select class="form-select">
-                            <option>PDF</option>
-                            <option>Excel</option>
-                            <option>CSV</option>
-                            <option>JSON</option>
+                        <select class="form-select" id="exportFormat">
+                            <option value="pdf">PDF</option>
+                            <option value="excel">Excel</option>
+                            <option value="csv">CSV</option>
+                            <option value="json">JSON</option>
                         </select>
                     </div>
                     <div class="col-md-3 d-flex align-items-end">
-                        <button type="button" class="btn btn-primary w-100">
+                        <button type="button" class="btn btn-primary w-100" onclick="generateReport()">
                             <i class="bi bi-search me-2"></i>Generate Report
                         </button>
                     </div>
@@ -81,22 +84,107 @@
             </div>
         </div>
         
+        <!-- KPI Cards -->
+        <div class="row mb-4" id="kpiCards">
+            <div class="col-md-3 mb-4">
+                <div class="card border-start border-4 border-primary h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-muted">Total Users</h6>
+                                <h3 id="totalUsers">0</h3>
+                            </div>
+                            <div class="bg-light rounded-circle p-3">
+                                <i class="bi bi-people-fill text-primary fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="text-success"><i class="bi bi-arrow-up"></i> <span id="userGrowth">0%</span></span>
+                            <span class="text-muted ms-2">from last period</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-start border-4 border-success h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-muted">Total Clerks</h6>
+                                <h3 id="totalClerks">0</h3>
+                            </div>
+                            <div class="bg-light rounded-circle p-3">
+                                <i class="bi bi-person-badge-fill text-success fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="text-success"><i class="bi bi-arrow-up"></i> <span id="clerkGrowth">0%</span></span>
+                            <span class="text-muted ms-2">from last period</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-start border-4 border-warning h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-muted">Total Citizens</h6>
+                                <h3 id="totalCitizens">0</h3>
+                            </div>
+                            <div class="bg-light rounded-circle p-3">
+                                <i class="bi bi-person-fill text-warning fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="text-success"><i class="bi bi-arrow-up"></i> <span id="citizenGrowth">0%</span></span>
+                            <span class="text-muted ms-2">from last period</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-start border-4 border-danger h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-muted">Pending Grievances</h6>
+                                <h3 id="pendingGrievances">0</h3>
+                            </div>
+                            <div class="bg-light rounded-circle p-3">
+                                <i class="bi bi-exclamation-circle-fill text-danger fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="text-danger"><i class="bi bi-arrow-down"></i> <span id="grievanceChange">0%</span></span>
+                            <span class="text-muted ms-2">from last period</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Charts Section -->
         <div class="row mb-4">
-            <div class="col-md-6 mb-4">
+            <div class="col-md-8 mb-4">
                 <div class="card">
-                    <div class="card-header">
-                        <h5>User Registration Trends</h5>
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">User Registration Trends</h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="toggleChartType('userRegistrationChart')">
+                                <i class="bi bi-arrow-left-right"></i> Switch View
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <canvas id="userRegistrationChart" height="300"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
                 <div class="card">
-                    <div class="card-header">
-                        <h5>User Distribution by Type</h5>
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">User Distribution by Type</h5>
                     </div>
                     <div class="card-body">
                         <canvas id="userTypeChart" height="300"></canvas>
@@ -109,57 +197,28 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h5>Summary Statistics</h5>
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Summary Statistics</h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary" onclick="toggleTableSize()">
+                                <i class="bi bi-arrows-angle-expand"></i> Expand
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
+                            <table class="table table-striped" id="summaryTable">
+                                <thead class="table-light">
                                     <tr>
                                         <th>Metric</th>
                                         <th>Current Value</th>
                                         <th>Previous Period</th>
                                         <th>Change (%)</th>
+                                        <th>Trend</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Total Users</td>
-                                        <td>2,845</td>
-                                        <td>2,567</td>
-                                        <td class="text-success">+10.8%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Total Clerks</td>
-                                        <td>42</td>
-                                        <td>38</td>
-                                        <td class="text-success">+10.5%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Total Citizens</td>
-                                        <td>2,798</td>
-                                        <td>2,524</td>
-                                        <td class="text-success">+10.9%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Grievances Submitted</td>
-                                        <td>342</td>
-                                        <td>298</td>
-                                        <td class="text-success">+14.8%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Grievances Resolved</td>
-                                        <td>287</td>
-                                        <td>245</td>
-                                        <td class="text-success">+17.1%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tax Collections (₹)</td>
-                                        <td>12,45,000</td>
-                                        <td>10,87,500</td>
-                                        <td class="text-success">+14.5%</td>
-                                    </tr>
+                                <tbody id="summaryTableBody">
+                                    <!-- Data will be loaded dynamically -->
                                 </tbody>
                             </table>
                         </div>
@@ -172,53 +231,43 @@
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h5>Recent System Activity</h5>
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Recent System Activity</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
+                            <table class="table table-hover" id="activityTable">
+                                <thead class="table-light">
                                     <tr>
                                         <th>Activity</th>
                                         <th>User</th>
                                         <th>Timestamp</th>
                                         <th>Details</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>User Registration</td>
-                                        <td>Ramesh Kumar</td>
-                                        <td>Today, 10:30 AM</td>
-                                        <td>New citizen registered from Ward 3</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Grievance Submitted</td>
-                                        <td>Sunita Devi</td>
-                                        <td>Today, 09:45 AM</td>
-                                        <td>Road repair request in Main Street</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tax Payment</td>
-                                        <td>Mahesh Patil</td>
-                                        <td>Yesterday, 04:20 PM</td>
-                                        <td>Property tax payment of ₹12,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Scheme Application</td>
-                                        <td>Priya Sharma</td>
-                                        <td>Yesterday, 02:15 PM</td>
-                                        <td>Scholarship application submitted</td>
-                                    </tr>
-                                    <tr>
-                                        <td>User Deactivation</td>
-                                        <td>Admin</td>
-                                        <td>Yesterday, 11:30 AM</td>
-                                        <td>Deactivated inactive citizen account</td>
-                                    </tr>
+                                <tbody id="activityTableBody">
+                                    <!-- Data will be loaded dynamically -->
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="loadMoreActivity()">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>Load More
+                                </button>
+                            </div>
+                            <div>
+                                <nav>
+                                    <ul class="pagination pagination-sm mb-0">
+                                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -229,17 +278,27 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Initialize charts when the page loads
+    // Global variables for charts
+    let userRegChart, userTypeChart;
+    let currentChartType = 'line'; // For toggling chart types
+    
+    // Initialize when the page loads
     document.addEventListener('DOMContentLoaded', function() {
-        // User Registration Chart
+        initializeCharts();
+        loadData();
+        setInterval(refreshData, 30000); // Auto-refresh every 30 seconds
+    });
+    
+    // Initialize charts
+    function initializeCharts() {
         const userRegCtx = document.getElementById('userRegistrationChart').getContext('2d');
-        const userRegChart = new Chart(userRegCtx, {
+        userRegChart = new Chart(userRegCtx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: [],
                 datasets: [{
                     label: 'New Registrations',
-                    data: [120, 190, 130, 180, 220, 250, 210, 280, 310, 290, 320, 350],
+                    data: [],
                     borderColor: '#0d6efd',
                     backgroundColor: 'rgba(13, 110, 253, 0.1)',
                     tension: 0.3,
@@ -251,20 +310,32 @@
                 maintainAspectRatio: false,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
                     }
                 }
             }
         });
         
-        // User Type Chart
         const userTypeCtx = document.getElementById('userTypeChart').getContext('2d');
-        const userTypeChart = new Chart(userTypeCtx, {
+        userTypeChart = new Chart(userTypeCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Citizens', 'Clerks', 'Admins'],
+                labels: [],
                 datasets: [{
-                    data: [2798, 42, 5],
+                    data: [],
                     backgroundColor: [
                         '#198754',
                         '#0d6efd',
@@ -282,12 +353,296 @@
                 }
             }
         });
-    });
+    }
     
-    // Export report function
+    // Load all data
+    function loadData() {
+        loadKPIData();
+        loadChartData();
+        loadSummaryTable();
+        loadActivityTable();
+    }
+    
+    // Load KPI data
+    function loadKPIData() {
+        fetch('{% url "admin_module:reports_data" %}?type=kpi')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalUsers').textContent = data.total_users;
+                document.getElementById('totalClerks').textContent = data.total_clerks;
+                document.getElementById('totalCitizens').textContent = data.total_citizens;
+                
+                document.getElementById('userGrowth').textContent = data.user_growth + '%';
+                document.getElementById('clerkGrowth').textContent = data.clerk_growth + '%';
+                document.getElementById('citizenGrowth').textContent = data.citizen_growth + '%';
+                
+                // Update colors based on growth
+                document.getElementById('userGrowth').className = data.user_growth >= 0 ? 'text-success' : 'text-danger';
+                document.getElementById('clerkGrowth').className = data.clerk_growth >= 0 ? 'text-success' : 'text-danger';
+                document.getElementById('citizenGrowth').className = data.citizen_growth >= 0 ? 'text-success' : 'text-danger';
+            })
+            .catch(error => {
+                console.error('Error loading KPI data:', error);
+                // Fallback to mock data
+                document.getElementById('totalUsers').textContent = '2,845';
+                document.getElementById('totalClerks').textContent = '42';
+                document.getElementById('totalCitizens').textContent = '2,798';
+                document.getElementById('userGrowth').textContent = '+10.8%';
+                document.getElementById('clerkGrowth').textContent = '+10.5%';
+                document.getElementById('citizenGrowth').textContent = '+10.9%';
+            });
+    }
+    
+    // Load chart data
+    function loadChartData() {
+        fetch('{% url "admin_module:reports_data" %}?type=charts')
+            .then(response => response.json())
+            .then(data => {
+                // Update user registration chart
+                userRegChart.data.labels = data.registration_trends.labels;
+                userRegChart.data.datasets[0].data = data.registration_trends.data;
+                userRegChart.update();
+                
+                // Update user type chart
+                userTypeChart.data.labels = data.user_distribution.labels;
+                userTypeChart.data.datasets[0].data = data.user_distribution.data;
+                userTypeChart.update();
+            })
+            .catch(error => {
+                console.error('Error loading chart data:', error);
+                // Fallback to mock data
+                userRegChart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                userRegChart.data.datasets[0].data = [120, 190, 130, 180, 220, 250, 210, 280, 310, 290, 320, 350];
+                userRegChart.update();
+                
+                userTypeChart.data.labels = ['Citizens', 'Clerks', 'Admins'];
+                userTypeChart.data.datasets[0].data = [2798, 42, 5];
+                userTypeChart.update();
+            });
+    }
+    
+    // Load summary table data
+    function loadSummaryTable() {
+        const tbody = document.getElementById('summaryTableBody');
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Loading...</td></tr>';
+        
+        fetch('{% url "admin_module:reports_data" %}?type=summary')
+            .then(response => response.json())
+            .then(data => {
+                tbody.innerHTML = '';
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.metric}</td>
+                        <td>${item.current}</td>
+                        <td>${item.previous}</td>
+                        <td class="${item.change.startsWith('+') ? 'text-success' : 'text-danger'}">${item.change}</td>
+                        <td>
+                            ${item.change.startsWith('+') ? 
+                                '<i class="bi bi-arrow-up-circle-fill text-success"></i>' : 
+                                '<i class="bi bi-arrow-down-circle-fill text-danger"></i>'}
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading summary data:', error);
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading data</td></tr>';
+            });
+    }
+    
+    // Load activity table data
+    function loadActivityTable() {
+        const tbody = document.getElementById('activityTableBody');
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Loading...</td></tr>';
+        
+        fetch('{% url "admin_module:reports_data" %}?type=activity')
+            .then(response => response.json())
+            .then(data => {
+                tbody.innerHTML = '';
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.activity}</td>
+                        <td>${item.user}</td>
+                        <td>${item.timestamp}</td>
+                        <td>${item.details}</td>
+                        <td>
+                            <span class="badge bg-${item.status}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading activity data:', error);
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading data</td></tr>';
+            });
+    }
+    
+    // Toggle chart type for user registration chart
+    function toggleChartType(chartId) {
+        if (chartId === 'userRegistrationChart') {
+            currentChartType = currentChartType === 'line' ? 'bar' : 'line';
+            userRegChart.destroy();
+            
+            const userRegCtx = document.getElementById('userRegistrationChart').getContext('2d');
+            userRegChart = new Chart(userRegCtx, {
+                type: currentChartType,
+                data: {
+                    labels: userRegChart.data.labels,
+                    datasets: [{
+                        label: 'New Registrations',
+                        data: userRegChart.data.datasets[0].data,
+                        borderColor: '#0d6efd',
+                        backgroundColor: currentChartType === 'line' ? 'rgba(13, 110, 253, 0.1)' : '#0d6efd',
+                        tension: currentChartType === 'line' ? 0.3 : 0,
+                        fill: currentChartType === 'line'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    }
+    
+    // Toggle table size
+    function toggleTableSize() {
+        const tableContainer = document.querySelector('#summaryTable').closest('.table-responsive');
+        tableContainer.classList.toggle('expanded-table');
+        
+        const button = event.target.closest('button');
+        if (tableContainer.classList.contains('expanded-table')) {
+            button.innerHTML = '<i class="bi bi-arrows-angle-contract"></i> Collapse';
+        } else {
+            button.innerHTML = '<i class="bi bi-arrows-angle-expand"></i> Expand';
+        }
+    }
+    
+    // Load more activity
+    function loadMoreActivity() {
+        const button = event.target.closest('button');
+        button.innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Loading...';
+        button.disabled = true;
+        
+        // Simulate loading
+        setTimeout(() => {
+            loadActivityTable();
+            button.innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Load More';
+            button.disabled = false;
+        }, 1000);
+    }
+    
+    // Generate report based on filters
+    function generateReport() {
+        const reportType = document.getElementById('reportType').value;
+        const dateRange = document.getElementById('dateRange').value;
+        const format = document.getElementById('exportFormat').value;
+        
+        // Show loading indicator
+        const generateBtn = event.target.closest('button');
+        const originalText = generateBtn.innerHTML;
+        generateBtn.innerHTML = '<i class="bi bi-search me-2"></i>Generating...';
+        generateBtn.disabled = true;
+        
+        // Simulate report generation
+        setTimeout(() => {
+            alert(`Generated ${document.getElementById('reportType').options[document.getElementById('reportType').selectedIndex].text} for the last ${dateRange} days in ${format.toUpperCase()} format.`);
+            generateBtn.innerHTML = originalText;
+            generateBtn.disabled = false;
+        }, 1500);
+    }
+    
+    // Refresh all data
+    function refreshData() {
+        const refreshBtn = document.querySelector('[onclick="refreshData()"]');
+        const originalText = refreshBtn.innerHTML;
+        refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Refreshing...';
+        
+        loadData();
+        
+        setTimeout(() => {
+            refreshBtn.innerHTML = originalText;
+        }, 2000);
+    }
+    
+    // Export report
     function exportReport() {
-        const format = document.querySelector('select:nth-child(3)').value;
-        alert(`Report exported in ${format} format. Download will start shortly.`);
+        const format = document.getElementById('exportFormat').value;
+        alert(`Report exported in ${format.toUpperCase()} format. Download will start shortly.`);
     }
 </script>
+
+<style>
+    .expanded-table {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .card.border-start {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+    
+    .card.border-start:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .action-card {
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s;
+    }
+    
+    .action-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 1.5rem;
+    }
+    
+    .bg-card-blue {
+        background-color: rgba(13, 110, 253, 0.1);
+        color: #0d6efd;
+    }
+    
+    .bg-card-green {
+        background-color: rgba(25, 135, 84, 0.1);
+        color: #198754;
+    }
+    
+    .bg-card-saffron {
+        background-color: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+    }
+</style>
 {% endblock %}

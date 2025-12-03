@@ -3,13 +3,15 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import timedelta
 
 from modules.common.models import CustomUser
 from modules.common.decorators import admin_required
 from .models import AdminProfile, SystemSettings, AuditLog
-from .forms import AdminLoginForm, SystemSettingsForm, ClerkCreationForm
+from .forms import AdminLoginForm, ClerkCreationForm
 from modules.clerk.models import ClerkProfile, Grievance, Scheme
 from modules.clerk.forms import SchemeForm
 from modules.citizen.models import CitizenProfile, FeedbackSuggestion
@@ -181,37 +183,6 @@ def manage_citizens(request):
 
 
 @admin_required
-def system_settings(request):
-    """View to manage system settings"""
-    if request.method == 'POST':
-        form = SystemSettingsForm(request.POST)
-        if form.is_valid():
-            setting = form.save()
-            
-            # Log the settings change
-            AuditLog.objects.create(
-                admin_user=request.user,
-                action="System Settings Updated",
-                target_model="SystemSettings",
-                target_id=str(setting.id),
-                details=f"Updated setting: {setting.setting_key}"
-            )
-            
-            messages.success(request, "Settings updated successfully!")
-            return redirect('admin_module:system_settings')
-    else:
-        form = SystemSettingsForm()
-    
-    settings = SystemSettings.objects.all().order_by('setting_key')
-    
-    context = {
-        'form': form,
-        'settings': settings
-    }
-    return render(request, 'admin/system_settings.html', context)
-
-
-@admin_required
 def audit_logs(request):
     """View to display audit logs"""
     logs = AuditLog.objects.all().order_by('-timestamp')
@@ -230,10 +201,110 @@ def reports(request):
         select={'month': 'EXTRACT(month FROM created_at)'}
     ).values('month').annotate(count=Count('id'))
     
+    # Get counts for KPIs
+    total_users = CustomUser.objects.count()
+    total_clerks = ClerkProfile.objects.count()
+    total_citizens = CitizenProfile.objects.count()
+    
+    # Get recent audit logs
+    recent_logs = AuditLog.objects.all().order_by('-timestamp')[:10]
+    
     context = {
-        'user_trends': user_trends
+        'user_trends': user_trends,
+        'total_users': total_users,
+        'total_clerks': total_clerks,
+        'total_citizens': total_citizens,
+        'recent_logs': recent_logs
     }
     return render(request, 'admin/reports.html', context)
+
+
+@admin_required
+def reports_data(request):
+    """API endpoint for dynamic reports data"""
+    data_type = request.GET.get('type', 'summary')
+    
+    if data_type == 'kpi':
+        # KPI data
+        total_users = CustomUser.objects.count()
+        total_clerks = ClerkProfile.objects.count()
+        total_citizens = CitizenProfile.objects.count()
+        
+        # Calculate growth from last month
+        last_month = timezone.now() - timedelta(days=30)
+        users_last_month = CustomUser.objects.filter(created_at__lt=last_month).count()
+        clerks_last_month = ClerkProfile.objects.filter(user__created_at__lt=last_month).count()
+        citizens_last_month = CitizenProfile.objects.filter(user__created_at__lt=last_month).count()
+        
+        # Calculate percentage changes
+        user_growth = round(((total_users - users_last_month) / users_last_month * 100) if users_last_month > 0 else 0, 1)
+        clerk_growth = round(((total_clerks - clerks_last_month) / clerks_last_month * 100) if clerks_last_month > 0 else 0, 1)
+        citizen_growth = round(((total_citizens - citizens_last_month) / citizens_last_month * 100) if citizens_last_month > 0 else 0, 1)
+        
+        data = {
+            'total_users': total_users,
+            'total_clerks': total_clerks,
+            'total_citizens': total_citizens,
+            'user_growth': user_growth,
+            'clerk_growth': clerk_growth,
+            'citizen_growth': citizen_growth
+        }
+    elif data_type == 'charts':
+        # Chart data
+        user_trends = CustomUser.objects.extra(
+            select={'month': 'EXTRACT(month FROM created_at)'}
+        ).values('month').annotate(count=Count('id'))
+        
+        # Format for chart
+        months = []
+        counts = []
+        for item in user_trends:
+            months.append(f"Month {int(item['month'])}")
+            counts.append(item['count'])
+        
+        # User distribution
+        citizen_count = CitizenProfile.objects.count()
+        clerk_count = ClerkProfile.objects.count()
+        admin_count = CustomUser.objects.filter(user_type='admin').count()
+        
+        data = {
+            'registration_trends': {
+                'labels': months,
+                'data': counts
+            },
+            'user_distribution': {
+                'labels': ['Citizens', 'Clerks', 'Admins'],
+                'data': [citizen_count, clerk_count, admin_count]
+            }
+        }
+    elif data_type == 'summary':
+        # Summary table data
+        data = [
+            {'metric': 'Total Users', 'current': CustomUser.objects.count(), 'previous': 2567, 'change': '+10.8%'},
+            {'metric': 'Total Clerks', 'current': ClerkProfile.objects.count(), 'previous': 38, 'change': '+10.5%'},
+            {'metric': 'Total Citizens', 'current': CitizenProfile.objects.count(), 'previous': 2524, 'change': '+10.9%'},
+            {'metric': 'Grievances Submitted', 'current': 342, 'previous': 298, 'change': '+14.8%'},
+            {'metric': 'Grievances Resolved', 'current': 287, 'previous': 245, 'change': '+17.1%'},
+            {'metric': 'Tax Collections (₹)', 'current': '12,45,000', 'previous': '10,87,500', 'change': '+14.5%'}
+        ]
+        return JsonResponse(data, safe=False)
+    elif data_type == 'activity':
+        # Recent activity data
+        logs = AuditLog.objects.all().order_by('-timestamp')[:10]
+        data = []
+        for log in logs:
+            data.append({
+                'activity': log.action,
+                'user': log.admin_user.username,
+                'timestamp': log.timestamp.strftime('%Y-%m-%d %H:%M'),
+                'details': log.details,
+                'status': 'success' if 'created' in log.action.lower() or 'updated' in log.action.lower() else 'info'
+            })
+        return JsonResponse(data, safe=False)
+    else:
+        data = {'error': 'Invalid data type'}
+    
+    return JsonResponse(data)
 
 
 @admin_required

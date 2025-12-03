@@ -10,9 +10,10 @@ urlpatterns = [
     path('clerks/', views.manage_clerks, name='manage_clerks'),
     path('clerks/create/', views.create_clerk, name='create_clerk'),
     path('citizens/', views.manage_citizens, name='manage_citizens'),
-    path('settings/', views.system_settings, name='system_settings'),
+    # Removed system settings URL
     path('audit-logs/', views.audit_logs, name='audit_logs'),
     path('reports/', views.reports, name='reports'),
+    path('reports/data/', views.reports_data, name='reports_data'),
     path('grievances/', views.manage_grievances, name='manage_grievances'),
     path('schemes/', views.manage_schemes, name='manage_schemes'),
     path('schemes/<int:scheme_id>/edit/', views.edit_scheme, name='edit_scheme'),
