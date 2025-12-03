@@ -302,6 +302,43 @@ def manage_taxes(request):
 
 
 @clerk_required
+def edit_tax_record(request, tax_record_id):
+    """Edit an existing tax record"""
+    tax_record = get_object_or_404(TaxRecord, id=tax_record_id)
+    
+    if request.method == 'POST':
+        form = TaxRecordForm(request.POST, instance=tax_record)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Tax record updated successfully!")
+            return redirect('clerk:manage_taxes')
+    else:
+        form = TaxRecordForm(instance=tax_record)
+    
+    context = {
+        'form': form,
+        'tax_record': tax_record
+    }
+    return render(request, 'clerk/edit_tax_record.html', context)
+
+
+@clerk_required
+def delete_tax_record(request, tax_record_id):
+    """Delete a tax record"""
+    tax_record = get_object_or_404(TaxRecord, id=tax_record_id)
+    
+    if request.method == 'POST':
+        tax_record.delete()
+        messages.success(request, "Tax record deleted successfully!")
+        return redirect('clerk:manage_taxes')
+    
+    context = {
+        'tax_record': tax_record
+    }
+    return render(request, 'clerk/delete_tax_record.html', context)
+
+
+@clerk_required
 def reports(request):
     """View to display clerk reports"""
     # Application statistics

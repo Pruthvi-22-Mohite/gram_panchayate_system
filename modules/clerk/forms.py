@@ -117,7 +117,7 @@ class TaxRecordForm(forms.ModelForm):
     
     class Meta:
         model = TaxRecord
-        fields = ['taxpayer', 'tax_type', 'amount', 'due_date']
+        fields = ['taxpayer', 'tax_type', 'amount', 'due_date', 'status']
         widgets = {
             'tax_type': forms.Select(attrs={
                 'class': 'form-control'

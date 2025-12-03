@@ -1,0 +1,59 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Upload Tax Data - Clerk Panel{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-cloud-arrow-up"></i> Upload Tax Data</h2>
+                <a href="{% url 'clerk:dashboard' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Excel File Upload</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="excel_file" class="form-label">Select Excel File</label>
+                            <input type="file" class="form-control" id="excel_file" name="excel_file" accept=".xlsx,.xls" required>
+                            <div class="form-text">
+                                <strong>Required Columns:</strong> Aadhaar Number, Property Tax Amount, Property Due Date, 
+                                Property Penalty, Property Status, Water Tax Amount, Water Due Date, Water Penalty, 
+                                Water Status, Garbage Tax Amount, Garbage Due Date, Garbage Penalty, Garbage Status, 
+                                Health Tax Amount, Health Due Date, Health Penalty, Health Status
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="alert alert-info">
+                                <h6><i class="bi bi-info-circle"></i> Important Notes:</h6>
+                                <ul>
+                                    <li>Only .xlsx and .xls files are accepted</li>
+                                    <li>Aadhaar Number is required and used as the primary key</li>
+                                    <li>Existing records will be updated based on Aadhaar Number</li>
+                                    <li>New records will be created for new Aadhaar Numbers</li>
+                                    <li>Date format should be YYYY-MM-DD</li>
+                                    <li>Status values should be: paid, pending, overdue</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-upload"></i> Upload and Process
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

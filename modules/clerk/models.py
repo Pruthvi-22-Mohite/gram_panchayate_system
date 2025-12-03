@@ -118,8 +118,8 @@ class TaxRecord(models.Model):
     TAX_TYPES = [
         ('property', 'Property Tax'),
         ('water', 'Water Tax'),
-        ('trade', 'Trade License Fee'),
-        ('other', 'Other'),
+        ('garbage', 'Garbage Tax'),
+        ('health', 'Health Tax'),
     ]
     
     STATUS_CHOICES = [

@@ -15,6 +15,7 @@ urlpatterns = [
     path('reports/', views.reports, name='reports'),
     path('reports/data/', views.reports_data, name='reports_data'),
     path('grievances/', views.manage_grievances, name='manage_grievances'),
+    path('taxes/', views.manage_taxes, name='manage_taxes'),
     path('schemes/', views.manage_schemes, name='manage_schemes'),
     path('schemes/<int:scheme_id>/edit/', views.edit_scheme, name='edit_scheme'),
     path('schemes/<int:scheme_id>/delete/', views.delete_scheme, name='delete_scheme'),

@@ -8,6 +8,7 @@ from django.utils import timezone
 from modules.common.models import CustomUser
 from modules.common.decorators import citizen_required
 from modules.clerk.models import Scheme, SchemeApplication, Grievance, TaxRecord
+from tax_management.models import CitizenTaxData
 from modules.informationhub.models import VillageNotice, MeetingSchedule
 from modules.emergencydirectory.models import EmergencyContact
 from .models import CitizenProfile, CitizenDocument, FeedbackSuggestion, EmergencyContact as CitizenEmergencyContact, BudgetItem
@@ -84,6 +85,20 @@ def citizen_dashboard(request):
         status='pending'
     )
     
+    # Get overdue taxes as well
+    overdue_taxes = TaxRecord.objects.filter(
+        taxpayer=request.user,
+        status='overdue'
+    )
+    
+    # Get tax data from the Aadhaar-based system
+    citizen_tax_data = None
+    try:
+        citizen_profile = CitizenProfile.objects.get(user=request.user)
+        citizen_tax_data = CitizenTaxData.objects.get(aadhaar_number=citizen_profile.aadhaar_number)
+    except (CitizenProfile.DoesNotExist, CitizenTaxData.DoesNotExist):
+        citizen_tax_data = None
+    
     # Information Hub data
     today = timezone.now().date()
     
@@ -107,6 +122,8 @@ def citizen_dashboard(request):
         'recent_applications': recent_applications,
         'recent_grievances': recent_grievances,
         'pending_taxes': pending_taxes,
+        'overdue_taxes': overdue_taxes,
+        'citizen_tax_data': citizen_tax_data,
         'total_applications': recent_applications.count(),
         'total_grievances': recent_grievances.count(),
         'pending_tax_amount': sum(tax.amount for tax in pending_taxes),
@@ -236,15 +253,130 @@ def my_grievances(request):
 
 @citizen_required
 def pay_tax(request):
-    """View and pay taxes"""
+    """View and pay property taxes only"""
+    # Get property tax records from the clerk system (user-based)
     tax_records = TaxRecord.objects.filter(
-        taxpayer=request.user
+        taxpayer=request.user,
+        tax_type='property'
     ).order_by('-created_at')
     
+    # Get property tax data from the Aadhaar-based system
+    citizen_tax_data = None
+    property_tax_data = None
+    try:
+        citizen_profile = CitizenProfile.objects.get(user=request.user)
+        citizen_tax_data = CitizenTaxData.objects.get(aadhaar_number=citizen_profile.aadhaar_number)
+        if citizen_tax_data.property_tax_amount:
+            property_tax_data = {
+                'amount': citizen_tax_data.property_tax_amount,
+                'due_date': citizen_tax_data.property_due_date,
+                'penalty': citizen_tax_data.property_penalty,
+                'status': citizen_tax_data.property_status,
+            }
+    except (CitizenProfile.DoesNotExist, CitizenTaxData.DoesNotExist):
+        pass
+    
     context = {
-        'tax_records': tax_records
+        'tax_records': tax_records,
+        'property_tax_data': property_tax_data
     }
     return render(request, 'citizen/pay_tax.html', context)
+
+
+@citizen_required
+def pay_water_bill(request):
+    """View and pay water bills"""
+    # Get water tax records from the clerk system (user-based)
+    water_tax_records = TaxRecord.objects.filter(
+        taxpayer=request.user,
+        tax_type='water'
+    ).order_by('-created_at')
+    
+    # Get water tax data from the Aadhaar-based system
+    citizen_tax_data = None
+    water_tax_data = None
+    try:
+        citizen_profile = CitizenProfile.objects.get(user=request.user)
+        citizen_tax_data = CitizenTaxData.objects.get(aadhaar_number=citizen_profile.aadhaar_number)
+        if citizen_tax_data.water_tax_amount:
+            water_tax_data = {
+                'amount': citizen_tax_data.water_tax_amount,
+                'due_date': citizen_tax_data.water_due_date,
+                'penalty': citizen_tax_data.water_penalty,
+                'status': citizen_tax_data.water_status,
+            }
+    except (CitizenProfile.DoesNotExist, CitizenTaxData.DoesNotExist):
+        pass
+    
+    context = {
+        'water_tax_records': water_tax_records,
+        'water_tax_data': water_tax_data
+    }
+    return render(request, 'citizen/pay_water_bill.html', context)
+
+
+@citizen_required
+def pay_garbage_bill(request):
+    """View and pay garbage bills"""
+    # Get garbage tax records from the clerk system (user-based)
+    garbage_tax_records = TaxRecord.objects.filter(
+        taxpayer=request.user,
+        tax_type='garbage'
+    ).order_by('-created_at')
+    
+    # Get garbage tax data from the Aadhaar-based system
+    citizen_tax_data = None
+    garbage_tax_data = None
+    try:
+        citizen_profile = CitizenProfile.objects.get(user=request.user)
+        citizen_tax_data = CitizenTaxData.objects.get(aadhaar_number=citizen_profile.aadhaar_number)
+        if citizen_tax_data.garbage_tax_amount:
+            garbage_tax_data = {
+                'amount': citizen_tax_data.garbage_tax_amount,
+                'due_date': citizen_tax_data.garbage_due_date,
+                'penalty': citizen_tax_data.garbage_penalty,
+                'status': citizen_tax_data.garbage_status,
+            }
+    except (CitizenProfile.DoesNotExist, CitizenTaxData.DoesNotExist):
+        pass
+    
+    context = {
+        'garbage_tax_records': garbage_tax_records,
+        'garbage_tax_data': garbage_tax_data
+    }
+    return render(request, 'citizen/pay_garbage_bill.html', context)
+
+
+@citizen_required
+def pay_health_bill(request):
+    """View and pay health bills"""
+    # Get health tax records from the clerk system (user-based)
+    health_tax_records = TaxRecord.objects.filter(
+        taxpayer=request.user,
+        tax_type='health'
+    ).order_by('-created_at')
+    
+    # Get health tax data from the Aadhaar-based system
+    citizen_tax_data = None
+    health_tax_data = None
+    try:
+        citizen_profile = CitizenProfile.objects.get(user=request.user)
+        citizen_tax_data = CitizenTaxData.objects.get(aadhaar_number=citizen_profile.aadhaar_number)
+        if citizen_tax_data.health_tax_amount:
+            health_tax_data = {
+                'amount': citizen_tax_data.health_tax_amount,
+                'due_date': citizen_tax_data.health_due_date,
+                'penalty': citizen_tax_data.health_penalty,
+                'status': citizen_tax_data.health_status,
+            }
+    except (CitizenProfile.DoesNotExist, CitizenTaxData.DoesNotExist):
+        pass
+    
+    context = {
+        'health_tax_records': health_tax_records,
+        'health_tax_data': health_tax_data
+    }
+    return render(request, 'citizen/pay_health_bill.html', context)
 
 
 @citizen_required

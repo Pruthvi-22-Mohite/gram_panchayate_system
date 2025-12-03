@@ -16,6 +16,8 @@ urlpatterns = [
     path('grievances/', views.manage_grievances, name='manage_grievances'),
     path('grievances/<int:grievance_id>/respond/', views.respond_grievance, name='respond_grievance'),
     path('taxes/', views.manage_taxes, name='manage_taxes'),
+    path('taxes/<int:tax_record_id>/edit/', views.edit_tax_record, name='edit_tax_record'),
+    path('taxes/<int:tax_record_id>/delete/', views.delete_tax_record, name='delete_tax_record'),
     path('reports/', views.reports, name='reports'),
     # Information Hub URLs
     path('notices/', views.manage_notices, name='manage_notices'),

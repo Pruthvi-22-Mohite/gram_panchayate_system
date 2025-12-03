@@ -12,7 +12,7 @@ from modules.common.models import CustomUser
 from modules.common.decorators import admin_required
 from .models import AdminProfile, SystemSettings, AuditLog
 from .forms import AdminLoginForm, ClerkCreationForm
-from modules.clerk.models import ClerkProfile, Grievance, Scheme
+from modules.clerk.models import ClerkProfile, Grievance, Scheme, TaxRecord
 from modules.clerk.forms import SchemeForm
 from modules.citizen.models import CitizenProfile, FeedbackSuggestion
 from modules.citizen.forms import FeedbackResponseForm
@@ -305,6 +305,23 @@ def reports_data(request):
         data = {'error': 'Invalid data type'}
     
     return JsonResponse(data)
+
+
+@admin_required
+def manage_taxes(request):
+    """View to manage all tax records"""
+    tax_records = TaxRecord.objects.all().order_by('-created_at')
+    
+    # Get tax type distribution
+    tax_stats = TaxRecord.objects.values('tax_type').annotate(
+        count=Count('tax_type')
+    )
+    
+    context = {
+        'tax_records': tax_records,
+        'tax_stats': tax_stats
+    }
+    return render(request, 'admin/manage_taxes.html', context)
 
 
 @admin_required

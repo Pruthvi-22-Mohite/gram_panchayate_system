@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'modules.panchayat_budget',
     # Asset and Project Tracker module
     'modules.asset_project_tracker',
+    # Tax Management module
+    'tax_management',
 ]
 
 MIDDLEWARE = [
@@ -103,7 +105,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'gram_panchayate_system',
         'USER': 'root',
-        'PASSWORD': 'Vivek@M2007',  # Update with your MySQL password
+        'PASSWORD': 'Gargi@2006',  # Update with your MySQL password
         'HOST': 'localhost',
         'PORT': '3306',
     }

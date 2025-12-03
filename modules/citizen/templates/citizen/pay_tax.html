@@ -1,0 +1,135 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Pay Property Taxes - Citizen Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-house-door-fill"></i> Property Tax Payments</h2>
+                <a href="{% url 'citizen:dashboard' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Property Tax Records from Clerk System -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-list"></i> Your Property Tax Records</h5>
+                </div>
+                <div class="card-body">
+                    {% if tax_records %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Amount</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for record in tax_records %}
+                                        <tr>
+                                            <td>₹{{ record.amount }}</td>
+                                            <td>{{ record.due_date|date:"d M Y" }}</td>
+                                            <td>
+                                                <span class="badge {% if record.status == 'paid' %}bg-success{% elif record.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                                    {{ record.get_status_display }}
+                                                </span>
+                                            </td>
+                                            <td>{{ record.created_at|date:"d M Y" }}</td>
+                                            <td>
+                                                {% if record.status != 'paid' %}
+                                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal{{ record.id }}">
+                                                        <i class="bi bi-credit-card"></i> Pay
+                                                    </button>
+                                                {% else %}
+                                                    <button class="btn btn-sm btn-outline-success" disabled>
+                                                        <i class="bi bi-check-circle"></i> Paid
+                                                    </button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> No property tax records found in the clerk system.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Property Tax Data from Aadhaar-based System -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-house-door-fill"></i> Your Property Bill (Aadhaar-based)</h5>
+                </div>
+                <div class="card-body">
+                    {% if property_tax_data %}
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">Property Bill Details</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <h6 class="text-muted">Amount Due</h6>
+                                            <h4 class="mb-0">₹{{ property_tax_data.amount }}</h4>
+                                        </div>
+                                        
+                                        {% if property_tax_data.penalty > 0 %}
+                                            <div class="mb-3">
+                                                <h6 class="text-muted">Penalty</h6>
+                                                <h5 class="text-danger mb-0">₹{{ property_tax_data.penalty }}</h5>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <div class="mb-3">
+                                            <h6 class="text-muted">Due Date</h6>
+                                            <p class="mb-0">{{ property_tax_data.due_date|date:"d M Y" }}</p>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <h6 class="text-muted">Status</h6>
+                                            <span class="badge {% if property_tax_data.status == 'paid' %}bg-success{% elif property_tax_data.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ property_tax_data.status|title }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        {% if property_tax_data.status != 'paid' %}
+                                            <button class="btn btn-primary w-100">
+                                                <i class="bi bi-credit-card"></i> Pay Now
+                                            </button>
+                                        {% else %}
+                                            <button class="btn btn-success w-100" disabled>
+                                                <i class="bi bi-check-circle"></i> Paid
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> No property bill data found in the Aadhaar-based system.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Modals would go here if needed -->
+
+{% endblock %}

@@ -1,0 +1,3 @@
+Aadhaar Number,Property Tax Amount,Property Due Date,Property Penalty,Property Status,Water Tax Amount,Water Due Date,Water Penalty,Water Status,Garbage Tax Amount,Garbage Due Date,Garbage Penalty,Garbage Status,Health Tax Amount,Health Due Date,Health Penalty,Health Status
+123456789012,5000,2024-03-31,0,pending,1200,2024-04-15,100,overdue,800,2024-03-20,50,overdue,300,2024-05-31,0,pending
+987654321098,7500,2024-03-31,0,paid,1500,2024-04-15,0,pending,1000,2024-03-20,0,pending,500,2024-05-31,0,pending
