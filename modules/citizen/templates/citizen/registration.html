@@ -6,14 +6,14 @@
 {% block body_class %} class="login-page"{% endblock %}
 
 {% block header_actions %}
-<a href="{% url 'citizen:login' %}" class="btn btn-primary btn-sm">Back to Login</a>
+<a href="{% url 'citizen:login' %}" class="btn btn-primary btn-sm" data-lang-key="back_to_login">Back to Login</a>
 {% endblock %}
 
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center min-vh-custom">
     <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
         <div class="card-body">
-            <h2 class="card-title text-center mb-4">Citizen Registration</h2>
+            <h2 class="card-title text-center mb-4" data-lang-key="citizen_registration">Citizen Registration</h2>
             
             {% if messages %}
                 {% for message in messages %}
@@ -27,7 +27,7 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                    <label for="{{ form.username.id_for_label }}" class="form-label" data-lang-key="username">Username</label>
                     {{ form.username }}
                     {% if form.username.errors %}
                         <div class="text-danger">
@@ -39,7 +39,7 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="{{ form.email.id_for_label }}" class="form-label">Email Address</label>
+                    <label for="{{ form.email.id_for_label }}" class="form-label" data-lang-key="email_address">Email Address</label>
                     {{ form.email }}
                     {% if form.email.errors %}
                         <div class="text-danger">
@@ -51,7 +51,7 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="{{ form.mobile_number.id_for_label }}" class="form-label">Mobile Number</label>
+                    <label for="{{ form.mobile_number.id_for_label }}" class="form-label" data-lang-key="mobile_number">Mobile Number</label>
                     {{ form.mobile_number }}
                     {% if form.mobile_number.errors %}
                         <div class="text-danger">
@@ -63,7 +63,7 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="{{ form.aadhaar_number.id_for_label }}" class="form-label">Aadhaar Number</label>
+                    <label for="{{ form.aadhaar_number.id_for_label }}" class="form-label" data-lang-key="aadhaar_number">Aadhaar Number</label>
                     {{ form.aadhaar_number }}
                     {% if form.aadhaar_number.errors %}
                         <div class="text-danger">
@@ -75,7 +75,7 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="{{ form.address.id_for_label }}" class="form-label">Address</label>
+                    <label for="{{ form.address.id_for_label }}" class="form-label" data-lang-key="address">Address</label>
                     {{ form.address }}
                     {% if form.address.errors %}
                         <div class="text-danger">
@@ -87,7 +87,7 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
+                    <label for="{{ form.password1.id_for_label }}" class="form-label" data-lang-key="password">Password</label>
                     {{ form.password1 }}
                     {% if form.password1.errors %}
                         <div class="text-danger">
@@ -99,7 +99,7 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm Password</label>
+                    <label for="{{ form.password2.id_for_label }}" class="form-label" data-lang-key="confirm_password">Confirm Password</label>
                     {{ form.password2 }}
                     {% if form.password2.errors %}
                         <div class="text-danger">
@@ -110,11 +110,11 @@
                     {% endif %}
                 </div>
                 
-                <button type="submit" class="btn btn-primary w-100">Register</button>
+                <button type="submit" class="btn btn-primary w-100" data-lang-key="register_button">Register</button>
             </form>
             
             <div class="text-center mt-3">
-                <p>Already have an account? <a href="{% url 'citizen:login' %}">Login here</a></p>
+                <p data-lang-key="already_have_account">Already have an account? <a href="{% url 'citizen:login' %}" data-lang-key="login_here">Login here</a></p>
             </div>
         </div>
     </div>

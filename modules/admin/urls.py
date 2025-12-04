@@ -9,7 +9,11 @@ urlpatterns = [
     path('users/', views.manage_users, name='manage_users'),
     path('clerks/', views.manage_clerks, name='manage_clerks'),
     path('clerks/create/', views.create_clerk, name='create_clerk'),
+    path('clerks/<int:clerk_id>/edit/', views.edit_clerk, name='edit_clerk'),
+    path('clerks/<int:clerk_id>/toggle-status/', views.toggle_clerk_status, name='toggle_clerk_status'),
     path('citizens/', views.manage_citizens, name='manage_citizens'),
+    path('citizens/<int:citizen_id>/toggle-status/', views.toggle_citizen_status, name='toggle_citizen_status'),
+    path('citizens/<int:citizen_id>/delete/', views.delete_citizen, name='delete_citizen'),
     # Removed system settings URL
     path('audit-logs/', views.audit_logs, name='audit_logs'),
     path('reports/', views.reports, name='reports'),

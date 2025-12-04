@@ -69,17 +69,17 @@
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn btn-outline-primary" title="Edit">
+                                    <a href="{% url 'admin_module:edit_clerk' clerk.user.id %}" class="btn btn-outline-primary" title="Edit">
                                         <i class="bi bi-pencil"></i>
-                                    </button>
+                                    </a>
                                     {% if clerk.user.is_active %}
-                                        <button type="button" class="btn btn-outline-warning" title="Deactivate">
+                                        <a href="{% url 'admin_module:toggle_clerk_status' clerk.user.id %}" class="btn btn-outline-warning" title="Deactivate">
                                             <i class="bi bi-pause"></i>
-                                        </button>
+                                        </a>
                                     {% else %}
-                                        <button type="button" class="btn btn-outline-success" title="Activate">
+                                        <a href="{% url 'admin_module:toggle_clerk_status' clerk.user.id %}" class="btn btn-outline-success" title="Activate">
                                             <i class="bi bi-play"></i>
-                                        </button>
+                                        </a>
                                     {% endif %}
                                 </div>
                             </td>

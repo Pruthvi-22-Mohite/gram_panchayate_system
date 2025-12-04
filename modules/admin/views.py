@@ -11,7 +11,7 @@ from datetime import timedelta
 from modules.common.models import CustomUser
 from modules.common.decorators import admin_required
 from .models import AdminProfile, SystemSettings, AuditLog
-from .forms import AdminLoginForm, ClerkCreationForm
+from .forms import AdminLoginForm, ClerkCreationForm, ClerkEditForm
 from modules.clerk.models import ClerkProfile, Grievance, Scheme, TaxRecord
 from modules.clerk.forms import SchemeForm
 from modules.citizen.models import CitizenProfile, FeedbackSuggestion
@@ -171,6 +171,75 @@ def create_clerk(request):
 
 
 @admin_required
+def edit_clerk(request, clerk_id):
+    """View to edit clerk account"""
+    clerk = get_object_or_404(ClerkProfile, user_id=clerk_id)
+    
+    if request.method == 'POST':
+        form = ClerkEditForm(request.POST, instance=clerk.user)
+        if form.is_valid():
+            # Update the user
+            user = form.save()
+            
+            # Update the clerk profile
+            clerk.panchayat_name = form.cleaned_data['panchayat_name']
+            clerk.designation = form.cleaned_data['designation']
+            clerk.employee_id = form.cleaned_data['employee_id']
+            clerk.save()
+            
+            # Log the action
+            AuditLog.objects.create(
+                admin_user=request.user,
+                action="Clerk Account Updated",
+                target_model="ClerkProfile",
+                target_id=str(clerk.user.id),
+                details=f"Updated clerk account for {clerk.user.username} (Employee ID: {clerk.employee_id})"
+            )
+            
+            messages.success(request, f"Clerk account updated successfully! Username: {clerk.user.username}")
+            return redirect('admin_module:manage_clerks')
+    else:
+        # Pre-populate form with existing data
+        initial_data = {
+            'panchayat_name': clerk.panchayat_name,
+            'designation': clerk.designation,
+            'employee_id': clerk.employee_id
+        }
+        form = ClerkEditForm(instance=clerk.user, initial=initial_data)
+    
+    context = {
+        'form': form,
+        'clerk': clerk
+    }
+    return render(request, 'admin/edit_clerk.html', context)
+
+
+@admin_required
+def toggle_clerk_status(request, clerk_id):
+    """View to activate/deactivate clerk account"""
+    clerk = get_object_or_404(ClerkProfile, user_id=clerk_id)
+    
+    # Toggle the user's active status
+    clerk.user.is_active = not clerk.user.is_active
+    clerk.user.save()
+    
+    # Determine action for audit log
+    action = "Clerk Account Activated" if clerk.user.is_active else "Clerk Account Deactivated"
+    
+    # Log the action
+    AuditLog.objects.create(
+        admin_user=request.user,
+        action=action,
+        target_model="ClerkProfile",
+        target_id=str(clerk.user.id),
+        details=f"{'Activated' if clerk.user.is_active else 'Deactivated'} clerk account for {clerk.user.username} (Employee ID: {clerk.employee_id})"
+    )
+    
+    messages.success(request, f"Clerk account {'activated' if clerk.user.is_active else 'deactivated'} successfully!")
+    return redirect('admin_module:manage_clerks')
+
+
+@admin_required
 def manage_citizens(request):
     """View to manage citizen users"""
     citizens = CitizenProfile.objects.select_related('user').all()
@@ -180,6 +249,55 @@ def manage_citizens(request):
         'total_citizens': citizens.count()
     }
     return render(request, 'admin/manage_citizens.html', context)
+
+
+@admin_required
+def toggle_citizen_status(request, citizen_id):
+    """View to activate/deactivate citizen account"""
+    citizen = get_object_or_404(CitizenProfile, user_id=citizen_id)
+    
+    # Toggle the user's active status
+    citizen.user.is_active = not citizen.user.is_active
+    citizen.user.save()
+    
+    # Determine action for audit log
+    action = "Citizen Account Activated" if citizen.user.is_active else "Citizen Account Deactivated"
+    
+    # Log the action
+    AuditLog.objects.create(
+        admin_user=request.user,
+        action=action,
+        target_model="CitizenProfile",
+        target_id=str(citizen.user.id),
+        details=f"{'Activated' if citizen.user.is_active else 'Deactivated'} citizen account for {citizen.user.username} (User ID: {citizen.user.id})"
+    )
+    
+    messages.success(request, f"Citizen account {'activated' if citizen.user.is_active else 'deactivated'} successfully!")
+    return redirect('admin_module:manage_citizens')
+
+
+@admin_required
+def delete_citizen(request, citizen_id):
+    """View to delete citizen account"""
+    citizen = get_object_or_404(CitizenProfile, user_id=citizen_id)
+    username = citizen.user.username
+    
+    # Delete the citizen profile and user account
+    user = citizen.user
+    citizen.delete()
+    user.delete()
+    
+    # Log the action
+    AuditLog.objects.create(
+        admin_user=request.user,
+        action="Citizen Account Deleted",
+        target_model="CitizenProfile",
+        target_id=str(citizen_id),
+        details=f"Deleted citizen account for {username} (User ID: {citizen_id})"
+    )
+    
+    messages.success(request, f"Citizen account '{username}' deleted successfully!")
+    return redirect('admin_module:manage_citizens')
 
 
 @admin_required

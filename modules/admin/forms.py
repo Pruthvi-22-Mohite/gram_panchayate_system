@@ -113,6 +113,83 @@ class ClerkCreationForm(forms.ModelForm):
         return user
 
 
+class ClerkEditForm(forms.ModelForm):
+    """
+    Form for editing clerk accounts by admin
+    """
+    # Clerk profile fields
+    panchayat_name = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter Panchayat name'
+        })
+    )
+    designation = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter designation (e.g., Junior Clerk)'
+        })
+    )
+    employee_id = forms.CharField(
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter employee ID'
+        })
+    )
+    
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'first_name', 'last_name', 'email', 'mobile_number')
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Choose username for clerk'
+            }),
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First name'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last name'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Email address'
+            }),
+            'mobile_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Mobile number'
+            })
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # If we're editing an existing clerk, populate the profile fields
+        if self.instance and self.instance.pk:
+            try:
+                clerk_profile = self.instance.clerkprofile
+                self.fields['panchayat_name'].initial = clerk_profile.panchayat_name
+                self.fields['designation'].initial = clerk_profile.designation
+                self.fields['employee_id'].initial = clerk_profile.employee_id
+            except ClerkProfile.DoesNotExist:
+                pass
+    
+    def clean_employee_id(self):
+        employee_id = self.cleaned_data.get("employee_id")
+        # Check if another clerk already has this employee ID
+        if self.instance and self.instance.pk:
+            if ClerkProfile.objects.filter(employee_id=employee_id).exclude(user=self.instance).exists():
+                raise forms.ValidationError("A clerk with this employee ID already exists")
+        elif ClerkProfile.objects.filter(employee_id=employee_id).exists():
+            raise forms.ValidationError("A clerk with this employee ID already exists")
+        return employee_id
+
+
 class UserManagementForm(forms.Form):
     """
     Form for user management actions

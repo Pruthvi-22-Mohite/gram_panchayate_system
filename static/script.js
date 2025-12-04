@@ -58,10 +58,115 @@ const translations = {
         "access_guide_step3_title": "Step 3: Verify Your Identity",
         "access_guide_step3_desc": "Upon entering the OTP, the system will verify your identity. Make sure your mobile number is updated with your Aadhaar details.",
         "access_guide_step4_title": "Step 4: Access Your Dashboard",
-        "access_guide_step4_desc": "Once verified, you will be directed to your personalized dashboard where you can access all available services and information."
+        "access_guide_step4_desc": "Once verified, you will be directed to your personalized dashboard where you can access all available services and information.",
+        // New translations for citizen dashboard
+        "my_applications": "My Applications",
+        "my_grievances": "My Grievances",
+        "pending_taxes": "Pending Taxes",
+        "recent_activity": "Recent Activity & Alerts",
+        "recent_applications": "Recent Applications:",
+        "recent_grievances": "Recent Grievances:",
+        "tax_due": "Tax Due:",
+        "is_due_on": "is due on",
+        "pay_now": "Pay Now",
+        "overdue_tax": "Overdue Tax:",
+        "was_due_on": "was due on",
+        "property_tax_due": "Property Tax Due:",
+        "is_due_status": "is due status",
+        "on_date": "on",
+        "view_details": "View Details",
+        "water_tax_due": "Water Tax Due:",
+        "garbage_tax_due": "Garbage Tax Due:",
+        "health_tax_due": "Health Tax Due:",
+        "latest_village_notices": "Latest Village Notices",
+        "view_all": "View All",
+        "read_more": "Read More",
+        "no_notices_available": "No notices available at the moment.",
+        "upcoming_meetings": "Upcoming Meetings",
+        "meeting": "Meeting",
+        "date_time": "Date & Time",
+        "location": "Location",
+        "action": "Action",
+        "no_meetings_scheduled": "No meetings scheduled at the moment.",
+        // New translations for base template
+        "select_language": "Select Language",
+        "english": "English",
+        "marathi": "मराठी",
+        "hindi": "हिन्दी",
+        "welcome_user": "Welcome, {username}!",
+        "login": "Login",
+        // New translations for login template
+        "admin_login": "Admin Login",
+        "clerk_login": "Clerk Login",
+        "citizen_login": "Citizen Login",
+        "new_citizen": "New citizen?",
+        "register_here": "Register here",
+        // New translations for citizen login template
+        "citizen_login_page_title": "Citizen Login - LokSevaGram",
+        "citizen_login_title": "Citizen Login",
+        "login_username": "Username",
+        "login_password": "Password",
+        "dont_have_account": "Don't have an account?",
+        // New translations for citizen registration template
+        "citizen_registration_title": "Citizen Registration - LokSevaGram",
+        "back_to_login": "Back to Login",
+        "citizen_registration": "Citizen Registration",
+        "username": "Username",
+        "email_address": "Email Address",
+        "mobile_number": "Mobile Number",
+        "aadhaar_number": "Aadhaar Number",
+        "address": "Address",
+        "password": "Password",
+        "confirm_password": "Confirm Password",
+        "register_button": "Register",
+        "already_have_account": "Already have an account?",
+        "login_here": "Login here",
+        // New translations for admin dashboard
+        "admin_dashboard_title": "Admin Dashboard - LokSevaGram",
+        "admin_portal": "Admin Portal",
+        "welcome_admin": "Welcome to the admin portal, {username}!",
+        "admin_dashboard": "Admin Dashboard",
+        "admin_services": "Admin Services",
+        "action_manage_clerks": "Manage Clerks",
+        "action_create_clerk": "Create New Clerk",
+        "action_manage_citizens": "Manage Citizens",
+        "action_view_grievances": "View Grievances",
+        "action_reports": "Reports",
+        "action_manage_schemes": "Manage Schemes",
+        "action_manage_notices": "Manage Notices",
+        "action_manage_meetings": "Manage Meetings",
+        "action_emergency_directory": "Emergency Directory",
+        "action_manage_certificates": "Manage Certificates",
+        "action_manage_rti": "Manage RTI Requests",
+        "action_manage_land_records": "Manage Land Records",
+        "action_manage_feedback": "Manage Feedback",
+        "action_manage_assets": "Manage Assets",
+        "action_manage_projects": "Manage Projects",
+        "action_manage_taxes": "Manage Taxes",
+        "action_panchayat_budget": "Panchayat Budget",
+        // New translations for clerk dashboard
+        "clerk_dashboard_title": "Clerk Dashboard - LokSevaGram",
+        "clerk_portal": "Clerk Portal",
+        "welcome_clerk": "Welcome to the clerk portal, {username}!",
+        "clerk_dashboard": "Clerk Dashboard",
+        "clerk_services": "Clerk Services",
+        "action_handle_grievances": "Handle Grievances",
+        // Additional translations for missing elements
+        "total_clerks": "Total Clerks",
+        "total_citizens": "Total Citizens",
+        "active_schemes": "Active Schemes",
+        "total_users": "Total Users",
+        "pending_applications": "Pending Applications",
+        "open_grievances": "Open Grievances",
+        "emergency": "Emergency Directory",
+        "my_certificates": "My Certificates",
+        "my_rti_requests": "My RTI Requests",
+        "my_land_records": "My Land Records",
+        "view_budget": "View Panchayat Budget",
+        "pay_garbage_bill": "Pay Garbage Tax",
+        "pay_health_bill": "Pay Health Tax"
     },
-    "mr": {
-        "page_title": "लोकसेवाग्राम",
+    "mr": {        "page_title": "लोकसेवाग्राम",
         "main_title": "लोकसेवाग्राम",
         "subtitle": "ग्रामपंचायत डिजिटल सेवा | भारत सरकार",
         "welcome_main_title": "लोकसेवाग्राम मध्ये आपले स्वागत आहे",
@@ -119,7 +224,113 @@ const translations = {
         "access_guide_step3_title": "पायरी 3: तुमची ओळख सत्यापित करा",
         "access_guide_step3_desc": "ओटीपी प्रविष्ट केल्यावर, प्रणाली तुमची ओळख सत्यापित करेल. तुमचा मोबाईल नंबर तुमच्या आधार तपशीलांसह अद्ययावत असल्याची खात्री करा.",
         "access_guide_step4_title": "पायरी 4: तुमच्या डॅशबोर्डमध्ये प्रवेश करा",
-        "access_guide_step4_desc": "एकदा सत्यापित झाल्यावर, तुम्हाला तुमच्या वैयक्तिक डॅशबोर्डवर निर्देशित केले जाईल जिथे तुम्ही सर्व उपलब्ध सेवा आणि माहितीमध्ये प्रवेश करू शकता."
+        "access_guide_step4_desc": "एकदा सत्यापित झाल्यावर, तुम्हाला तुमच्या वैयक्तिक डॅशबोर्डवर निर्देशित केले जाईल जिथे तुम्ही सर्व उपलब्ध सेवा आणि माहितीमध्ये प्रवेश करू शकता.",
+        // New translations for citizen dashboard
+        "my_applications": "माझे अर्ज",
+        "my_grievances": "माझ्या तक्रारी",
+        "pending_taxes": "बाकी कर",
+        "recent_activity": "अलीकडील क्रियाकलाप आणि सूचना",
+        "recent_applications": "अलीकडील अर्ज:",
+        "recent_grievances": "अलीकडील तक्रारी:",
+        "tax_due": "देय कर:",
+        "is_due_on": "ची पात्रता आहे",
+        "pay_now": "आता भरा",
+        "overdue_tax": "विलंबित कर:",
+        "was_due_on": "ची पात्रता होती",
+        "property_tax_due": "मालमत्ता कर देय:",
+        "is_due_status": "स्थिती देय आहे",
+        "on_date": "वर",
+        "view_details": "तपशील पहा",
+        "water_tax_due": "पाणी कर देय:",
+        "garbage_tax_due": "कचरा कर देय:",
+        "health_tax_due": "आरोग्य कर देय:",
+        "latest_village_notices": "नवीनतम गावाच्या सूचना",
+        "view_all": "सर्व पहा",
+        "read_more": "अधिक वाचा",
+        "no_notices_available": "सध्या कोणत्याही सूचना उपलब्ध नाहीत.",
+        "upcoming_meetings": "आगामी बैठकी",
+        "meeting": "बैठक",
+        "date_time": "दिनांक आणि वेळ",
+        "location": "स्थान",
+        "action": "कृती",
+        "no_meetings_scheduled": "सध्या कोणत्याही बैठकी निर्धारित नाहीत.",
+        // New translations for base template
+        "select_language": "भाषा निवडा",
+        "english": "English",
+        "marathi": "मराठी",
+        "hindi": "हिन्दी",
+        "welcome_user": "स्वागत आहे, {username}!",
+        "login": "लॉगिन",
+        // New translations for login template
+        "admin_login": "प्रशासक लॉगिन",
+        "clerk_login": "कर्मचारी लॉगिन",
+        "citizen_login": "नागरिक लॉगिन",
+        "new_citizen": "नवीन नागरिक?",
+        "register_here": "येथे नोंदणी करा",
+        // New translations for citizen login template
+        "citizen_login_page_title": "नागरिक लॉगिन - लोकसेवाग्राम",
+        "citizen_login_title": "नागरिक लॉगिन",
+        "login_username": "वापरकर्तानाव",
+        "login_password": "संकेतशब्द",
+        "dont_have_account": "खाते नाही?",
+        // New translations for citizen registration template
+        "citizen_registration_title": "नागरिक नोंदणी - लोकसेवाग्राम",
+        "back_to_login": "लॉगिन वर परत जा",
+        "citizen_registration": "नागरिक नोंदणी",
+        "username": "वापरकर्तानाव",
+        "email_address": "ईमेल पत्ता",
+        "mobile_number": "मोबाईल क्रमांक",
+        "aadhaar_number": "आधार क्रमांक",
+        "address": "पत्ता",
+        "password": "संकेतशब्द",
+        "confirm_password": "संकेतशब्दची पुष्टी करा",
+        "register_button": "नोंदणी करा",
+        "already_have_account": "आधीपासूनच खाते आहे?",
+        "login_here": "येथे लॉगिन करा",
+        // New translations for admin dashboard
+        "admin_dashboard_title": "प्रशासक डॅशबोर्ड - लोकसेवाग्राम",
+        "admin_portal": "प्रशासक पोर्टल",
+        "welcome_admin": "प्रशासक पोर्टल मध्ये आपले स्वागत आहे, {username}!",
+        "admin_dashboard": "प्रशासक डॅशबोर्ड",
+        "admin_services": "प्रशासक सेवा",
+        "action_manage_clerks": "कर्मचारी व्यवस्थापित करा",
+        "action_create_clerk": "नवीन कर्मचारी तयार करा",
+        "action_manage_citizens": "नागरिक व्यवस्थापित करा",
+        "action_view_grievances": "तक्रारी पहा",
+        "action_reports": "अहवाल",
+        "action_manage_schemes": "योजना व्यवस्थापित करा",
+        "action_manage_notices": "सूचना व्यवस्थापित करा",
+        "action_manage_meetings": "सभा व्यवस्थापित करा",
+        "action_emergency_directory": "आपत्कालीन निर्देशिका",
+        "action_manage_certificates": "प्रमाणपत्रे व्यवस्थापित करा",
+        "action_manage_rti": "माहितीचा अधिकार अर्ज व्यवस्थापित करा",
+        "action_manage_land_records": "जमीन रेकॉर्ड व्यवस्थापित करा",
+        "action_manage_feedback": "अभिप्राय व्यवस्थापित करा",
+        "action_manage_assets": "मालमत्ता व्यवस्थापित करा",
+        "action_manage_projects": "प्रकल्प व्यवस्थापित करा",
+        "action_manage_taxes": "कर व्यवस्थापित करा",
+        "action_panchayat_budget": "पंचायत अर्थसंकल्प",
+        // New translations for clerk dashboard
+        "clerk_dashboard_title": "कर्मचारी डॅशबोर्ड - लोकसेवाग्राम",
+        "clerk_portal": "कर्मचारी पोर्टल",
+        "welcome_clerk": "कर्मचारी पोर्टल मध्ये आपले स्वागत आहे, {username}!",
+        "clerk_dashboard": "कर्मचारी डॅशबोर्ड",
+        "clerk_services": "कर्मचारी सेवा",
+        "action_handle_grievances": "तक्रारी सांभाळा",
+        // Additional translations for missing elements
+        "total_clerks": "एकूण कर्मचारी",
+        "total_citizens": "एकूण नागरिक",
+        "active_schemes": "सक्रिय योजना",
+        "total_users": "एकूण वापरकर्ते",
+        "pending_applications": "प्रलंबित अर्ज",
+        "open_grievances": "उघड्या तक्रारी",
+        "action_emergency_directory": "आपत्कालीन निर्देशिका",
+        "action_panchayat_budget": "पंचायत अर्थसंकल्प",
+        "my_certificates": "माझे प्रमाणपत्र",
+        "my_rti_requests": "माझे माहितीचे अधिकार विनंती",
+        "my_land_records": "माझे जमिनीचे रेकॉर्ड",
+        "pay_garbage_bill": "कचरा कर भरा",
+        "pay_health_bill": "आरोग्य कर भरा"
     },
     "hi": {
         "page_title": "लोकसेवाग्राम",
@@ -171,6 +382,8 @@ const translations = {
         "role_staff": "पंचायत कर्मचारी",
         "role_official": "उच्च अधिकारी",
         "login_button": "लॉगिन",
+        "action_my_schemes": "मेरी लागू की गई योजनाएं",
+        "action_beneficiary_list": "लाभार्थी सूची",
         "access_guide_title": "लोकसेवाग्राम में कैसे पहुंचें",
         "access_guide_intro": "लॉग इन करने और सेवाओं का उपयोग शुरू करने के लिए इन सरल चरणों का पालन करें:",
         "access_guide_step1_title": "चरण 1: लॉगिन पृष्ठ पर जाएं",
@@ -180,26 +393,212 @@ const translations = {
         "access_guide_step3_title": "चरण 3: अपनी पहचान सत्यापित करें",
         "access_guide_step3_desc": "ओटीपी दर्ज करने पर, सिस्टम आपकी पहचान को सत्यापित करेगा। सुनिश्चित करें कि आपका मोबाइल नंबर आपके आधार विवरण के साथ अपडेट है।",
         "access_guide_step4_title": "चरण 4: अपने डैशबोर्ड तक पहुंचें",
-        "access_guide_step4_desc": "एक बार सत्यापित होने के बाद, आपको आपके व्यक्तिगत डैशबोर्ड पर निर्देशित किया जाएगा, जहाँ आप सभी उपलब्ध सेवाओं और जानकारी तक पहुंच सकते हैं।"
+        "access_guide_step4_desc": "एक बार सत्यापित होने के बाद, आपको आपके व्यक्तिगत डैशबोर्ड पर निर्देशित किया जाएगा, जहाँ आप सभी उपलब्ध सेवाओं और जानकारी तक पहुंच सकते हैं।",
+        // New translations for citizen dashboard
+        "my_applications": "मेरे आवेदन",
+        "my_grievances": "मेरी शिकायतें",
+        "pending_taxes": "लंबित कर",
+        "recent_activity": "हाल की गतिविधि और अलर्ट",
+        "recent_applications": "हाल के आवेदन:",
+        "recent_grievances": "हाल की शिकायतें:",
+        "tax_due": "कर बकाया:",
+        "is_due_on": "की नियत तारीख है",
+        "pay_now": "अभी भुगतान करें",
+        "overdue_tax": "अतिदेय कर:",
+        "was_due_on": "की नियत तारीख थी",
+        "property_tax_due": "संपत्ति कर बकाया:",
+        "is_due_status": "बकाया है स्थिति",
+        "on_date": "पर",
+        "view_details": "विवरण देखें",
+        "water_tax_due": "पानी कर बकाया:",
+        "garbage_tax_due": "कचरा कर बकाया:",
+        "health_tax_due": "स्वास्थ्य कर बकाया:",
+        "latest_village_notices": "नवीनतम गांव की सूचनाएं",
+        "view_all": "सभी देखें",
+        "read_more": "और पढ़ें",
+        "no_notices_available": "इस समय कोई सूचनाएं उपलब्ध नहीं हैं।",
+        "upcoming_meetings": "आगामी बैठकें",
+        "meeting": "बैठक",
+        "date_time": "दिनांक और समय",
+        "location": "स्थान",
+        "action": "कार्य",
+        "no_meetings_scheduled": "इस समय कोई बैठकें निर्धारित नहीं हैं।",
+        // New translations for base template
+        "select_language": "भाषा चुनें",
+        "english": "English",
+        "marathi": "मराठी",
+        "hindi": "हिन्दी",
+        "welcome_user": "स्वागत है, {username}!",
+        "login": "लॉगिन",
+        // New translations for login template
+        "admin_login": "व्यवस्थापक लॉगिन",
+        "clerk_login": "कर्मचारी लॉगिन",
+        "citizen_login": "नागरिक लॉगिन",
+        "new_citizen": "नया नागरिक?",
+        "register_here": "यहाँ पंजीकरण करें",
+        // New translations for citizen login template
+        "citizen_login_page_title": "नागरिक लॉगिन - लोकसेवाग्राम",
+        "citizen_login_title": "नागरिक लॉगिन",
+        "login_username": "उपयोगकर्ता नाम",
+        "login_password": "पासवर्ड",
+        "dont_have_account": "खाता नहीं है?",
+        // New translations for citizen registration template
+        "citizen_registration_title": "नागरिक पंजीकरण - लोकसेवाग्राम",
+        "back_to_login": "लॉगिन पर वापस जाएं",
+        "citizen_registration": "नागरिक पंजीकरण",
+        "username": "उपयोगकर्ता नाम",
+        "email_address": "ईमेल पता",
+        "mobile_number": "मोबाइल नंबर",
+        "aadhaar_number": "आधार नंबर",
+        "address": "पता",
+        "password": "पासवर्ड",
+        "confirm_password": "पासवर्ड की पुष्टि करें",
+        "register_button": "रजिस्टर करें",
+        "already_have_account": "पहले से ही एक खाता है?",
+        "login_here": "यहाँ लॉगिन करें",
+        // New translations for admin dashboard
+        "admin_dashboard_title": "व्यवस्थापक डैशबोर्ड - लोकसेवाग्राम",
+        "admin_portal": "व्यवस्थापक पोर्टल",
+        "welcome_admin": "व्यवस्थापक पोर्टल में आपका स्वागत है, {username}!",
+        "admin_dashboard": "व्यवस्थापक डैशबोर्ड",
+        "admin_services": "व्यवस्थापक सेवाएँ",
+        "action_manage_clerks": "कर्मचारियों का प्रबंधन करें",
+        "action_create_clerk": "नया कर्मचारी बनाएं",
+        "action_manage_citizens": "नागरिकों का प्रबंधन करें",
+        "action_view_grievances": "शिकायतें देखें",
+        "action_reports": "रिपोर्ट्स",
+        "action_manage_schemes": "योजनाओं का प्रबंधन करें",
+        "action_manage_notices": "सूचनाओं का प्रबंधन करें",
+        "action_manage_meetings": "बैठकों का प्रबंधन करें",
+        "action_emergency_directory": "आपातकालीन निर्देशिका",
+        "action_manage_certificates": "प्रमाणपत्रों का प्रबंधन करें",
+        "action_manage_rti": "आरटीआई अनुरोधों का प्रबंधन करें",
+        "action_manage_land_records": "भूमि रिकॉर्ड का प्रबंधन करें",
+        "action_manage_feedback": "प्रतिक्रियाओं का प्रबंधन करें",
+        "action_manage_assets": "संपत्ति का प्रबंधन करें",
+        "action_manage_projects": "परियोजनाओं का प्रबंधन करें",
+        "action_manage_taxes": "करों का प्रबंधन करें",
+        "action_panchayat_budget": "पंचायत बजट",
+        // New translations for clerk dashboard
+        "clerk_dashboard_title": "कर्मचारी डैशबोर्ड - लोकसेवाग्राम",
+        "clerk_portal": "कर्मचारी पोर्टल",
+        "welcome_clerk": "कर्मचारी पोर्टल में आपका स्वागत है, {username}!",
+        "clerk_dashboard": "कर्मचारी डैशबोर्ड",
+        "clerk_services": "कर्मचारी सेवाएँ",
+        "action_handle_grievances": "शिकायतों को संभालें",
+        // Additional translations for missing elements
+        "total_clerks": "कुल कर्मचारी",
+        "total_citizens": "कुल नागरिक",
+        "active_schemes": "सक्रिय योजनाएं",
+        "total_users": "कुल उपयोगकर्ता",
+        "pending_applications": "लंबित आवेदन",
+        "open_grievances": "खुली शिकायतें",
+        "emergency": "आपातकालीन निर्देशिका",
+        "my_certificates": "मेरे प्रमाणपत्र",
+        "my_rti_requests": "मेरे आरटीआई अनुरोध",
+        "my_land_records": "मेरे भूमि रिकॉर्ड",
+        "view_budget": "पंचायत बजट देखें",
+        "pay_garbage_bill": "कचरा कर भरें",
+        "pay_health_bill": "स्वास्थ्य कर भरें"
     }
+};
+// Handle dynamic content with placeholders
+const interpolate = (str, params) => {
+    return str.replace(/\{([^}]+)\}/g, (match, key) => {
+        return params[key] || match;
+    });
 };
 
 const setLanguage = (lang) => {
+    // Apply translations to all elements with data-lang-key attribute
     document.querySelectorAll('[data-lang-key]').forEach(element => {
-        const key = element.getAttribute('data-lang-key');
-        if (translations[lang] && translations[lang][key]) {
-            if (element.tagName === 'TITLE') {
-                document.title = translations[lang][key];
+        let key = element.getAttribute('data-lang-key');
+        
+        // For title elements, dynamically determine the appropriate translation key based on content
+        if (element.tagName === 'TITLE') {
+            const titleContent = element.textContent.trim();
+            
+            // Map specific title content to appropriate translation keys
+            if (titleContent.includes('Admin Dashboard')) {
+                key = 'admin_dashboard_title';
+            } else if (titleContent.includes('Citizen Login')) {
+                key = 'citizen_login_page_title';
+            } else if (titleContent.includes('Citizen Registration')) {
+                key = 'citizen_registration_title';
+            } else if (titleContent.includes('Clerk Dashboard')) {
+                key = 'clerk_dashboard_title';
             } else {
-                element.innerText = translations[lang][key];
+                // Default to page_title for generic pages
+                key = 'page_title';
+            }
+        }
+        
+        if (translations[lang] && translations[lang][key]) {
+            let translatedText = translations[lang][key];
+            
+            // Handle dynamic content like welcome messages
+            if (key.includes('welcome') && window.userUsername) {
+                translatedText = interpolate(translatedText, { username: window.userUsername });
+            }
+            
+            if (element.tagName === 'TITLE') {
+                document.title = translatedText;
+            } else {
+                element.innerText = translatedText;
             }
         }
     });
+    
+    // Also check for any dynamically added elements that might have been missed
+    setTimeout(() => {
+        document.querySelectorAll('[data-lang-key]').forEach(element => {
+            let key = element.getAttribute('data-lang-key');
+            
+            // For title elements, dynamically determine the appropriate translation key based on content
+            if (element.tagName === 'TITLE') {
+                const titleContent = element.textContent.trim();
+                
+                // Map specific title content to appropriate translation keys
+                if (titleContent.includes('Admin Dashboard')) {
+                    key = 'admin_dashboard_title';
+                } else if (titleContent.includes('Citizen Login')) {
+                    key = 'citizen_login_page_title';
+                } else if (titleContent.includes('Citizen Registration')) {
+                    key = 'citizen_registration_title';
+                } else if (titleContent.includes('Clerk Dashboard')) {
+                    key = 'clerk_dashboard_title';
+                } else {
+                    // Default to page_title for generic pages
+                    key = 'page_title';
+                }
+            }
+            
+            if (translations[lang] && translations[lang][key]) {
+                let translatedText = translations[lang][key];
+                
+                // Handle dynamic content like welcome messages
+                if (key.includes('welcome') && window.userUsername) {
+                    translatedText = interpolate(translatedText, { username: window.userUsername });
+                }
+                
+                if (element.tagName === 'TITLE') {
+                    document.title = translatedText;
+                } else {
+                    element.innerText = translatedText;
+                }
+            }
+        });
+    }, 100);
+    
     localStorage.setItem('userLanguage', lang);
     const langSwitcher = document.getElementById('language-switcher');
     if (langSwitcher) langSwitcher.value = lang;
+    
+    // Re-render summary cards to ensure they are translated
+    if (document.querySelector('.sidebar')) {
+        loadCitizenDashboard();
+    }
 };
-
 // ==========================================================
 //  PAGE INITIALIZATION
 // ==========================================================
@@ -250,8 +649,16 @@ function handleLogin(event) {
 
 function loadCitizenDashboard() {
     renderSummaryCards();
+    
+    // Ensure all elements are translated after rendering
+    const currentLang = localStorage.getItem('userLanguage') || 'en';
+    setLanguage(currentLang);
+    
+    // Additional translation pass to catch any missed elements
+    setTimeout(() => {
+        setLanguage(currentLang);
+    }, 150);
 }
-
 function renderSummaryCards() {
     const container = document.getElementById('summary-cards-container');
     if (!container) return;
@@ -281,4 +688,15 @@ function renderSummaryCards() {
     
     const currentLang = localStorage.getItem('userLanguage') || 'en';
     setLanguage(currentLang);
+    
+    // Also update welcome messages dynamically if user data is available
+    if (window.userUsername) {
+        const welcomeElements = document.querySelectorAll('[data-lang-key*="welcome"]');
+        welcomeElements.forEach(element => {
+            const key = element.getAttribute('data-lang-key');
+            if (translations[currentLang] && translations[currentLang][key]) {
+                element.innerText = interpolate(translations[currentLang][key], { username: window.userUsername });
+            }
+        });
+    }
 }

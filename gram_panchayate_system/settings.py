@@ -58,9 +58,11 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # Add this for i18n
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'modules.common.middleware.language.LanguageMiddleware',  # Add our custom language middleware
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -105,7 +107,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'gram_panchayate_system',
         'USER': 'root',
-        'PASSWORD': 'Gargi@2006',  # Update with your MySQL password
+        'PASSWORD': 'Vivek@M2007',  # Update with your MySQL password
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -136,12 +138,27 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# Add supported languages
+LANGUAGES = [
+    ('en', 'English'),
+    ('hi', 'Hindi'),
+    ('mr', 'Marathi'),
+]
 
+# Enable internationalization
 USE_I18N = True
+
+# Enable localization (formatting of dates, numbers, etc.)
+USE_L10N = True
+
+TIME_ZONE = 'UTC'
 
 USE_TZ = True
 
+# Localization settings
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
