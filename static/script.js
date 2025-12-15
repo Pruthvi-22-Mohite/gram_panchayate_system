@@ -164,7 +164,22 @@ const translations = {
         "my_land_records": "My Land Records",
         "view_budget": "View Panchayat Budget",
         "pay_garbage_bill": "Pay Garbage Tax",
-        "pay_health_bill": "Pay Health Tax"
+        "pay_health_bill": "Pay Health Tax",
+        // New translations for index page
+        "community_engagement_title": "Community Engagement",
+        "community_engagement_desc": "Active participation in village development",
+        "digital_transformation_title": "Digital Transformation",
+        "digital_transformation_desc": "Bringing technology to rural governance",
+        "transparent_governance_title": "Transparent Governance",
+        "transparent_governance_desc": "Open access to public information and records",
+        "latest_announcements": "Latest Announcements",
+        "issued_by": "Issued by:",
+        "view_all_announcements": "View All Announcements",
+        "no_announcements": "No announcements available at the moment.",
+        "upcoming_meetings_title": "Upcoming Meetings",
+        "organized_by": "Organized by:",
+        "view_all_meetings": "View All Meetings",
+        "no_meetings": "No upcoming meetings scheduled."
     },
     "mr": {        "page_title": "लोकसेवाग्राम",
         "main_title": "लोकसेवाग्राम",
@@ -330,7 +345,22 @@ const translations = {
         "my_rti_requests": "माझे माहितीचे अधिकार विनंती",
         "my_land_records": "माझे जमिनीचे रेकॉर्ड",
         "pay_garbage_bill": "कचरा कर भरा",
-        "pay_health_bill": "आरोग्य कर भरा"
+        "pay_health_bill": "आरोग्य कर भरा",
+        // New translations for index page
+        "community_engagement_title": "समुदाय सहभाग",
+        "community_engagement_desc": "गाव विकासात सक्रिय सहभाग",
+        "digital_transformation_title": "डिजिटल रूपांतरण",
+        "digital_transformation_desc": "ग्रामीण शासनासाठी तंत्रज्ञान आणणे",
+        "transparent_governance_title": "पारदर्शक शासन",
+        "transparent_governance_desc": "सार्वजनिक माहिती आणि नोंदींमध्ये खुला प्रवेश",
+        "latest_announcements": "नवीनतम घोषणा",
+        "issued_by": "जारी केलेले:",
+        "view_all_announcements": "सर्व घोषणा पहा",
+        "no_announcements": "या क्षणी कोणत्याही घोषणा उपलब्ध नाहीत.",
+        "upcoming_meetings_title": "आगामी बैठकी",
+        "organized_by": "आयोजित केलेले:",
+        "view_all_meetings": "सर्व बैठकी पहा",
+        "no_meetings": "या क्षणी कोणत्याही बैठकी निर्धारित नाहीत."
     },
     "hi": {
         "page_title": "लोकसेवाग्राम",
@@ -499,7 +529,22 @@ const translations = {
         "my_land_records": "मेरे भूमि रिकॉर्ड",
         "view_budget": "पंचायत बजट देखें",
         "pay_garbage_bill": "कचरा कर भरें",
-        "pay_health_bill": "स्वास्थ्य कर भरें"
+        "pay_health_bill": "स्वास्थ्य कर भरें",
+        // New translations for index page
+        "community_engagement_title": "सामुदायिक सहभागिता",
+        "community_engagement_desc": "गांव के विकास में सक्रिय भागीदारी",
+        "digital_transformation_title": "डिजिटल रूपांतरण",
+        "digital_transformation_desc": "ग्रामीण शासन के लिए प्रौद्योगिकी लाना",
+        "transparent_governance_title": "पारदर्शी शासन",
+        "transparent_governance_desc": "सार्वजनिक जानकारी और रिकॉर्ड में खुला पहुंच",
+        "latest_announcements": "नवीनतम घोषणाएं",
+        "issued_by": "जारी करने वाला:",
+        "view_all_announcements": "सभी घोषणाएं देखें",
+        "no_announcements": "इस समय कोई घोषणाएं उपलब्ध नहीं हैं।",
+        "upcoming_meetings_title": "आगामी बैठकें",
+        "organized_by": "आयोजित करने वाला:",
+        "view_all_meetings": "सभी बैठकें देखें",
+        "no_meetings": "इस समय कोई बैठकें निर्धारित नहीं हैं।"
     }
 };
 // Handle dynamic content with placeholders
@@ -613,6 +658,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.sidebar')) {
         loadCitizenDashboard();
     }
+    
+    // Listen for Bootstrap tab changes to re-apply translations
+    const tabTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tab"]'))
+    tabTriggerList.forEach(function (tabTrigger) {
+        tabTrigger.addEventListener('shown.bs.tab', function (event) {
+            // Small delay to ensure content is fully rendered
+            setTimeout(() => {
+                const currentLang = localStorage.getItem('userLanguage') || 'en';
+                setLanguage(currentLang);
+            }, 50);
+        });
+    });
     
     // ===================================
     // IMAGE SLIDER LOGIC

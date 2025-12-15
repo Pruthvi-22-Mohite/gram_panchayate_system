@@ -12,53 +12,192 @@
 {% block content %}
 <br>
 <div class="max-w-3xl mx-auto">
-    <div class="bg-white p-6 md:p-10 rounded-lg shadow-md fancy-box text-center">
-        <br>
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4" data-lang-key="welcome_main_title">Welcome to the LokSevaGram</h1>
-        <p class="text-lg md:text-xl text-gray-700 mb-6" data-lang-key="welcome_para_1">
-            LokSevaGram is a digital platform designed to empower our village community. We provide a single point of access for essential public services, community engagement, and transparent governance.
-        </p>
-        <p class="text-gray-500 text-sm md:text-base" data-lang-key="welcome_para_2">
-            Explore this website to find emergency contacts, submit feedback and suggestions, track the progress of local projects, and access important public records. Our goal is to make village administration more accessible and efficient for every resident.
-        </p>
-        <br>
+    <div class="bg-white p-6 md:p-10 rounded-lg shadow-md fancy-box text-center position-relative overflow-hidden">
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(135deg, rgba(13, 98, 169, 0.05) 0%, rgba(19, 136, 8, 0.05) 100%); z-index: 0;"></div>
+        <div class="position-relative z-1">
+            <br>
+            <div class="d-flex align-items-center justify-content-center mb-3">
+                <i class="bi bi-house-door-fill text-primary me-3" style="font-size: 2.5rem;"></i>
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-0" data-lang-key="welcome_main_title">Welcome to the LokSevaGram</h1>
+            </div>
+            <p class="text-lg md:text-xl text-gray-700 mb-4" data-lang-key="welcome_para_1">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>LokSevaGram is a digital platform designed to empower our village community. We provide a single point of access for essential public services, community engagement, and transparent governance.
+            </p>
+            <p class="text-gray-500 text-sm md:text-base" data-lang-key="welcome_para_2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>Explore this website to find emergency contacts, submit feedback and suggestions, track the progress of local projects, and access important public records. Our goal is to make village administration more accessible and efficient for every resident.
+            </p>
+            <br>
+        </div>
     </div>
     <br>
     
     <main class="py-10 px-4 md:px-8">
-        <div class="image-slider-container fancy-box mb-4">
-            <div class="slide">
-                <img src="{% static 'images/20250207490355450.jpg' %}" alt="A group of people discussing community projects">
+        <div class="image-slider-container fancy-box mb-4 rounded-lg shadow-lg position-relative">
+            <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(transparent 0%, rgba(0,0,0,0.3) 100%); z-index: 1;"></div>
+            <div class="slide d-flex align-items-center justify-content-center">
+                <img src="{% static 'images/20250207490355450.jpg' %}" alt="A group of people discussing community projects" class="w-100 h-100 object-cover">
+                <div class="position-absolute bottom-0 start-0 w-100 text-white p-4 z-2">
+                    <h3 class="mb-0" data-lang-key="community_engagement_title">Community Engagement</h3>
+                    <p class="mb-0" data-lang-key="community_engagement_desc">Active participation in village development</p>
+                </div>
             </div>
-            <div class="slide active">
-                <img src="{% static 'images/2024123093809381.jpeg' %}" alt="Digital services in a village setting">
+            <div class="slide active d-flex align-items-center justify-content-center">
+                <img src="{% static 'images/2024123093809381.jpeg' %}" alt="Digital services in a village setting" class="w-100 h-100 object-cover">
+                <div class="position-absolute bottom-0 start-0 w-100 text-white p-4 z-2">
+                    <h3 class="mb-0" data-lang-key="digital_transformation_title">Digital Transformation</h3>
+                    <p class="mb-0" data-lang-key="digital_transformation_desc">Bringing technology to rural governance</p>
+                </div>
             </div>
-            <div class="slide">
-                <img src="{% static 'images/202502061433080426.jpeg' %}" alt="A person using a computer to access public records">
+            <div class="slide d-flex align-items-center justify-content-center">
+                <img src="{% static 'images/202502061433080426.jpeg' %}" alt="A person using a computer to access public records" class="w-100 h-100 object-cover">
+                <div class="position-absolute bottom-0 start-0 w-100 text-white p-4 z-2">
+                    <h3 class="mb-0" data-lang-key="transparent_governance_title">Transparent Governance</h3>
+                    <p class="mb-0" data-lang-key="transparent_governance_desc">Open access to public information and records</p>
+                </div>
+            </div>
+            <div class="slider-indicators position-absolute bottom-0 end-0 p-3 z-2">
+                <span class="badge bg-primary me-1">1</span>
+                <span class="badge bg-light text-dark me-1">2</span>
+                <span class="badge bg-light text-dark">3</span>
             </div>
         </div>
 
-        <br> 
+        <br>
+        <!-- Public Announcements Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md mt-8 fancy-box">
+            <div class="d-flex align-items-center justify-content-center mb-4">
+                <i class="bi bi-megaphone-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+                <h2 class="text-2xl font-bold mb-0" data-lang-key="latest_announcements">Latest Announcements</h2>
+            </div>
+            
+            {% if latest_notices %}
+                <div class="row">
+                    {% for notice in latest_notices %}
+                        <div class="col-md-12 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-3">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-3">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-info-circle-fill text-primary me-2"></i>
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-0">{{ notice.get_notice_type_display }}</div>
+                                            </div>
+                                            <div class="h5 mb-2 font-weight-bold text-gray-800">{{ notice.title }}</div>
+                                            <div class="text-muted small mb-2">
+                                                <i class="bi bi-person-fill me-1"></i> <span data-lang-key="issued_by">Issued by:</span> {{ notice.issued_by }}
+                                                <i class="bi bi-calendar ms-3 me-1"></i> {{ notice.date|date:"d M Y" }}
+                                            </div>
+                                            <p class="mb-0 text-gray-700">{{ notice.description|truncatewords:25 }}</p>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span class="badge {{ notice.get_badge_class }} px-3 py-2">{{ notice.get_notice_type_display }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-2">
+                    <a href="{% url 'informationhub:notices_list' %}" class="btn btn-primary btn-lg px-4 py-2">
+                        <i class="bi bi-eye-fill me-2"></i><span data-lang-key="view_all_announcements">View All Announcements</span>
+                    </a>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center py-4">
+                    <i class="bi bi-info-circle-fill me-2"></i><span data-lang-key="no_announcements">No announcements available at the moment.</span>
+                </div>
+            {% endif %}
+        </div>
+        <br>
+        
+        <!-- Upcoming Meetings Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md mt-8 fancy-box">
+            <div class="d-flex align-items-center justify-content-center mb-4">
+                <i class="bi bi-calendar-event-fill text-success me-2" style="font-size: 1.5rem;"></i>
+                <h2 class="text-2xl font-bold mb-0" data-lang-key="upcoming_meetings_title">Upcoming Meetings</h2>
+            </div>
+            
+            {% if upcoming_meetings %}
+                <div class="row">
+                    {% for meeting in upcoming_meetings %}
+                        <div class="col-md-12 mb-4">
+                            <div class="card border-left-success shadow h-100 py-3">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-3">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-people-fill text-success me-2"></i>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ meeting.meeting_title }}</div>
+                                            </div>
+                                            <div class="text-muted small mb-2">
+                                                <i class="bi bi-calendar-check me-1"></i> {{ meeting.meeting_date|date:"d M Y" }}
+                                                <i class="bi bi-clock ms-3 me-1"></i> {{ meeting.time|time:"H:i" }}
+                                                <br>
+                                                <i class="bi bi-geo-alt ms-1 me-1"></i> {{ meeting.location }}
+                                            </div>
+                                            <p class="mb-0 text-gray-700">
+                                                <i class="bi bi-person-workspace me-1"></i> <span data-lang-key="organized_by">Organized by:</span> {{ meeting.organized_by }}
+                                            </p>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span class="badge bg-success px-3 py-2">Upcoming</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-2">
+                    <a href="{% url 'informationhub:meetings_list' %}" class="btn btn-success btn-lg px-4 py-2">
+                        <i class="bi bi-eye-fill me-2"></i><span data-lang-key="view_all_meetings">View All Meetings</span>
+                    </a>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center py-4">
+                    <i class="bi bi-calendar-x-fill me-2"></i><span data-lang-key="no_meetings">No upcoming meetings scheduled.</span>
+                </div>
+            {% endif %}
+        </div>
+        <br>
+        
+        <!-- Access Guide Section -->
         <div class="bg-white p-6 md:p-10 rounded-lg shadow-md mt-8 fancy-box access-guide-section" data-lang-key="access_guide_section">
             <br>
-            <h2 class="text-2xl font-bold mb-4 text-center" data-lang-key="access_guide_title">How to Access LokSevaGram</h2>
+            <div class="d-flex align-items-center justify-content-center mb-4">
+                <i class="bi bi-lightbulb-fill text-warning me-2" style="font-size: 1.5rem;"></i>
+                <h2 class="text-2xl font-bold mb-0" data-lang-key="access_guide_title">How to Access LokSevaGram</h2>
+            </div>
             <p class="mb-4 text-center" data-lang-key="access_guide_intro">Follow these simple steps to log in and start using the services:</p>
             
             <ol class="list-group list-group-numbered w-100 access-guide-list" data-lang-key="access_guide_steps">
-                <li class="list-group-item d-flex flex-column align-items-center border-0" data-lang-key="access_guide_step1">
-                    <div class="fw-bold text-center" data-lang-key="access_guide_step1_title">Step 1: Go to the Login Page</div>
+                <li class="list-group-item d-flex flex-column align-items-center border-0 py-4" data-lang-key="access_guide_step1">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-megaphone-fill text-primary me-2" style="font-size: 1.2rem;"></i>
+                        <div class="fw-bold text-center h5 mb-0" data-lang-key="access_guide_step1_title">Step 1: Go to the Login Page</div>
+                    </div>
                     <p class="mb-0 text-center" data-lang-key="access_guide_step1_desc">Click on the "Login" button at the top right corner of the home page or navigate directly to Login Page.</p>
                 </li>
-                <li class="list-group-item d-flex flex-column align-items-center border-0" data-lang-key="access_guide_step2">
-                    <div class="fw-bold text-center" data-lang-key="access_guide_step2_title">Step 2: Choose Your User Type</div>
+                <li class="list-group-item d-flex flex-column align-items-center border-0 py-4" data-lang-key="access_guide_step2">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-person-badge-fill text-success me-2" style="font-size: 1.2rem;"></i>
+                        <div class="fw-bold text-center h5 mb-0" data-lang-key="access_guide_step2_title">Step 2: Choose Your User Type</div>
+                    </div>
                     <p class="mb-0 text-center" data-lang-key="access_guide_step2_desc">Select whether you are logging in as an Admin, Clerk, or Citizen to access the appropriate services.</p>
                 </li>
-                <li class="list-group-item d-flex flex-column align-items-center border-0" data-lang-key="access_guide_step3">
-                    <div class="fw-bold text-center" data-lang-key="access_guide_step3_title">Step 3: Enter Your Credentials</div>
+                <li class="list-group-item d-flex flex-column align-items-center border-0 py-4" data-lang-key="access_guide_step3">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-key-fill text-warning me-2" style="font-size: 1.2rem;"></i>
+                        <div class="fw-bold text-center h5 mb-0" data-lang-key="access_guide_step3_title">Step 3: Enter Your Credentials</div>
+                    </div>
                     <p class="mb-0 text-center" data-lang-key="access_guide_step3_desc">Enter your username and password to access your account. Citizens can register for a new account if needed.</p>
                 </li>
-                <li class="list-group-item d-flex flex-column align-items-center border-0" data-lang-key="access_guide_step4">
-                    <div class="fw-bold text-center" data-lang-key="access_guide_step4_title">Step 4: Access Your Dashboard</div>
+                <li class="list-group-item d-flex flex-column align-items-center border-0 py-4" data-lang-key="access_guide_step4">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-speedometer2 text-info me-2" style="font-size: 1.2rem;"></i>
+                        <div class="fw-bold text-center h5 mb-0" data-lang-key="access_guide_step4_title">Step 4: Access Your Dashboard</div>
+                    </div>
                     <p class="mb-0 text-center" data-lang-key="access_guide_step4_desc">Once logged in, you will be directed to your personalized dashboard where you can access all available services and information.</p>
                 </li>
             </ol>

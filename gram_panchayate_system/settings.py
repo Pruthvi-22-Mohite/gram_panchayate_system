@@ -101,15 +101,22 @@ WSGI_APPLICATION = 'gram_panchayate_system.wsgi.application'
 
 
 
-# MySQL Configuration (commented out, uncomment if you want to use MySQL)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'gram_panchayate_system',
+#         'USER': 'root',
+#         'PASSWORD': 'Vivek@M2007',  # Update with your MySQL password
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+
+# Using SQLite for development
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'gram_panchayate_system',
-        'USER': 'root',
-        'PASSWORD': 'Vivek@M2007',  # Update with your MySQL password
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -143,6 +150,14 @@ LANGUAGES = [
     ('en', 'English'),
     ('hi', 'Hindi'),
     ('mr', 'Marathi'),
+    ('ta', 'Tamil'),
+    ('te', 'Telugu'),
+    ('bn', 'Bengali'),
+    ('gu', 'Gujarati'),
+    ('kn', 'Kannada'),
+    ('ml', 'Malayalam'),
+    ('pa', 'Punjabi'),
+    ('ur', 'Urdu'),
 ]
 
 # Enable internationalization

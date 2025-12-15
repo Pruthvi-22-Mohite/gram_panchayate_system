@@ -4,11 +4,28 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import translation
 from django.http import JsonResponse
+from django.utils import timezone
+from modules.informationhub.models import VillageNotice, MeetingSchedule
 
 
 def home(request):
-    """Home page view"""
-    return render(request, 'common/index.html')
+    """Home page view with public information"""
+    # Get latest 5 active village notices
+    latest_notices = VillageNotice.objects.filter(is_active=True).order_by('-date')[:5]
+    
+    # Get upcoming meetings
+    today = timezone.now().date()
+    upcoming_meetings = MeetingSchedule.objects.filter(
+        meeting_date__gte=today,
+        is_cancelled=False
+    ).order_by('meeting_date', 'time')[:5]
+    
+    context = {
+        'latest_notices': latest_notices,
+        'upcoming_meetings': upcoming_meetings,
+    }
+    
+    return render(request, 'common/index.html', context)
 
 
 def login_view(request):
