@@ -11,7 +11,8 @@ from modules.clerk.models import Scheme, SchemeApplication, Grievance, TaxRecord
 from tax_management.models import CitizenTaxData
 from modules.informationhub.models import VillageNotice, MeetingSchedule
 from modules.emergencydirectory.models import EmergencyContact
-from .models import CitizenProfile, CitizenDocument, FeedbackSuggestion, EmergencyContact as CitizenEmergencyContact, BudgetItem
+from modules.panchayat_budget.models import PanchayatBudget
+from .models import CitizenProfile, CitizenDocument, FeedbackSuggestion, EmergencyContact as CitizenEmergencyContact
 from .forms import CitizenLoginForm, CitizenRegistrationForm, SchemeApplicationForm, GrievanceForm, FeedbackForm, DocumentUploadForm
 
 
@@ -381,21 +382,14 @@ def pay_health_bill(request):
 
 @citizen_required
 def view_budget(request):
-    """View panchayat budget"""
-    budget_items = BudgetItem.objects.all().order_by('category', 'item_name')
-    
-    # Group by category
-    budget_by_category = {}
-    for item in budget_items:
-        if item.category not in budget_by_category:
-            budget_by_category[item.category] = []
-        budget_by_category[item.category].append(item)
+    """View panchayat budget PDFs"""
+    # Get all budget PDFs ordered by financial year
+    budgets = PanchayatBudget.objects.all().order_by('-financial_year')
     
     context = {
-        'budget_by_category': budget_by_category,
-        'budget_items': budget_items
+        'budgets': budgets
     }
-    return render(request, 'citizen/view_budget.html', context)
+    return render(request, 'panchayat_budget/citizen_list.html', context)
 
 
 @citizen_required

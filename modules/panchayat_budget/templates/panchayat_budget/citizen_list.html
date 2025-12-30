@@ -1,0 +1,37 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Panchayat Budget Documents{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Panchayat Budget Documents</h2>
+        <a href="{% url 'citizen:dashboard' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    {% if budgets %}
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Budget Documents</h5>
+            </div>
+            <div class="card-body">
+                {% for budget in budgets %}
+                <div class="mb-3">
+                    <a href="{% url 'panchayat_budget:citizen_budget_pdf_view' budget.financial_year %}" target="_blank" class="btn btn-link text-danger btn-lg px-4 py-2 d-block text-start">
+                        <i class="bi bi-file-pdf me-2"></i>{{ budget.title }} ({{ budget.financial_year }})
+                    </a>
+                </div>
+                {% if not forloop.last %}<hr>{% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle-fill me-2"></i>No budget documents available.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Delete Budget PDF{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Delete Budget PDF</h2>
+        <a href="{% url 'panchayat_budget:manage_budget_pdfs' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Management
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Confirm Deletion</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>Warning!</strong> This action cannot be undone.
+                    </div>
+                    
+                    <h5>Budget Document Details:</h5>
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item">
+                            <strong>Title:</strong> {{ budget.title }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Financial Year:</strong> {{ budget.financial_year }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Uploaded by:</strong> {{ budget.uploaded_by|default:"Unknown" }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Uploaded at:</strong> {{ budget.uploaded_at|date:"d M Y H:i" }}
+                        </li>
+                    </ul>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'panchayat_budget:manage_budget_pdfs' %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Delete Permanently
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

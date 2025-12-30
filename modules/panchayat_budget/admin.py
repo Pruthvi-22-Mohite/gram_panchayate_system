@@ -7,52 +7,39 @@ class PanchayatBudgetAdmin(admin.ModelAdmin):
     """Admin configuration for PanchayatBudget model"""
     
     list_display = [
-        'id',
-        'budget_head',
-        'previous_year_amount',
-        'revenue_income',
-        'revenue_collection',
-        'expenditure_spent',
-        'total_amount',
-        'created_at'
+        'financial_year',
+        'title',
+        'uploaded_by',
+        'uploaded_at'
     ]
     
     list_filter = [
-        'budget_head',
-        'created_at'
+        'financial_year',
+        'uploaded_at'
     ]
     
     search_fields = [
-        'budget_head'
+        'title',
+        'financial_year'
     ]
     
     readonly_fields = [
-        'total_amount',
-        'created_at',
-        'updated_at'
+        'uploaded_at'
     ]
     
     fieldsets = (
         ('Budget Information', {
             'fields': (
-                'budget_head',
-                'previous_year_amount',
-                'revenue_income',
-                'revenue_collection',
-                'expenditure_allotted',
-                'expenditure_spent',
-                'total_amount'
+                'financial_year',
+                'title',
+                'description',
+                'pdf_file'
             )
         }),
-        ('Supporting Documents', {
+        ('Metadata', {
             'fields': (
-                'document',
-            )
-        }),
-        ('Timestamps', {
-            'fields': (
-                'created_at',
-                'updated_at'
+                'uploaded_by',
+                'uploaded_at'
             ),
             'classes': ('collapse',)
         })
@@ -60,12 +47,12 @@ class PanchayatBudgetAdmin(admin.ModelAdmin):
     
     def has_add_permission(self, request):
         """Only allow admin users to add budget entries"""
-        return request.user.user_type in ['ADMIN']
+        return request.user.is_superuser or request.user.user_type == 'clerk'
     
     def has_change_permission(self, request, obj=None):
         """Only allow admin and clerk users to change budget entries"""
-        return request.user.user_type in ['ADMIN', 'CLERK']
+        return request.user.is_superuser or request.user.user_type == 'clerk'
     
     def has_delete_permission(self, request, obj=None):
         """Only allow admin and clerk users to delete budget entries"""
-        return request.user.user_type in ['ADMIN', 'CLERK']
+        return request.user.is_superuser or request.user.user_type == 'clerk'

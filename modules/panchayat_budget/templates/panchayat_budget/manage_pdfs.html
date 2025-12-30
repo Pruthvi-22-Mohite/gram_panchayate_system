@@ -1,0 +1,69 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Manage Budget PDFs{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Manage Budget PDFs</h2>
+        <div>
+            <a href="{% url 'panchayat_budget:upload_budget_pdf' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Upload New PDF
+            </a>
+            <a href="{% url 'common:home' %}" class="btn btn-secondary ms-2">
+                <i class="bi bi-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+
+    {% if budgets %}
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Existing Budget PDFs</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Financial Year</th>
+                                <th>Title</th>
+                                <th>Upload Date</th>
+                                <th>Uploaded By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for budget in budgets %}
+                            <tr>
+                                <td>{{ budget.financial_year }}</td>
+                                <td>{{ budget.title }}</td>
+                                <td>{{ budget.uploaded_at|date:"d M Y H:i" }}</td>
+                                <td>{{ budget.uploaded_by|default:"Unknown" }}</td>
+                                <td>
+                                    <a href="{% url 'panchayat_budget:budget_pdf_view' budget.financial_year %}" target="_blank" class="btn btn-sm btn-primary" title="View PDF">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{% url 'panchayat_budget:edit_budget_pdf' budget.financial_year %}" class="btn btn-sm btn-warning" title="Edit PDF">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'panchayat_budget:delete_budget_pdf' budget.financial_year %}" class="btn btn-sm btn-danger" title="Delete PDF">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle-fill me-2"></i>No budget PDFs available. 
+            <a href="{% url 'panchayat_budget:upload_budget_pdf' %}" class="alert-link">Upload the first PDF</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

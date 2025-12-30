@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'gram_panchayate_system.wsgi.application'
 #         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'gram_panchayate_system',
 #         'USER': 'root',
-#         'PASSWORD': 'Vivek@M2007',  # Update with your MySQL password
+        
 #         'HOST': 'localhost',
 #         'PORT': '3306',
 #     }

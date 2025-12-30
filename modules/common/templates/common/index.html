@@ -204,4 +204,34 @@
         </div>
     </main>
 </div>
+
+<!-- Panchayat Budget Section -->
+<div class="bg-white p-6 rounded-lg shadow-md mt-8 fancy-box">
+    <div class="d-flex align-items-center justify-content-center mb-4">
+        <i class="bi bi-file-pdf-fill text-danger me-2" style="font-size: 1.5rem;"></i>
+        <h2 class="text-2xl font-bold mb-0">Panchayat Budget Documents</h2>
+    </div>
+    
+    <p class="mb-4 text-center">Access our annual budget documents for transparency and accountability.</p>
+    
+    <div class="text-center mb-4">
+        {% if budgets %}
+            {% for budget in budgets %}
+            <div class="mb-2">
+                <a href="{% url 'panchayat_budget:budget_pdf_view' budget.financial_year %}" target="_blank" class="btn btn-link text-danger btn-lg px-4 py-2 d-block">
+                    <i class="bi bi-file-pdf me-2"></i>{{ budget.title }} ({{ budget.financial_year }})
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">No budget documents available.</p>
+        {% endif %}
+    </div>
+    
+    <p class="text-center text-muted small">
+        View our budget documents to understand how funds are allocated and spent for village development.
+    </p>
+</div>
+<br>
+
 {% endblock %}

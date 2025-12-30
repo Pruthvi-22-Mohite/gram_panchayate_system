@@ -1,56 +1,23 @@
 from django import forms
 from .models import PanchayatBudget
 
-
 class PanchayatBudgetForm(forms.ModelForm):
-    """Form for creating and editing panchayat budget entries"""
+    """Form for uploading panchayat budget PDFs"""
     
     class Meta:
         model = PanchayatBudget
-        fields = [
-            'budget_head',
-            'previous_year_amount',
-            'revenue_income',
-            'revenue_collection',
-            'expenditure_allotted',
-            'expenditure_spent',
-            'document'
-        ]
+        fields = ['financial_year', 'title', 'description', 'pdf_file']
         widgets = {
-            'budget_head': forms.Select(attrs={
-                'class': 'form-control'
-            }),
-            'previous_year_amount': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'step': '0.01',
-                'min': '0'
-            }),
-            'revenue_income': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'step': '0.01',
-                'min': '0'
-            }),
-            'revenue_collection': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'step': '0.01',
-                'min': '0'
-            }),
-            'expenditure_allotted': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'step': '0.01',
-                'min': '0'
-            }),
-            'expenditure_spent': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'step': '0.01',
-                'min': '0'
-            }),
-            'document': forms.FileInput(attrs={
-                'class': 'form-control'
-            })
+            'financial_year': forms.Select(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'pdf_file': forms.FileInput(attrs={'class': 'form-control'}),
         }
     
-    def clean(self):
-        """Custom validation for the form"""
-        cleaned_data = super().clean()
-        return cleaned_data
+    def clean_pdf_file(self):
+        """Validate that only PDF files are uploaded"""
+        pdf_file = self.cleaned_data.get('pdf_file')
+        if pdf_file:
+            if not pdf_file.name.endswith('.pdf'):
+                raise forms.ValidationError("Only PDF files are allowed.")
+        return pdf_file

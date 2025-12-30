@@ -1,139 +1,128 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from django.core.paginator import Paginator
-from django.db.models import Q
-from django.urls import reverse_lazy
-from django.http import HttpResponseForbidden
+from django.http import HttpResponse, Http404
+from django.contrib.auth.decorators import login_required
 from .models import PanchayatBudget
 from .forms import PanchayatBudgetForm
-from .decorators import admin_or_clerk_required, citizen_required, admin_required
+import os
 
-
-# Admin/Clerk Views
-@admin_or_clerk_required
-def budget_list(request):
-    """List all budget entries for admin and clerk users"""
-    budgets = PanchayatBudget.objects.all().order_by('-created_at')
-    
-    # Search functionality
-    search_query = request.GET.get('search')
-    if search_query:
-        budgets = budgets.filter(
-            Q(budget_head__icontains=search_query)
-        )
-    
-    # Pagination
-    paginator = Paginator(budgets, 10)  # Show 10 budgets per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+def public_budget_list(request):
+    """Display all budget PDFs for public users (before login)"""
+    # Get all budget PDFs ordered by financial year
+    budgets = PanchayatBudget.objects.all().order_by('-financial_year')
     
     context = {
-        'page_obj': page_obj,
-        'search_query': search_query
+        'budgets': budgets,
     }
-    return render(request, 'panchayat_budget/budget_list.html', context)
+    return render(request, 'panchayat_budget/public_list.html', context)
 
+def citizen_budget_list(request):
+    """Display all budget PDFs for citizen users (after login)"""
+    # Get all budget PDFs ordered by financial year
+    budgets = PanchayatBudget.objects.all().order_by('-financial_year')
+    
+    context = {
+        'budgets': budgets,
+    }
+    return render(request, 'panchayat_budget/citizen_list.html', context)
 
-@admin_or_clerk_required
-def budget_add(request):
-    """Add a new budget entry"""
+def budget_pdf_view(request, financial_year):
+    """View a specific budget PDF for all users"""
+    budget = get_object_or_404(PanchayatBudget, financial_year=financial_year)
+    
+    if budget.pdf_file:
+        # Serve the file
+        response = HttpResponse(budget.pdf_file.read(), content_type='application/pdf')
+        response['Content-Disposition'] = f'inline; filename="{budget.filename()}"'
+        return response
+    else:
+        raise Http404("PDF file not found.")
+
+@login_required
+def manage_budget_pdfs(request):
+    """Manage budget PDFs (admin and clerk only)"""
+    # Check if user is admin or clerk
+    if not (request.user.is_superuser or request.user.user_type == 'clerk'):
+        messages.error(request, "Access denied. Admin or Clerk access required.")
+        return redirect('common:home')
+    
+    # Get all budget PDFs
+    budgets = PanchayatBudget.objects.all().order_by('-financial_year')
+    
+    context = {
+        'budgets': budgets,
+    }
+    return render(request, 'panchayat_budget/manage_pdfs.html', context)
+
+@login_required
+def upload_budget_pdf(request):
+    """Upload a budget PDF (admin and clerk only)"""
+    # Check if user is admin or clerk
+    if not (request.user.is_superuser or request.user.user_type == 'clerk'):
+        messages.error(request, "Access denied. Admin or Clerk access required.")
+        return redirect('common:home')
+    
     if request.method == 'POST':
         form = PanchayatBudgetForm(request.POST, request.FILES)
         if form.is_valid():
-            budget = form.save()
-            messages.success(request, 'Budget entry added successfully!')
-            return redirect('panchayat_budget:budget_list')
+            budget = form.save(commit=False)
+            budget.uploaded_by = request.user
+            budget.save()
+            messages.success(request, 'Budget PDF uploaded successfully!')
+            return redirect('panchayat_budget:manage_budget_pdfs')
     else:
         form = PanchayatBudgetForm()
     
     context = {
         'form': form,
-        'title': 'Add Budget Entry'
     }
-    return render(request, 'panchayat_budget/budget_add.html', context)
+    return render(request, 'panchayat_budget/upload_form.html', context)
 
-
-@admin_or_clerk_required
-def budget_edit(request, pk):
-    """Edit an existing budget entry"""
-    budget = get_object_or_404(PanchayatBudget, pk=pk)
+@login_required
+def edit_budget_pdf(request, financial_year):
+    """Edit a budget PDF (admin and clerk only)"""
+    # Check if user is admin or clerk
+    if not (request.user.is_superuser or request.user.user_type == 'clerk'):
+        messages.error(request, "Access denied. Admin or Clerk access required.")
+        return redirect('common:home')
+    
+    budget = get_object_or_404(PanchayatBudget, financial_year=financial_year)
     
     if request.method == 'POST':
         form = PanchayatBudgetForm(request.POST, request.FILES, instance=budget)
         if form.is_valid():
             budget = form.save()
-            messages.success(request, 'Budget entry updated successfully!')
-            return redirect('panchayat_budget:budget_detail', pk=budget.pk)
+            messages.success(request, 'Budget PDF updated successfully!')
+            return redirect('panchayat_budget:manage_budget_pdfs')
     else:
         form = PanchayatBudgetForm(instance=budget)
     
     context = {
         'form': form,
         'budget': budget,
-        'title': 'Edit Budget Entry'
     }
-    return render(request, 'panchayat_budget/budget_edit.html', context)
+    return render(request, 'panchayat_budget/edit_form.html', context)
 
-
-@admin_required
-def budget_delete(request, pk):
-    """Delete a budget entry (admin only)"""
-    budget = get_object_or_404(PanchayatBudget, pk=pk)
+@login_required
+def delete_budget_pdf(request, financial_year):
+    """Delete a budget PDF (admin and clerk only)"""
+    # Check if user is admin or clerk
+    if not (request.user.is_superuser or request.user.user_type == 'clerk'):
+        messages.error(request, "Access denied. Admin or Clerk access required.")
+        return redirect('common:home')
+    
+    budget = get_object_or_404(PanchayatBudget, financial_year=financial_year)
     
     if request.method == 'POST':
+        # Delete the file from storage
+        if budget.pdf_file:
+            if os.path.isfile(budget.pdf_file.path):
+                os.remove(budget.pdf_file.path)
         budget.delete()
-        messages.success(request, 'Budget entry deleted successfully!')
-        return redirect('panchayat_budget:budget_list')
+        messages.success(request, 'Budget PDF deleted successfully!')
+        return redirect('panchayat_budget:manage_budget_pdfs')
     
     context = {
         'budget': budget,
-        'title': 'Delete Budget Entry'
     }
-    return render(request, 'panchayat_budget/budget_delete.html', context)
-
-
-@admin_or_clerk_required
-def budget_detail(request, pk):
-    """View details of a budget entry"""
-    budget = get_object_or_404(PanchayatBudget, pk=pk)
-    context = {
-        'budget': budget,
-        'title': 'Budget Details'
-    }
-    return render(request, 'panchayat_budget/budget_detail.html', context)
-
-
-# Citizen Views
-@citizen_required
-def budget_public_list(request):
-    """List all budget entries for citizen users (read-only)"""
-    budgets = PanchayatBudget.objects.all().order_by('-created_at')
-    
-    # Search functionality
-    search_query = request.GET.get('search')
-    if search_query:
-        budgets = budgets.filter(
-            Q(budget_head__icontains=search_query)
-        )
-    
-    # Pagination
-    paginator = Paginator(budgets, 10)  # Show 10 budgets per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
-    context = {
-        'page_obj': page_obj,
-        'search_query': search_query
-    }
-    return render(request, 'panchayat_budget/budget_public_list.html', context)
-
-
-@citizen_required
-def budget_public_detail(request, pk):
-    """View details of a budget entry for citizen users (read-only)"""
-    budget = get_object_or_404(PanchayatBudget, pk=pk)
-    context = {
-        'budget': budget,
-        'title': 'Budget Details'
-    }
-    return render(request, 'panchayat_budget/budget_public_detail.html', context)
+    return render(request, 'panchayat_budget/delete_confirm.html', context)

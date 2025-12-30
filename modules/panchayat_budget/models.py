@@ -1,57 +1,43 @@
 from django.db import models
-from decimal import Decimal
-
+from django.conf import settings
+import os
 
 class PanchayatBudget(models.Model):
-    """Model for managing panchayat budget records"""
+    """Model for managing panchayat budget PDFs for the last 3 financial years"""
     
-    # Budget head choices
-    HEALTH_INSPECTION = 'Health Inspection'
-    ELECTRICITY_TAX = 'Electricity Tax'
-    GARBAGE_TAX = 'Garbage Tax'
-    PUBLIC_WATER_SUPPLY = 'Public Water Supply'
-    OTHER_WATER_SERVICES = 'Other Water Services'
-    OLD_PRODUCT_INCOME = 'Old Product / Previous Income'
-    
-    BUDGET_HEAD_CHOICES = [
-        (HEALTH_INSPECTION, 'Health Inspection'),
-        (ELECTRICITY_TAX, 'Electricity Tax'),
-        (GARBAGE_TAX, 'Garbage Tax'),
-        (PUBLIC_WATER_SUPPLY, 'Public Water Supply'),
-        (OTHER_WATER_SERVICES, 'Other Water Services'),
-        (OLD_PRODUCT_INCOME, 'Old Product / Previous Income'),
+    # Last 3 financial years
+    FINANCIAL_YEAR_CHOICES = [
+        ('2022-2023', '2022-2023'),
+        ('2023-2024', '2023-2024'),
+        ('2024-2025', '2024-2025'),
     ]
     
-    # Fields
-    id = models.AutoField(primary_key=True, verbose_name='Sr. No.')
-    budget_head = models.CharField(max_length=100, choices=BUDGET_HEAD_CHOICES)
-    previous_year_amount = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('0.00'))
-    revenue_income = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('0.00'))
-    revenue_collection = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('0.00'))
-    expenditure_allotted = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('0.00'))
-    expenditure_spent = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('0.00'))
-    total_amount = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('0.00'))
-    document = models.FileField(upload_to='budget_documents/', blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    financial_year = models.CharField(
+        max_length=9, 
+        choices=FINANCIAL_YEAR_CHOICES,
+        unique=True,
+        verbose_name="Financial Year"
+    )
+    title = models.CharField(max_length=200, verbose_name="Budget Title")
+    description = models.TextField(blank=True, verbose_name="Description")
+    pdf_file = models.FileField(upload_to='budget_pdfs/', verbose_name="PDF File")
+    uploaded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Uploaded By"
+    )
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Upload Date")
     
     class Meta:
         verbose_name = 'Panchayat Budget'
         verbose_name_plural = 'Panchayat Budgets'
-        ordering = ['-created_at']
+        ordering = ['-financial_year']
     
     def __str__(self):
-        return f"{self.budget_head} - {self.total_amount}"
+        return f"{self.title} ({self.financial_year})"
     
-    def save(self, *args, **kwargs):
-        """
-        Override save method to calculate total_amount automatically
-        total_amount = previous_year_amount + revenue_income + revenue_collection - expenditure_spent
-        """
-        self.total_amount = (
-            self.previous_year_amount + 
-            self.revenue_income + 
-            self.revenue_collection - 
-            self.expenditure_spent
-        )
-        super().save(*args, **kwargs)
+    def filename(self):
+        """Return the filename of the PDF"""
+        return os.path.basename(self.pdf_file.name)

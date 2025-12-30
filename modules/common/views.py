@@ -6,6 +6,7 @@ from django.utils import translation
 from django.http import JsonResponse
 from django.utils import timezone
 from modules.informationhub.models import VillageNotice, MeetingSchedule
+from modules.panchayat_budget.models import PanchayatBudget
 
 
 def home(request):
@@ -20,9 +21,16 @@ def home(request):
         is_cancelled=False
     ).order_by('meeting_date', 'time')[:5]
     
+    # Get budget documents (only if table exists)
+    try:
+        budgets = PanchayatBudget.objects.all().order_by('-financial_year')
+    except:
+        budgets = []  # If table doesn't exist, return empty list
+    
     context = {
         'latest_notices': latest_notices,
         'upcoming_meetings': upcoming_meetings,
+        'budgets': budgets,
     }
     
     return render(request, 'common/index.html', context)
