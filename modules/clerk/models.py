@@ -9,11 +9,29 @@ class ClerkProfile(models.Model):
     """
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     panchayat_name = models.CharField(max_length=100)
-    designation = models.CharField(max_length=100, blank=True)
+    designation = models.CharField(max_length=100)  # Required field
     employee_id = models.CharField(max_length=50, unique=True)
     
     def __str__(self):
         return f"Clerk Profile: {self.user.username} - {self.panchayat_name}"
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.designation and not self.designation.strip():
+            raise ValidationError({'designation': 'Designation is required.'})
+        
+        # Additional validations for related CustomUser fields
+        if self.user.first_name and not self.user.first_name.replace(' ', '').isalpha():
+            raise ValidationError({'first_name': 'First name must contain only alphabets.'})
+        
+        if self.user.last_name and not self.user.last_name.replace(' ', '').isalpha():
+            raise ValidationError({'last_name': 'Last name must contain only alphabets.'})
+        
+        # Validate mobile number format
+        if self.user.mobile_number:
+            mobile_number_clean = self.user.mobile_number.replace(' ', '').replace('-', '')
+            if len(mobile_number_clean) != 10 or not mobile_number_clean.isdigit():
+                raise ValidationError({'mobile_number': 'Mobile number must be exactly 10 digits.'})
 
 
 class Scheme(models.Model):
@@ -37,6 +55,19 @@ class Scheme(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        from django.utils import timezone
+        
+        if not self.application_process or not self.application_process.strip():
+            raise ValidationError({'application_process': 'Application process cannot be empty.'})
+        
+        if self.last_date and self.last_date < timezone.now().date():
+            raise ValidationError({'last_date': 'Last date cannot be in the past.'})
+        
+        if not self.contact_person or not self.contact_person.strip():
+            raise ValidationError({'contact_person': 'Contact person cannot be empty.'})
 
 
 class SchemeApplication(models.Model):
@@ -144,3 +175,10 @@ class TaxRecord(models.Model):
     
     def __str__(self):
         return f"{self.taxpayer.username} - {self.tax_type} - ₹{self.amount}"
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        
+        # Validate that numeric fields are non-negative
+        if self.amount < 0:
+            raise ValidationError({'amount': 'Negative values are not allowed.'})

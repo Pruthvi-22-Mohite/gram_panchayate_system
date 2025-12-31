@@ -44,7 +44,7 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="{{ form.name.id_for_label }}" class="form-label">Scheme Name *</label>
+                                    <label for="{{ form.name.id_for_label }}" class="form-label">Scheme Name <span class="text-danger">*</span></label>
                                     {{ form.name }}
                                     {% if form.name.errors %}
                                         <div class="text-danger">{{ form.name.errors }}</div>
@@ -62,7 +62,7 @@
                             </div>
                             
                             <div class="mb-3">
-                                <label for="{{ form.description.id_for_label }}" class="form-label">Description *</label>
+                                <label for="{{ form.description.id_for_label }}" class="form-label">Description <span class="text-danger">*</span></label>
                                 {{ form.description }}
                                 {% if form.description.errors %}
                                     <div class="text-danger">{{ form.description.errors }}</div>
@@ -71,14 +71,14 @@
                             
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="{{ form.eligibility_criteria.id_for_label }}" class="form-label">Eligibility Criteria *</label>
+                                    <label for="{{ form.eligibility_criteria.id_for_label }}" class="form-label">Eligibility Criteria <span class="text-danger">*</span></label>
                                     {{ form.eligibility_criteria }}
                                     {% if form.eligibility_criteria.errors %}
                                         <div class="text-danger">{{ form.eligibility_criteria.errors }}</div>
                                     {% endif %}
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="{{ form.required_documents.id_for_label }}" class="form-label">Required Documents *</label>
+                                    <label for="{{ form.required_documents.id_for_label }}" class="form-label">Required Documents <span class="text-danger">*</span></label>
                                     {{ form.required_documents }}
                                     {% if form.required_documents.errors %}
                                         <div class="text-danger">{{ form.required_documents.errors }}</div>
@@ -87,7 +87,7 @@
                             </div>
                             
                             <div class="mb-3">
-                                <label for="{{ form.benefits.id_for_label }}" class="form-label">Benefits *</label>
+                                <label for="{{ form.benefits.id_for_label }}" class="form-label">Benefits <span class="text-danger">*</span></label>
                                 {{ form.benefits }}
                                 {% if form.benefits.errors %}
                                     <div class="text-danger">{{ form.benefits.errors }}</div>

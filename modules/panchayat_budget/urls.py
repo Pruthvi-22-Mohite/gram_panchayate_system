@@ -4,6 +4,14 @@ from . import views
 app_name = 'panchayat_budget'
 
 urlpatterns = [
+    # URLs for budget entries with numeric fields
+    path('entries/', views.public_budget_entry_list, name='budget_public_list'),
+    path('entries/<int:pk>/', views.budget_entry_detail, name='budget_public_detail'),
+    path('entries/manage/', views.budget_list, name='budget_list'),
+    path('entries/add/', views.budget_add, name='budget_add'),
+    path('entries/edit/<int:pk>/', views.budget_edit, name='budget_edit'),
+    path('entries/delete/<int:pk>/', views.budget_delete, name='budget_delete'),
+    
     # Admin/Clerk URLs to manage budget PDFs (specific paths first)
     path('manage/', views.manage_budget_pdfs, name='manage_budget_pdfs'),
     path('upload/', views.upload_budget_pdf, name='upload_budget_pdf'),

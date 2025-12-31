@@ -41,6 +41,11 @@ class VillageNoticeForm(forms.ModelForm):
 class MeetingScheduleForm(forms.ModelForm):
     """Form for creating and editing meeting schedules"""
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make meeting_date required in HTML
+        self.fields['meeting_date'].widget.attrs.update({'required': 'required'})
+    
     class Meta:
         model = MeetingSchedule
         fields = ['meeting_title', 'meeting_date', 'time', 'location', 'agenda', 'organized_by', 'is_cancelled']
@@ -51,7 +56,8 @@ class MeetingScheduleForm(forms.ModelForm):
             }),
             'meeting_date': forms.DateInput(attrs={
                 'class': 'form-control',
-                'type': 'date'
+                'type': 'date',
+                'required': 'required'  # Required field
             }),
             'time': forms.TimeInput(attrs={
                 'class': 'form-control',
@@ -74,3 +80,12 @@ class MeetingScheduleForm(forms.ModelForm):
                 'class': 'form-check-input'
             }),
         }
+    
+    def clean_meeting_date(self):
+        meeting_date = self.cleaned_data.get('meeting_date')
+        if not meeting_date:
+            raise forms.ValidationError("Meeting date is required.")
+        from django.utils import timezone
+        if meeting_date < timezone.now().date():
+            raise forms.ValidationError("Meeting date cannot be in the past.")
+        return meeting_date

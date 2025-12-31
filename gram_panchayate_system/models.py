@@ -19,6 +19,37 @@ class CustomUser(AbstractUser):
     
     def __str__(self):
         return f"{self.username} ({self.user_type})"
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        from django.core.validators import validate_email
+        
+        if self.user_type not in ['citizen', 'clerk', 'admin']:
+            raise ValidationError(f'Invalid user type: {self.user_type}')
+        
+        # Validate email format
+        if self.email:
+            try:
+                validate_email(self.email)
+            except ValidationError:
+                raise ValidationError({'email': 'Please enter a valid email address.'})
+        
+        # Validate mobile number format
+        if self.mobile_number:
+            # Remove any spaces or hyphens
+            mobile_number_clean = self.mobile_number.replace(' ', '').replace('-', '')
+            if len(mobile_number_clean) != 10 or not mobile_number_clean.isdigit():
+                raise ValidationError({'mobile_number': 'Mobile number must be exactly 10 digits.'})
+        
+        # Validate first name (if present)
+        if self.first_name:
+            if not self.first_name.replace(' ', '').isalpha():
+                raise ValidationError({'first_name': 'First name must contain only alphabets.'})
+        
+        # Validate last name (if present)
+        if self.last_name:
+            if not self.last_name.replace(' ', '').isalpha():
+                raise ValidationError({'last_name': 'Last name must contain only alphabets.'})
 
 class AdminProfile(models.Model):
     """

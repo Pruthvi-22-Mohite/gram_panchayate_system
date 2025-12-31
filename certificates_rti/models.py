@@ -90,7 +90,7 @@ class RTIRequest(models.Model):
     citizen = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='rti_requests')
     subject = models.CharField(max_length=500)
     description = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='general')
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     address = models.TextField()
     supporting_doc = models.FileField(upload_to='rti/supporting/', blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='submitted')
@@ -105,6 +105,22 @@ class RTIRequest(models.Model):
     
     def __str__(self):
         return f"RTI: {self.subject[:50]}"
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        
+        # Validate required fields
+        if not self.subject or not self.subject.strip():
+            raise ValidationError({'subject': 'Subject is required.'})
+        
+        if not self.description or not self.description.strip():
+            raise ValidationError({'description': 'Description is required.'})
+        
+        if not self.category:
+            raise ValidationError({'category': 'Category is required.'})
+        
+        if not self.address or not self.address.strip():
+            raise ValidationError({'address': 'Address is required.'})
 
 
 class LandRecordLink(models.Model):
@@ -132,6 +148,20 @@ class LandRecordLink(models.Model):
     
     def __str__(self):
         return f"Land Record - Survey: {self.survey_number}, Gat: {self.gat_number}"
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        
+        # Validate required fields
+        if not self.survey_number or not self.survey_number.strip():
+            raise ValidationError({'survey_number': 'Survey Number is required.'})
+        
+        if not self.gat_number or not self.gat_number.strip():
+            raise ValidationError({'gat_number': 'Gat Number is required.'})
+        
+        # Validate that numeric fields are non-negative
+        if self.area < 0:
+            raise ValidationError({'area': 'Negative values are not allowed.'})
 
 
 class LandParcel(models.Model):

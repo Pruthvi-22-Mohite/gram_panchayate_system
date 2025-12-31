@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
-from .models import PanchayatBudget
+from .models import PanchayatBudget, BudgetEntry
 from .forms import PanchayatBudgetForm
 import os
 
@@ -126,3 +126,151 @@ def delete_budget_pdf(request, financial_year):
         'budget': budget,
     }
     return render(request, 'panchayat_budget/delete_confirm.html', context)
+
+
+# Views for BudgetEntry model (numeric budget entries)
+@login_required
+def budget_list(request):
+    """Display all budget entries for admin and clerk users"""
+    # Check if user is admin or clerk
+    if not (request.user.is_superuser or request.user.user_type == 'clerk'):
+        messages.error(request, "Access denied. Admin or Clerk access required.")
+        return redirect('common:home')
+    
+    # Get all budget entries
+    budgets = BudgetEntry.objects.all().order_by('-created_at')
+    
+    # Search functionality
+    search_query = request.GET.get('search', '')
+    if search_query:
+        budgets = budgets.filter(budget_head__icontains=search_query)
+    
+    # Pagination
+    from django.core.paginator import Paginator
+    paginator = Paginator(budgets, 10)  # Show 10 entries per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'search_query': search_query,
+    }
+    return render(request, 'panchayat_budget/budget_list.html', context)
+
+
+@login_required
+def budget_detail(request, pk):
+    """Display details of a specific budget entry"""
+    budget = get_object_or_404(BudgetEntry, pk=pk)
+    
+    context = {
+        'budget': budget,
+    }
+    return render(request, 'panchayat_budget/budget_detail.html', context)
+
+
+@login_required
+def budget_add(request):
+    """Add a new budget entry"""
+    # Check if user is admin or clerk
+    if not (request.user.is_superuser or request.user.user_type == 'clerk'):
+        messages.error(request, "Access denied. Admin or Clerk access required.")
+        return redirect('common:home')
+    
+    from .forms import BudgetEntryForm
+    
+    if request.method == 'POST':
+        form = BudgetEntryForm(request.POST)
+        if form.is_valid():
+            budget = form.save()
+            messages.success(request, 'Budget entry added successfully!')
+            return redirect('panchayat_budget:budget_list')
+    else:
+        form = BudgetEntryForm()
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'panchayat_budget/budget_add.html', context)
+
+
+
+@login_required
+def budget_edit(request, pk):
+    """Edit an existing budget entry"""
+    # Check if user is admin or clerk
+    if not (request.user.is_superuser or request.user.user_type == 'clerk'):
+        messages.error(request, "Access denied. Admin or Clerk access required.")
+        return redirect('common:home')
+    
+    budget = get_object_or_404(BudgetEntry, pk=pk)
+    from .forms import BudgetEntryForm
+    
+    if request.method == 'POST':
+        form = BudgetEntryForm(request.POST, instance=budget)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Budget entry updated successfully!')
+            return redirect('panchayat_budget:budget_list')
+    else:
+        form = BudgetEntryForm(instance=budget)
+    
+    context = {
+        'form': form,
+        'budget': budget,
+    }
+    return render(request, 'panchayat_budget/budget_edit.html', context)
+
+
+@login_required
+def budget_delete(request, pk):
+    """Delete a budget entry"""
+    # Check if user is admin or clerk
+    if not (request.user.is_superuser or request.user.user_type == 'clerk'):
+        messages.error(request, "Access denied. Admin or Clerk access required.")
+        return redirect('common:home')
+    
+    budget = get_object_or_404(BudgetEntry, pk=pk)
+    
+    if request.method == 'POST':
+        budget.delete()
+        messages.success(request, 'Budget entry deleted successfully!')
+        return redirect('panchayat_budget:budget_list')
+    
+    context = {
+        'budget': budget,
+    }
+    return render(request, 'panchayat_budget/budget_delete.html', context)
+
+
+def public_budget_entry_list(request):
+    """Display all budget entries for public users (before login)"""
+    # Get all budget entries ordered by creation date
+    budgets = BudgetEntry.objects.all().order_by('-created_at')
+    
+    # Search functionality
+    search_query = request.GET.get('search', '')
+    if search_query:
+        budgets = budgets.filter(budget_head__icontains=search_query)
+    
+    # Pagination
+    from django.core.paginator import Paginator
+    paginator = Paginator(budgets, 10)  # Show 10 entries per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'search_query': search_query,
+    }
+    return render(request, 'panchayat_budget/budget_public_list.html', context)
+
+
+def budget_entry_detail(request, pk):
+    """View a specific budget entry for all users"""
+    budget = get_object_or_404(BudgetEntry, pk=pk)
+    
+    context = {
+        'budget': budget,
+    }
+    return render(request, 'panchayat_budget/budget_public_detail.html', context)

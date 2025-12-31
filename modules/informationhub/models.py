@@ -91,3 +91,10 @@ class MeetingSchedule(models.Model):
             return 'bg-success', 'Upcoming'
         else:
             return 'bg-secondary', 'Completed'
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        from django.utils import timezone
+        
+        if self.meeting_date and self.meeting_date < timezone.now().date():
+            raise ValidationError({'meeting_date': 'Meeting date cannot be in the past.'})

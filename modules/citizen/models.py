@@ -85,6 +85,28 @@ class FeedbackSuggestion(models.Model):
             'resolved': 'bg-success',
         }
         return badge_map.get(self.status, 'bg-secondary')
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        
+        # Validate required fields first
+        if not self.subject or not self.subject.strip():
+            raise ValidationError({'subject': 'Subject is required.'})
+        
+        if not self.message or not self.message.strip():
+            raise ValidationError({'message': 'Message is required.'})
+        
+        if not self.feedback_type:
+            raise ValidationError({'feedback_type': 'Feedback type is required.'})
+        
+        if self.admin_response:
+            stripped_response = self.admin_response.strip()
+            if not stripped_response:
+                raise ValidationError({'admin_response': 'Admin response cannot be empty.'})
+            if len(stripped_response) < 10:
+                raise ValidationError({'admin_response': 'Admin response must be at least 10 characters long for meaningful feedback.'})
+        
+
 
 
 class EmergencyContact(models.Model):

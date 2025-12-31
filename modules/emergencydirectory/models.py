@@ -26,7 +26,7 @@ class EmergencyContact(models.Model):
     )
     phone_number = models.CharField(max_length=20, help_text="Contact phone number")
     address = models.TextField(help_text="Complete address")
-    email = models.EmailField(blank=True, null=True, help_text="Email address (optional)")
+    email = models.EmailField(max_length=100, help_text="Email address", blank=True, null=True)
     available_24x7 = models.BooleanField(
         default=True,
         help_text="Is this service available 24x7?"
@@ -83,3 +83,14 @@ class EmergencyContact(models.Model):
             'others': 'bg-secondary',
         }
         return badge_map.get(self.contact_type, 'bg-secondary')
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        from django.core.validators import validate_email
+        
+        if self.email and self.email.strip():
+            # Validate email format only if email is provided
+            try:
+                validate_email(self.email)
+            except ValidationError:
+                raise ValidationError({'email': 'Please enter a valid email address.'})

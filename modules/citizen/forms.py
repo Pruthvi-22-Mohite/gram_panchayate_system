@@ -138,6 +138,12 @@ class SchemeApplicationForm(forms.Form):
             'placeholder': 'Annual income in rupees'
         })
     )
+    
+    def clean_annual_income(self):
+        annual_income = self.cleaned_data.get('annual_income')
+        if annual_income is not None and annual_income < 0:
+            raise forms.ValidationError("Negative values are not allowed.")
+        return annual_income
     caste_category = forms.ChoiceField(
         choices=[
             ('general', 'General'),
@@ -190,7 +196,8 @@ class GrievanceForm(forms.ModelForm):
             }),
             'category': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Category (e.g., Water Supply, Roads, etc.)'
+                'placeholder': 'Category (e.g., Water Supply, Roads, etc.)',
+                'onchange': 'toggleOtherGrievanceCategory()'
             }),
             'priority': forms.Select(attrs={
                 'class': 'form-control'
@@ -211,16 +218,19 @@ class FeedbackForm(forms.ModelForm):
         fields = ['feedback_type', 'subject', 'message', 'attachment', 'is_anonymous']
         widgets = {
             'feedback_type': forms.Select(attrs={
-                'class': 'form-control'
+                'class': 'form-control',
+                'required': True
             }),
             'subject': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Subject of your feedback'
+                'placeholder': 'Subject of your feedback',
+                'required': True
             }),
             'message': forms.Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Your detailed feedback or suggestion',
-                'rows': 5
+                'rows': 5,
+                'required': True
             }),
             'attachment': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
@@ -236,6 +246,12 @@ class FeedbackResponseForm(forms.ModelForm):
     """
     Form for admin/clerk to respond to feedback
     """
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make admin_response required in HTML
+        self.fields['admin_response'].widget.attrs.update({'required': 'required'})
+    
     class Meta:
         model = FeedbackSuggestion
         fields = ['status', 'admin_response']
@@ -246,21 +262,46 @@ class FeedbackResponseForm(forms.ModelForm):
             'admin_response': forms.Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter your response here...',
-                'rows': 4
+                'rows': 4,
+                'required': 'required'  # Required field
             })
         }
+    
+    def clean_admin_response(self):
+        admin_response = self.cleaned_data.get('admin_response')
+        if not admin_response or not admin_response.strip():
+            raise forms.ValidationError("Admin response is required and cannot be empty.")
+        # Remove whitespace to check if field is truly empty
+        stripped_response = admin_response.strip()
+        if len(stripped_response) < 10:
+            raise forms.ValidationError("Admin response must be at least 10 characters long for meaningful feedback.")
+        return admin_response
 
 
 class DocumentUploadForm(forms.ModelForm):
     """
     Form for uploading citizen documents
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add other document type field for 'other' option
+        self.fields['other_document_type'] = forms.CharField(
+            max_length=100,
+            required=False,
+            widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Specify document type',
+                'id': 'other_document_type'
+            })
+        )
+    
     class Meta:
         model = CitizenDocument
         fields = ['document_type', 'document_number', 'document_file']
         widgets = {
             'document_type': forms.Select(attrs={
-                'class': 'form-control'
+                'class': 'form-control',
+                'onchange': 'toggleOtherField(this, "document")'
             }),
             'document_number': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -270,3 +311,12 @@ class DocumentUploadForm(forms.ModelForm):
                 'class': 'form-control'
             })
         }
+    
+    def clean_document_type(self):
+        document_type = self.cleaned_data.get('document_type')
+        if document_type == 'other':
+            # If 'other' is selected, we need to validate the custom document type
+            other_document_type = self.cleaned_data.get('other_document_type', '').strip()
+            if not other_document_type:
+                raise forms.ValidationError("When 'Other' is selected, please specify the document type.")
+        return document_type

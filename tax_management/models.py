@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 class CitizenTaxData(models.Model):
@@ -53,6 +54,28 @@ class CitizenTaxData(models.Model):
     
     def __str__(self):
         return f"Citizen Tax Data - {self.aadhaar_number}"
+    
+    def clean(self):
+        # Validate that all tax amounts and penalties are non-negative
+        if self.property_tax_amount is not None and self.property_tax_amount < 0:
+            raise ValidationError({'property_tax_amount': 'Negative values are not allowed.'})
+        if self.property_penalty < 0:
+            raise ValidationError({'property_penalty': 'Negative values are not allowed.'})
+        
+        if self.water_tax_amount is not None and self.water_tax_amount < 0:
+            raise ValidationError({'water_tax_amount': 'Negative values are not allowed.'})
+        if self.water_penalty < 0:
+            raise ValidationError({'water_penalty': 'Negative values are not allowed.'})
+        
+        if self.garbage_tax_amount is not None and self.garbage_tax_amount < 0:
+            raise ValidationError({'garbage_tax_amount': 'Negative values are not allowed.'})
+        if self.garbage_penalty < 0:
+            raise ValidationError({'garbage_penalty': 'Negative values are not allowed.'})
+        
+        if self.health_tax_amount is not None and self.health_tax_amount < 0:
+            raise ValidationError({'health_tax_amount': 'Negative values are not allowed.'})
+        if self.health_penalty < 0:
+            raise ValidationError({'health_penalty': 'Negative values are not allowed.'})
     
     class Meta:
         verbose_name = "Citizen Tax Data"

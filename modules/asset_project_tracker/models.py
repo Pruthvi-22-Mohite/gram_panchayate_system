@@ -64,6 +64,28 @@ class Asset(models.Model):
             'damaged': 'bg-dark',
         }
         return condition_classes.get(self.condition, 'bg-secondary')
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if not self.ward_number or not self.ward_number.strip():
+            raise ValidationError({'ward_number': 'Ward number is required.'})
+        if not self.purchase_date:
+            raise ValidationError({'purchase_date': 'Purchase date is required.'})
+        if self.purchase_cost <= 0:
+            raise ValidationError({'purchase_cost': 'Purchase cost must be greater than zero.'})
+        if self.current_value is not None and self.current_value <= 0:
+            raise ValidationError({'current_value': 'Current value must be greater than zero.'})
+        if self.contact_number:
+            # Validate contact number format
+            contact_number_clean = self.contact_number.replace(' ', '').replace('-', '')
+            if len(contact_number_clean) != 10 or not contact_number_clean.isdigit():
+                raise ValidationError({'contact_number': 'Contact number must be exactly 10 digits.'})
+        
+        # Validate that numeric fields are non-negative
+        if self.purchase_cost < 0:
+            raise ValidationError({'purchase_cost': 'Negative values are not allowed.'})
+        if self.current_value is not None and self.current_value < 0:
+            raise ValidationError({'current_value': 'Negative values are not allowed.'})
 
 
 class Project(models.Model):
@@ -159,3 +181,33 @@ class Project(models.Model):
         if self.status == 'ongoing' and self.target_completion_date < timezone.now().date():
             return True
         return False
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if not self.ward_number or not self.ward_number.strip():
+            raise ValidationError({'ward_number': 'Ward number is required.'})
+        if self.budget_spent <= 0:
+            raise ValidationError({'budget_spent': 'Budget spent must be greater than zero.'})
+        if not self.start_date:
+            raise ValidationError({'start_date': 'Start date is required.'})
+        if not self.target_completion_date:
+            raise ValidationError({'target_completion_date': 'Target completion date is required.'})
+        if self.target_completion_date <= self.start_date:
+            raise ValidationError({'target_completion_date': 'Target completion date must be after start date.'})
+        if not self.contractor_name or not self.contractor_name.strip():
+            raise ValidationError({'contractor_name': 'Contractor name is required.'})
+        if self.contractor_contact:
+            # Validate contractor contact number format
+            contractor_contact_clean = self.contractor_contact.replace(' ', '').replace('-', '')
+            if len(contractor_contact_clean) != 10 or not contractor_contact_clean.isdigit():
+                raise ValidationError({'contractor_contact': 'Contractor contact number must be exactly 10 digits.'})
+        
+        # Validate that numeric fields are non-negative
+        if self.budget_allocated < 0:
+            raise ValidationError({'budget_allocated': 'Negative values are not allowed.'})
+        if self.budget_spent < 0:
+            raise ValidationError({'budget_spent': 'Negative values are not allowed.'})
+        if self.progress_percentage < 0:
+            raise ValidationError({'progress_percentage': 'Negative values are not allowed.'})
+        if self.beneficiaries_count < 0:
+            raise ValidationError({'beneficiaries_count': 'Negative values are not allowed.'})

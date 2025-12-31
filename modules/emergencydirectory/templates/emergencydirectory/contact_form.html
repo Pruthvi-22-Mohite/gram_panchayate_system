@@ -24,14 +24,14 @@
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                {{ form.contact_name.label_tag }}
+                                <label for="{{ form.contact_name.id_for_label }}" class="form-label">{{ form.contact_name.label }} <span class="text-danger">*</span></label>
                                 {{ form.contact_name }}
                                 {% if form.contact_name.errors %}
                                     <div class="text-danger">{{ form.contact_name.errors }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
-                                {{ form.contact_type.label_tag }}
+                                <label for="{{ form.contact_type.id_for_label }}" class="form-label">{{ form.contact_type.label }} <span class="text-danger">*</span></label>
                                 {{ form.contact_type }}
                                 {% if form.contact_type.errors %}
                                     <div class="text-danger">{{ form.contact_type.errors }}</div>
@@ -41,14 +41,14 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                {{ form.phone_number.label_tag }}
+                                <label for="{{ form.phone_number.id_for_label }}" class="form-label">{{ form.phone_number.label }} <span class="text-danger">*</span></label>
                                 {{ form.phone_number }}
                                 {% if form.phone_number.errors %}
                                     <div class="text-danger">{{ form.phone_number.errors }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
-                                {{ form.email.label_tag }}
+                                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }} <span class="text-danger">*</span></label>
                                 {{ form.email }}
                                 {% if form.email.errors %}
                                     <div class="text-danger">{{ form.email.errors }}</div>
@@ -58,7 +58,7 @@
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                {{ form.address.label_tag }}
+                                <label for="{{ form.address.id_for_label }}" class="form-label">{{ form.address.label }} <span class="text-danger">*</span></label>
                                 {{ form.address }}
                                 {% if form.address.errors %}
                                     <div class="text-danger">{{ form.address.errors }}</div>

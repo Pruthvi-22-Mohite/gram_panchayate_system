@@ -27,6 +27,13 @@ class SchemeForm(forms.ModelForm):
     """
     Form for creating and editing government schemes
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make required fields required in HTML
+        self.fields['application_process'].widget.attrs.update({'required': 'required'})
+        self.fields['last_date'].widget.attrs.update({'required': 'required'})
+        self.fields['contact_person'].widget.attrs.update({'required': 'required'})
+    
     class Meta:
         model = Scheme
         fields = ['name', 'description', 'eligibility_criteria', 'required_documents', 
@@ -60,15 +67,18 @@ class SchemeForm(forms.ModelForm):
             'application_process': forms.Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Step-by-step application process',
-                'rows': 3
+                'rows': 3,
+                'required': 'required'  # Required field
             }),
             'last_date': forms.DateInput(attrs={
                 'class': 'form-control',
-                'type': 'date'
+                'type': 'date',
+                'required': 'required'  # Required field
             }),
             'contact_person': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Name and contact details of the person to contact'
+                'placeholder': 'Name and contact details of the person to contact',
+                'required': 'required'  # Required field
             }),
             'downloadable_forms': forms.FileInput(attrs={
                 'class': 'form-control'
@@ -80,6 +90,27 @@ class SchemeForm(forms.ModelForm):
                 'class': 'form-control'
             })
         }
+    
+    def clean_application_process(self):
+        application_process = self.cleaned_data.get('application_process')
+        if not application_process or not application_process.strip():
+            raise forms.ValidationError("Application process is required and cannot be empty.")
+        return application_process
+    
+    def clean_last_date(self):
+        last_date = self.cleaned_data.get('last_date')
+        if not last_date:
+            raise forms.ValidationError("Last date is required.")
+        from django.utils import timezone
+        if last_date < timezone.now().date():
+            raise forms.ValidationError("Last date cannot be in the past.")
+        return last_date
+    
+    def clean_contact_person(self):
+        contact_person = self.cleaned_data.get('contact_person')
+        if not contact_person or not contact_person.strip():
+            raise forms.ValidationError("Contact person is required.")
+        return contact_person
 
 
 class GrievanceResponseForm(forms.ModelForm):
@@ -132,6 +163,12 @@ class TaxRecordForm(forms.ModelForm):
                 'type': 'date'
             })
         }
+    
+    def clean_amount(self):
+        amount = self.cleaned_data.get('amount')
+        if amount is not None and amount < 0:
+            raise forms.ValidationError("Negative values are not allowed.")
+        return amount
 
 
 class SchemeApplicationReviewForm(forms.Form):

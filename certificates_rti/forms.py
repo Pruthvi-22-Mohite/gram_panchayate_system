@@ -57,10 +57,10 @@ class RTIRequestForm(forms.ModelForm):
         model = RTIRequest
         fields = ['subject', 'description', 'category', 'address', 'supporting_doc']
         widgets = {
-            'subject': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'RTI Subject'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Detailed description of information requested'}),
-            'category': forms.Select(attrs={'class': 'form-select'}),
-            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Your address for correspondence'}),
+            'subject': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'RTI Subject', 'required': True}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Detailed description of information requested', 'required': True}),
+            'category': forms.Select(attrs={'class': 'form-select', 'required': True}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Your address for correspondence', 'required': True}),
             'supporting_doc': forms.FileInput(attrs={'class': 'form-control'}),
         }
 
