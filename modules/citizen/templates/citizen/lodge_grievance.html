@@ -13,51 +13,53 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        
+
                         <div class="mb-3">
                             <label for="{{ form.title.id_for_label }}" class="form-label">Grievance Title *</label>
                             {{ form.title }}
                             {% if form.title.errors %}
-                                <div class="text-danger">{{ form.title.errors }}</div>
+                            <div class="text-danger">{{ form.title.errors }}</div>
                             {% endif %}
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="{{ form.category.id_for_label }}" class="form-label">Category *</label>
                             {{ form.category }}
                             {% if form.category.errors %}
-                                <div class="text-danger">{{ form.category.errors }}</div>
+                            <div class="text-danger">{{ form.category.errors }}</div>
                             {% endif %}
-                            <div class="form-text">Examples: Road Maintenance, Water Supply, Electricity, Sanitation, Health Services, Education</div>
+                            <div class="form-text">Examples: Road Maintenance, Water Supply, Electricity, Sanitation,
+                                Health Services, Education</div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="{{ form.description.id_for_label }}" class="form-label">Description *</label>
                             {{ form.description }}
                             {% if form.description.errors %}
-                                <div class="text-danger">{{ form.description.errors }}</div>
+                            <div class="text-danger">{{ form.description.errors }}</div>
                             {% endif %}
                             <div class="form-text">Please provide detailed information about your grievance</div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="{{ form.priority.id_for_label }}" class="form-label">Priority *</label>
                             {{ form.priority }}
                             {% if form.priority.errors %}
-                                <div class="text-danger">{{ form.priority.errors }}</div>
+                            <div class="text-danger">{{ form.priority.errors }}</div>
                             {% endif %}
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="{{ form.photo.id_for_label }}" class="form-label">Upload Photo (Optional)</label>
+                            <label for="{{ form.photo.id_for_label }}" class="form-label">Upload Photo
+                                (Optional)</label>
                             {{ form.photo }}
                             {% if form.photo.errors %}
-                                <div class="text-danger">{{ form.photo.errors }}</div>
+                            <div class="text-danger">{{ form.photo.errors }}</div>
                             {% endif %}
                             <div class="form-text">Upload a photo related to your grievance (max 5MB)</div>
                         </div>
-                        
-                        <div class="d-flex gap-2">
+
+                        <div class="d-flex flex-column flex-md-row gap-2">
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-send-fill me-2"></i>Submit Grievance
                             </button>

@@ -47,35 +47,50 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="dashboard">
                 <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <div class="summary-card bg-card-blue">
-                            <h5>Pending Applications</h5>
-                            <div class="summary-number">3</div>
-                            <div class="summary-icon"><i class="bi bi-file-earmark-text"></i></div>
+                    <div class="col-4 mb-4 px-1">
+                        <div class="summary-card bg-card-blue p-2">
+                            <h5 class="small text-truncate">Pending</h5>
+                            <div class="summary-number fs-4">3</div>
+                            <div class="summary-icon fs-5"><i class="bi bi-file-earmark-text"></i></div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="summary-card bg-card-green">
-                            <h5>Resolved Grievances</h5>
-                            <div class="summary-number">12</div>
-                            <div class="summary-icon"><i class="bi bi-check-circle"></i></div>
+                    <div class="col-4 mb-4 px-1">
+                        <div class="summary-card bg-card-green p-2">
+                            <h5 class="small text-truncate">Resolved</h5>
+                            <div class="summary-number fs-4">12</div>
+                            <div class="summary-icon fs-5"><i class="bi bi-check-circle"></i></div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="summary-card bg-card-saffron">
-                            <h5>Taxes Due</h5>
-                            <div class="summary-number">₹2,450</div>
-                            <div class="summary-icon"><i class="bi bi-currency-rupee"></i></div>
+                    <div class="col-4 mb-4 px-1">
+                        <div class="summary-card bg-card-saffron p-2">
+                            <h5 class="small text-truncate">Tax Due</h5>
+                            <div class="summary-number fs-4">₹2.4k</div>
+                            <div class="summary-icon fs-5"><i class="bi bi-currency-rupee"></i></div>
                         </div>
                     </div>
                 </div>
                 <div class="content-box mt-4">
                     <h3 class="content-box-title">Common Services</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'pay_tax' %}" class="action-card"><div class="icon-circle bg-card-saffron"><i class="bi bi-cash-coin"></i></div><h6>Pay Property Tax</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'lodge_grievance' %}" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-megaphone-fill"></i></div><h6>Lodge Grievance</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'view_schemes' %}" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-award-fill"></i></div><h6>View Schemes</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'emergency_directory' %}" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div><h6>Emergency Directory</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-4 mb-4"><a href="{% url 'pay_tax' %}" class="action-card">
+                                <div class="icon-circle bg-card-saffron"><i class="bi bi-cash-coin"></i></div>
+                                <h6>Pay Property Tax</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-4 mb-4"><a href="{% url 'lodge_grievance' %}"
+                                class="action-card">
+                                <div class="icon-circle bg-card-blue"><i class="bi bi-megaphone-fill"></i></div>
+                                <h6>Lodge Grievance</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-4 mb-4"><a href="{% url 'view_schemes' %}"
+                                class="action-card">
+                                <div class="icon-circle bg-card-green"><i class="bi bi-award-fill"></i></div>
+                                <h6>View Schemes</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-4 mb-4"><a href="{% url 'emergency_directory' %}"
+                                class="action-card">
+                                <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
+                                <h6>Emergency Directory</h6>
+                            </a></div>
                     </div>
                 </div>
                 <div class="content-box mt-4">
@@ -84,7 +99,8 @@
                         <i class="bi bi-info-circle me-2"></i>Your property tax payment is due by 30th June 2025.
                     </div>
                     <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle me-2"></i>Your grievance #GRV-2025-004 has been assigned to the concerned department.
+                        <i class="bi bi-exclamation-triangle me-2"></i>Your grievance #GRV-2025-004 has been assigned to
+                        the concerned department.
                     </div>
                     <div class="alert alert-success">
                         <i class="bi bi-check-circle me-2"></i>Your water bill for April has been paid successfully.
@@ -96,9 +112,18 @@
                 <div class="content-box">
                     <h3 class="content-box-title">Financial Services</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'pay_tax' %}" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-house-check-fill"></i></div><h6>Pay Property Tax</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-secondary"><i class="bi bi-droplet-fill"></i></div><h6>Pay Water & Utility Bills</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'view_budget' %}" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-pie-chart-fill"></i></div><h6>View Panchayat Budget</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'pay_tax' %}" class="action-card">
+                                <div class="icon-circle bg-card-blue"><i class="bi bi-house-check-fill"></i></div>
+                                <h6>Pay Property Tax</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card">
+                                <div class="icon-circle bg-secondary"><i class="bi bi-droplet-fill"></i></div>
+                                <h6>Pay Water & Utility Bills</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'view_budget' %}" class="action-card">
+                                <div class="icon-circle bg-success"><i class="bi bi-pie-chart-fill"></i></div>
+                                <h6>View Panchayat Budget</h6>
+                            </a></div>
 
                     </div>
                 </div>
@@ -108,8 +133,15 @@
                 <div class="content-box">
                     <h3 class="content-box-title">Grievance Redressal</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'lodge_grievance' %}" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div><h6>Lodge New Complaint</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-card-checklist"></i></div><h6>Track My Grievances</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'lodge_grievance' %}"
+                                class="action-card">
+                                <div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div>
+                                <h6>Lodge New Complaint</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card">
+                                <div class="icon-circle bg-warning text-dark"><i class="bi bi-card-checklist"></i></div>
+                                <h6>Track My Grievances</h6>
+                            </a></div>
                     </div>
                     <div class="table-container mt-4">
                         <h4 class="table-title">My Recent Grievances</h4>
@@ -151,9 +183,19 @@
                 <div class="content-box">
                     <h3 class="content-box-title">Schemes & Subsidies</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'view_schemes' %}" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-patch-check-fill"></i></div><h6>View All Schemes</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-primary"><i class="bi bi-person-check-fill"></i></div><h6>My Applied Schemes</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-info text-dark"><i class="bi bi-people-fill"></i></div><h6>Beneficiary Lists</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'view_schemes' %}"
+                                class="action-card">
+                                <div class="icon-circle bg-card-green"><i class="bi bi-patch-check-fill"></i></div>
+                                <h6>View All Schemes</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card">
+                                <div class="icon-circle bg-primary"><i class="bi bi-person-check-fill"></i></div>
+                                <h6>My Applied Schemes</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card">
+                                <div class="icon-circle bg-info text-dark"><i class="bi bi-people-fill"></i></div>
+                                <h6>Beneficiary Lists</h6>
+                            </a></div>
                     </div>
                 </div>
             </div>
@@ -162,10 +204,24 @@
                 <div class="content-box">
                     <h3 class="content-box-title">Information Hub</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-light text-dark border"><i class="bi bi-card-checklist"></i></div><h6>Village Notices</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-secondary"><i class="bi bi-calendar-event-fill"></i></div><h6>Meeting Schedules</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-cone-striped"></i></div><h6>Asset & Project Tracker</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'emergency_directory' %}" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div><h6>Emergency Directory</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card">
+                                <div class="icon-circle bg-light text-dark border"><i class="bi bi-card-checklist"></i>
+                                </div>
+                                <h6>Village Notices</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card">
+                                <div class="icon-circle bg-secondary"><i class="bi bi-calendar-event-fill"></i></div>
+                                <h6>Meeting Schedules</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card">
+                                <div class="icon-circle bg-success"><i class="bi bi-cone-striped"></i></div>
+                                <h6>Asset & Project Tracker</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'emergency_directory' %}"
+                                class="action-card">
+                                <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
+                                <h6>Emergency Directory</h6>
+                            </a></div>
                     </div>
                 </div>
             </div>
@@ -174,18 +230,33 @@
                 <div class="content-box">
                     <h3 class="content-box-title">Certificates & RTI</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="/citizen/certificates/apply/" class="action-card"><div class="icon-circle bg-primary"><i class="bi bi-file-earmark-text-fill"></i></div><h6>Apply Certificate</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="/citizen/rti/submit/" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-shield-lock-fill"></i></div><h6>Submit RTI Request</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="/citizen/land-records/link/" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-map-fill"></i></div><h6>Link Land Records</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="/citizen/certificates/apply/"
+                                class="action-card">
+                                <div class="icon-circle bg-primary"><i class="bi bi-file-earmark-text-fill"></i></div>
+                                <h6>Apply Certificate</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="/citizen/rti/submit/" class="action-card">
+                                <div class="icon-circle bg-danger"><i class="bi bi-shield-lock-fill"></i></div>
+                                <h6>Submit RTI Request</h6>
+                            </a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="/citizen/land-records/link/"
+                                class="action-card">
+                                <div class="icon-circle bg-success"><i class="bi bi-map-fill"></i></div>
+                                <h6>Link Land Records</h6>
+                            </a></div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="tab-pane fade" id="engagement">
-                 <div class="content-box">
+                <div class="content-box">
                     <h3 class="content-box-title">Citizen Engagement</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'feedback_suggestions' %}" class="action-card"><div class="icon-circle bg-info text-dark"><i class="bi bi-lightbulb-fill"></i></div><h6>Feedback & Suggestions</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'feedback_suggestions' %}"
+                                class="action-card">
+                                <div class="icon-circle bg-info text-dark"><i class="bi bi-lightbulb-fill"></i></div>
+                                <h6>Feedback & Suggestions</h6>
+                            </a></div>
                     </div>
                 </div>
             </div>

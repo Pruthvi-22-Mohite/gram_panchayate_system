@@ -3,17 +3,7 @@
 
 {% block title %}Feedback & Suggestions - Citizen Portal{% endblock %}
 
-{% block sub_navbar %}
-<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Citizen Portal</a>
-        <div class="ms-auto">
-            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
-            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
-        </div>
-    </div>
-</nav>
-{% endblock %}
+{% block sub_navbar %}{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -28,7 +18,7 @@
 
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="{{ form.feedback_type.id_for_label }}" class="form-label">
@@ -36,28 +26,29 @@
                                 </label>
                                 {{ form.feedback_type }}
                                 {% if form.feedback_type.errors %}
-                                    <div class="text-danger small">{{ form.feedback_type.errors.0 }}</div>
+                                <div class="text-danger small">{{ form.feedback_type.errors.0 }}</div>
                                 {% endif %}
                             </div>
-                            
+
                             <div class="col-md-6 mb-3">
                                 <label for="{{ form.subject.id_for_label }}" class="form-label">
                                     <i class="bi bi-chat-text-fill me-1"></i>Subject <span class="text-danger">*</span>
                                 </label>
                                 {{ form.subject }}
                                 {% if form.subject.errors %}
-                                    <div class="text-danger small">{{ form.subject.errors.0 }}</div>
+                                <div class="text-danger small">{{ form.subject.errors.0 }}</div>
                                 {% endif %}
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="{{ form.message.id_for_label }}" class="form-label">
-                                <i class="bi bi-file-text-fill me-1"></i>Message/Description <span class="text-danger">*</span>
+                                <i class="bi bi-file-text-fill me-1"></i>Message/Description <span
+                                    class="text-danger">*</span>
                             </label>
                             {{ form.message }}
                             {% if form.message.errors %}
-                                <div class="text-danger small">{{ form.message.errors.0 }}</div>
+                            <div class="text-danger small">{{ form.message.errors.0 }}</div>
                             {% endif %}
                         </div>
 
@@ -66,9 +57,10 @@
                                 <i class="bi bi-paperclip me-1"></i>Attachment (Optional)
                             </label>
                             {{ form.attachment }}
-                            <div class="form-text">You can upload supporting documents (Images, PDF, Word documents)</div>
+                            <div class="form-text">You can upload supporting documents (Images, PDF, Word documents)
+                            </div>
                             {% if form.attachment.errors %}
-                                <div class="text-danger small">{{ form.attachment.errors.0 }}</div>
+                            <div class="text-danger small">{{ form.attachment.errors.0 }}</div>
                             {% endif %}
                         </div>
 
@@ -102,77 +94,80 @@
                 </div>
                 <div class="card-body">
                     {% if previous_feedback %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Type</th>
-                                        <th>Subject</th>
-                                        <th>Submitted</th>
-                                        <th>Status</th>
-                                        <th>Response</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for feedback in previous_feedback %}
-                                    <tr>
-                                        <td>#{{ feedback.id }}</td>
-                                        <td>
-                                            <span class="badge bg-primary">{{ feedback.get_feedback_type_display }}</span>
-                                        </td>
-                                        <td>{{ feedback.subject }}</td>
-                                        <td>{{ feedback.submitted_at|date:"d M Y, h:i A" }}</td>
-                                        <td>
-                                            <span class="badge {{ feedback.get_status_badge_class }}">
-                                                {{ feedback.get_status_display }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {% if feedback.admin_response %}
-                                                <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#responseModal{{ feedback.id }}">
-                                                    <i class="bi bi-eye-fill"></i> View
-                                                </button>
-                                                
-                                                <!-- Response Modal -->
-                                                <div class="modal fade" id="responseModal{{ feedback.id }}" tabindex="-1">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Response to: {{ feedback.subject }}</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p><strong>Response:</strong></p>
-                                                                <p>{{ feedback.admin_response }}</p>
-                                                                {% if feedback.responded_by %}
-                                                                <hr>
-                                                                <small class="text-muted">
-                                                                    Responded by: {{ feedback.responded_by.username }}<br>
-                                                                    On: {{ feedback.responded_at|date:"d M Y, h:i A" }}
-                                                                </small>
-                                                                {% endif %}
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            </div>
-                                                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Subject</th>
+                                    <th>Submitted</th>
+                                    <th>Status</th>
+                                    <th>Response</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for feedback in previous_feedback %}
+                                <tr>
+                                    <td>#{{ feedback.id }}</td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ feedback.get_feedback_type_display }}</span>
+                                    </td>
+                                    <td>{{ feedback.subject }}</td>
+                                    <td>{{ feedback.submitted_at|date:"d M Y, h:i A" }}</td>
+                                    <td>
+                                        <span class="badge {{ feedback.get_status_badge_class }}">
+                                            {{ feedback.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if feedback.admin_response %}
+                                        <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal"
+                                            data-bs-target="#responseModal{{ feedback.id }}">
+                                            <i class="bi bi-eye-fill"></i> View
+                                        </button>
+
+                                        <!-- Response Modal -->
+                                        <div class="modal fade" id="responseModal{{ feedback.id }}" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Response to: {{ feedback.subject }}</h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p><strong>Response:</strong></p>
+                                                        <p>{{ feedback.admin_response }}</p>
+                                                        {% if feedback.responded_by %}
+                                                        <hr>
+                                                        <small class="text-muted">
+                                                            Responded by: {{ feedback.responded_by.username }}<br>
+                                                            On: {{ feedback.responded_at|date:"d M Y, h:i A" }}
+                                                        </small>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
                                                     </div>
                                                 </div>
-                                            {% else %}
-                                                <span class="text-muted">No response yet</span>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                        <span class="text-muted">No response yet</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                     {% else %}
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle-fill me-2"></i>
-                            You haven't submitted any feedback yet. Use the form above to submit your first feedback!
-                        </div>
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        You haven't submitted any feedback yet. Use the form above to submit your first feedback!
+                    </div>
                     {% endif %}
                 </div>
             </div>

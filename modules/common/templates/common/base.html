@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,17 +20,24 @@
     {% endif %}
     <header class="app-header">
         <div class="container-fluid d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/80px-Emblem_of_India.svg.png" alt="National Emblem of India" class="emblem">
+            <div class="d-flex align-items-center flex-grow-1">
+                <button id="sidebar-toggle" class="btn btn-link text-dark me-2 d-md-none p-0"
+                    aria-label="Toggle Navigation">
+                    <i class="bi bi-list fs-2"></i>
+                </button>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/80px-Emblem_of_India.svg.png"
+                    alt="National Emblem of India" class="emblem">
                 <div class="ms-3">
                     <h1 class="h5 mb-0" data-lang-key="main_title">LokSevaGram</h1>
-                    <p class="mb-0 small" data-lang-key="subtitle">Gram Panchayat Digital Services | Government of India</p>
+                    <p class="mb-0 small" data-lang-key="subtitle">Gram Panchayat Digital Services | Government of India
+                    </p>
                 </div>
             </div>
-            
-            <div class="d-flex align-items-center gap-2">
+
+            <div class="d-flex align-items-center gap-2 ms-auto">
                 <div class="language-selector">
-                    <label for="language-switcher" class="visually-hidden" data-lang-key="select_language">Select Language</label>
+                    <label for="language-switcher" class="visually-hidden" data-lang-key="select_language">Select
+                        Language</label>
                     <select class="form-select form-select-sm" id="language-switcher">
                         <option value="en" data-lang-key="english">English</option>
                         <option value="mr" data-lang-key="marathi">मराठी</option>
@@ -37,16 +45,56 @@
                     </select>
                 </div>
                 {% block header_actions %}
-                    {% if user.is_authenticated %}
-                        <span class="navbar-text me-3" data-lang-key="welcome_user">Welcome, {{ user.username }}!</span>
-                        <a href="{% url 'common:logout' %}" class="btn btn-primary btn-sm" data-lang-key="logout">Logout</a>
-                    {% else %}
-                        <a href="{% url 'common:login' %}" class="btn btn-primary btn-sm" data-lang-key="login">Login</a>
-                    {% endif %}
+                {% if user.is_authenticated %}
+                <span class="navbar-text me-3 d-none d-md-inline" data-lang-key="welcome_user">Welcome, {{ user.username
+                    }}!</span>
+                <a href="{% url 'common:logout' %}" class="btn btn-primary btn-sm" data-lang-key="logout">Logout</a>
+                {% else %}
+                <a href="{% url 'common:login' %}" class="btn btn-primary btn-sm" data-lang-key="login">Login</a>
+                {% endif %}
                 {% endblock %}
             </div>
         </div>
     </header>
+
+    <div id="sidebar-overlay" class="d-md-none"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const body = document.body;
+
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', function () {
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                    body.classList.toggle('sidebar-open');
+                });
+
+                if (overlay) {
+                    overlay.addEventListener('click', function () {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                        body.classList.remove('sidebar-open');
+                    });
+                }
+
+                // Close sidebar when a link is clicked (optional, good for single page apps style navigation)
+                const sidebarLinks = sidebar.querySelectorAll('.list-group-item');
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', function () {
+                        if (window.innerWidth < 768) {
+                            sidebar.classList.remove('active');
+                            overlay.classList.remove('active');
+                            body.classList.remove('sidebar-open');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 
     {% block sub_navbar %}{% endblock %}
 
@@ -56,5 +104,6 @@
     {% load static %}
     <script src="{% static 'script.js' %}"></script>
     {% block extra_js %}{% endblock %}
-</body>
+    </body>
+
 </html>

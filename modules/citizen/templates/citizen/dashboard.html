@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% block body_class %} class="citizen-dashboard"{% endblock %}
 {% load static %}
 
 {% block title %}Citizen Dashboard - LokSevaGram{% endblock %}
@@ -26,7 +27,8 @@
                 <i class="bi bi-cash-coin me-2"></i><span data-lang-key="sidebar_financial">Financial Services</span>
             </a>
             <a href="#grievances" class="list-group-item list-group-item-action" data-bs-toggle="list">
-                <i class="bi bi-exclamation-octagon-fill me-2"></i><span data-lang-key="sidebar_grievance">Grievance Redressal</span>
+                <i class="bi bi-exclamation-octagon-fill me-2"></i><span data-lang-key="sidebar_grievance">Grievance
+                    Redressal</span>
             </a>
             <a href="#schemes" class="list-group-item list-group-item-action" data-bs-toggle="list">
                 <i class="bi bi-award-fill me-2"></i><span data-lang-key="sidebar_schemes">Schemes & Subsidies</span>
@@ -35,7 +37,8 @@
                 <i class="bi bi-info-circle-fill me-2"></i><span data-lang-key="sidebar_info">Information Hub</span>
             </a>
             <a href="#requests" class="list-group-item list-group-item-action" data-bs-toggle="list">
-                <i class="bi bi-file-earmark-text-fill me-2"></i><span data-lang-key="sidebar_requests">Certificates & RTI</span>
+                <i class="bi bi-file-earmark-text-fill me-2"></i><span data-lang-key="sidebar_requests">Certificates &
+                    RTI</span>
             </a>
             <a href="#engagement" class="list-group-item list-group-item-action" data-bs-toggle="list">
                 <i class="bi bi-people-fill me-2"></i><span data-lang-key="sidebar_engagement">Citizen Engagement</span>
@@ -46,221 +49,212 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="dashboard">
                 <div class="row" id="summary-cards-container">
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="summary-card bg-card-blue">
-                            <h5 data-lang-key="my_applications">My Applications</h5>
-                            <div class="summary-number">{{ total_applications|default:0 }}</div>
-                            <i class="bi bi-file-earmark-check summary-icon"></i>
+                    <div class="col-4 force-mobile-3col mb-4 px-1">
+                        <div class="summary-card bg-card-blue p-2">
+                            <h5 class="small text-truncate" data-lang-key="my_applications">Applications</h5>
+                            <div class="summary-number fs-4">{{ total_applications|default:0 }}</div>
+                            <i class="bi bi-file-earmark-check summary-icon fs-5"></i>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="summary-card bg-card-saffron">
-                            <h5 data-lang-key="my_grievances">My Grievances</h5>
-                            <div class="summary-number">{{ total_grievances|default:0 }}</div>
-                            <i class="bi bi-megaphone summary-icon"></i>
+                    <div class="col-4 force-mobile-3col mb-4 px-1">
+                        <div class="summary-card bg-card-saffron p-2">
+                            <h5 class="small text-truncate" data-lang-key="my_grievances">Grievances</h5>
+                            <div class="summary-number fs-4">{{ total_grievances|default:0 }}</div>
+                            <i class="bi bi-megaphone summary-icon fs-5"></i>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="summary-card bg-card-green">
-                            <h5 data-lang-key="pending_taxes">Pending Taxes</h5>
-                            <div class="summary-number">₹{{ pending_tax_amount|default:0 }}</div>
-                            <i class="bi bi-cash-coin summary-icon"></i>
+                    <div class="col-4 force-mobile-3col mb-4 px-1">
+                        <div class="summary-card bg-card-green p-2">
+                            <h5 class="small text-truncate" data-lang-key="pending_taxes">Tax Due</h5>
+                            <div class="summary-number fs-4">₹{{ pending_tax_amount|default:0 }}</div>
+                            <i class="bi bi-cash-coin summary-icon fs-5"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="content-box mt-4">
                     <h3 class="content-box-title" data-lang-key="recent_activity">Recent Activity & Alerts</h3>
                     <div id="quick-alerts">
                         {% if recent_applications %}
-                            <h6 data-lang-key="recent_applications">Recent Applications:</h6>
-                            <ul class="list-group">
-                                {% for application in recent_applications %}
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        {{ application.scheme.name }}
-                                        <span class="badge bg-{{ application.status|yesno:'success,warning,danger' }} rounded-pill">{{ application.get_status_display }}</span>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                        <h6 data-lang-key="recent_applications">Recent Applications:</h6>
+                        <ul class="list-group">
+                            {% for application in recent_applications %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ application.scheme.name }}
+                                <span
+                                    class="badge bg-{{ application.status|yesno:'success,warning,danger' }} rounded-pill">{{
+                                    application.get_status_display }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                     </div>
                     <div id="grievance-list">
                         {% if recent_grievances %}
-                            <h6 class="mt-3" data-lang-key="recent_grievances">Recent Grievances:</h6>
-                            <ul class="list-group">
-                                {% for grievance in recent_grievances %}
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        {{ grievance.title }}
-                                        <span class="badge bg-{{ grievance.status|yesno:'success,warning,danger' }} rounded-pill">{{ grievance.get_status_display }}</span>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                        <h6 class="mt-3" data-lang-key="recent_grievances">Recent Grievances:</h6>
+                        <ul class="list-group">
+                            {% for grievance in recent_grievances %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ grievance.title }}
+                                <span
+                                    class="badge bg-{{ grievance.status|yesno:'success,warning,danger' }} rounded-pill">{{
+                                    grievance.get_status_display }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                     </div>
-                    
+
                     <!-- Tax Alerts -->
                     <div id="tax-alerts" class="mt-3">
                         {% if pending_taxes %}
-                            {% for tax in pending_taxes %}
-                                <div class="alert alert-warning">
-                                    <i class="bi bi-exclamation-triangle"></i>
-                                    <strong data-lang-key="tax_due">Tax Due:</strong> ₹{{ tax.amount }} for {{ tax.get_tax_type_display }} <span data-lang-key="is_due_on">is due on</span> {{ tax.due_date|date:"d M Y" }}
-                                    <a href="{% url 'citizen:pay_tax' %}" class="alert-link ms-2" data-lang-key="pay_now">Pay Now</a>
-                                </div>
-                            {% endfor %}
+                        {% for tax in pending_taxes %}
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <strong data-lang-key="tax_due">Tax Due:</strong> ₹{{ tax.amount }} for {{
+                            tax.get_tax_type_display }} <span data-lang-key="is_due_on">is due on</span> {{
+                            tax.due_date|date:"d M Y" }}
+                            <a href="{% url 'citizen:pay_tax' %}" class="alert-link ms-2" data-lang-key="pay_now">Pay
+                                Now</a>
+                        </div>
+                        {% endfor %}
                         {% endif %}
-                        
+
                         {% if overdue_taxes %}
-                            {% for tax in overdue_taxes %}
-                                <div class="alert alert-danger">
-                                    <i class="bi bi-exclamation-circle"></i>
-                                    <strong data-lang-key="overdue_tax">Overdue Tax:</strong> ₹{{ tax.amount }} for {{ tax.get_tax_type_display }} <span data-lang-key="was_due_on">was due on</span> {{ tax.due_date|date:"d M Y" }}
-                                    <a href="{% url 'citizen:pay_tax' %}" class="alert-link ms-2" data-lang-key="pay_now">Pay Now</a>
-                                </div>
-                            {% endfor %}
+                        {% for tax in overdue_taxes %}
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-circle"></i>
+                            <strong data-lang-key="overdue_tax">Overdue Tax:</strong> ₹{{ tax.amount }} for {{
+                            tax.get_tax_type_display }} <span data-lang-key="was_due_on">was due on</span> {{
+                            tax.due_date|date:"d M Y" }}
+                            <a href="{% url 'citizen:pay_tax' %}" class="alert-link ms-2" data-lang-key="pay_now">Pay
+                                Now</a>
+                        </div>
+                        {% endfor %}
                         {% endif %}
-                        
-                        <!-- Aadhaar-based tax alerts -->
+
+                        <!-- Aadhaar-based tax alerts (DISABLED FOR STABILITY) -->
+                        {% comment %}
                         {% if citizen_tax_data %}
-                            <!-- Property Tax Alert -->
-                            {% if citizen_tax_data.property_status == 'pending' or citizen_tax_data.property_status == 'overdue' %}
-                                <div class="alert {% if citizen_tax_data.property_status == 'overdue' %}alert-danger{% else %}alert-warning{% endif %}">
-                                    <i class="bi bi-exclamation-{% if citizen_tax_data.property_status == 'overdue' %}circle{% else %}triangle{% endif %}"></i>
-                                    <strong data-lang-key="property_tax_due">Property Tax Due:</strong> ₹{{ citizen_tax_data.property_tax_amount }} <span data-lang-key="is_due_status">{% if citizen_tax_data.property_status == 'overdue' %}overdue{% else %}due{% endif %}</span> <span data-lang-key="on_date">on</span> {{ citizen_tax_data.property_due_date|date:"d M Y" }}
-                                    <a href="{% url 'tax_management:citizen_tax_bills' %}" class="alert-link ms-2" data-lang-key="view_details">View Details</a>
-                                </div>
-                            {% endif %}
-                            
-                            <!-- Water Tax Alert -->
-                            {% if citizen_tax_data.water_status == 'pending' or citizen_tax_data.water_status == 'overdue' %}
-                                <div class="alert {% if citizen_tax_data.water_status == 'overdue' %}alert-danger{% else %}alert-warning{% endif %}">
-                                    <i class="bi bi-exclamation-{% if citizen_tax_data.water_status == 'overdue' %}circle{% else %}triangle{% endif %}"></i>
-                                    <strong data-lang-key="water_tax_due">Water Tax Due:</strong> ₹{{ citizen_tax_data.water_tax_amount }} <span data-lang-key="is_due_status">{% if citizen_tax_data.water_status == 'overdue' %}overdue{% else %}due{% endif %}</span> <span data-lang-key="on_date">on</span> {{ citizen_tax_data.water_due_date|date:"d M Y" }}
-                                    <a href="{% url 'tax_management:citizen_tax_bills' %}" class="alert-link ms-2" data-lang-key="view_details">View Details</a>
-                                </div>
-                            {% endif %}
-                            
-                            <!-- Garbage Tax Alert -->
-                            {% if citizen_tax_data.garbage_status == 'pending' or citizen_tax_data.garbage_status == 'overdue' %}
-                                <div class="alert {% if citizen_tax_data.garbage_status == 'overdue' %}alert-danger{% else %}alert-warning{% endif %}">
-                                    <i class="bi bi-exclamation-{% if citizen_tax_data.garbage_status == 'overdue' %}circle{% else %}triangle{% endif %}"></i>
-                                    <strong data-lang-key="garbage_tax_due">Garbage Tax Due:</strong> ₹{{ citizen_tax_data.garbage_tax_amount }} <span data-lang-key="is_due_status">{% if citizen_tax_data.garbage_status == 'overdue' %}overdue{% else %}due{% endif %}</span> <span data-lang-key="on_date">on</span> {{ citizen_tax_data.garbage_due_date|date:"d M Y" }}
-                                    <a href="{% url 'tax_management:citizen_tax_bills' %}" class="alert-link ms-2" data-lang-key="view_details">View Details</a>
-                                </div>
-                            {% endif %}
-                            
-                            <!-- Health Tax Alert -->
-                            {% if citizen_tax_data.health_status == 'pending' or citizen_tax_data.health_status == 'overdue' %}
-                                <div class="alert {% if citizen_tax_data.health_status == 'overdue' %}alert-danger{% else %}alert-warning{% endif %}">
-                                    <i class="bi bi-exclamation-{% if citizen_tax_data.health_status == 'overdue' %}circle{% else %}triangle{% endif %}"></i>
-                                    <strong data-lang-key="health_tax_due">Health Tax Due:</strong> ₹{{ citizen_tax_data.health_tax_amount }} <span data-lang-key="is_due_status">{% if citizen_tax_data.health_status == 'overdue' %}overdue{% else %}due{% endif %}</span> <span data-lang-key="on_date">on</span> {{ citizen_tax_data.health_due_date|date:"d M Y" }}
-                                    <a href="{% url 'tax_management:citizen_tax_bills' %}" class="alert-link ms-2" data-lang-key="view_details">View Details</a>
-                                </div>
-                            {% endif %}
+                        <!-- Tax logic disabled -->
                         {% endif %}
+                        {% endcomment %}
                     </div>
                 </div>
-                
+
                 <!-- Village Notices Widget -->
                 <div class="content-box mt-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 class="content-box-title mb-0"><i class="bi bi-bell-fill"></i> <span data-lang-key="latest_village_notices">Latest Village Notices</span></h3>
-                        <a href="{% url 'informationhub:notices_list' %}" class="btn btn-sm btn-outline-primary" data-lang-key="view_all">View All</a>
+                        <h3 class="content-box-title mb-0"><i class="bi bi-bell-fill"></i> <span
+                                data-lang-key="latest_village_notices">Latest Village Notices</span></h3>
+                        <a href="{% url 'informationhub:notices_list' %}" class="btn btn-sm btn-outline-primary"
+                            data-lang-key="view_all">View All</a>
                     </div>
                     {% if latest_notices %}
-                        <div class="row">
-                            {% for notice in latest_notices %}
-                            <div class="col-md-6 mb-3">
-                                <div class="card border-start border-4 border-{{ notice.get_badge_class|slice:'3:' }} h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h6 class="card-title mb-0">{{ notice.title|truncatewords:8 }}</h6>
-                                            <span class="badge {{ notice.get_badge_class }}">{{ notice.get_notice_type_display }}</span>
-                                        </div>
-                                        <p class="card-text text-muted small">{{ notice.description|truncatewords:15 }}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted"><i class="bi bi-calendar"></i> {{ notice.date|date:"M d, Y" }}</small>
-                                            <a href="{% url 'informationhub:notice_detail' notice.id %}" class="btn btn-sm btn-outline-secondary" data-lang-key="read_more">Read More</a>
-                                        </div>
+                    <div class="row">
+                        {% for notice in latest_notices %}
+                        <div class="col-md-6 mb-3">
+                            <div
+                                class="card border-start border-4 border-{{ notice.get_badge_class|slice:'3:' }} h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="card-title mb-0">{{ notice.title|truncatewords:8 }}</h6>
+                                        <span class="badge {{ notice.get_badge_class }}">{{
+                                            notice.get_notice_type_display }}</span>
+                                    </div>
+                                    <p class="card-text text-muted small">{{ notice.description|truncatewords:15 }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted"><i class="bi bi-calendar"></i> {{ notice.date|date:"M
+                                            d, Y" }}</small>
+                                        <a href="{% url 'informationhub:notice_detail' notice.id %}"
+                                            class="btn btn-sm btn-outline-secondary" data-lang-key="read_more">Read
+                                            More</a>
                                     </div>
                                 </div>
                             </div>
-                            {% endfor %}
                         </div>
+                        {% endfor %}
+                    </div>
                     {% else %}
-                        <div class="alert alert-info" data-lang-key="no_notices_available">No notices available at the moment.</div>
+                    <div class="alert alert-info" data-lang-key="no_notices_available">No notices available at the
+                        moment.</div>
                     {% endif %}
                 </div>
-                
+
                 <!-- Upcoming Meetings Widget -->
                 <div class="content-box mt-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 class="content-box-title mb-0"><i class="bi bi-calendar-event-fill"></i> <span data-lang-key="upcoming_meetings">Upcoming Meetings</span></h3>
-                        <a href="{% url 'informationhub:meetings_list' %}" class="btn btn-sm btn-outline-success" data-lang-key="view_all">View All</a>
+                        <h3 class="content-box-title mb-0"><i class="bi bi-calendar-event-fill"></i> <span
+                                data-lang-key="upcoming_meetings">Upcoming Meetings</span></h3>
+                        <a href="{% url 'informationhub:meetings_list' %}" class="btn btn-sm btn-outline-success"
+                            data-lang-key="view_all">View All</a>
                     </div>
                     {% if upcoming_meetings %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th data-lang-key="meeting">Meeting</th>
-                                        <th data-lang-key="date_time">Date & Time</th>
-                                        <th data-lang-key="location">Location</th>
-                                        <th data-lang-key="action">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for meeting in upcoming_meetings %}
-                                    <tr>
-                                        <td><strong>{{ meeting.meeting_title|truncatewords:6 }}</strong></td>
-                                        <td>
-                                            <small class="d-block"><i class="bi bi-calendar"></i> {{ meeting.meeting_date|date:"M d, Y" }}</small>
-                                            <small class="text-muted"><i class="bi bi-clock"></i> {{ meeting.time|time:"h:i A" }}</small>
-                                        </td>
-                                        <td>{{ meeting.location }}</td>
-                                        <td><a href="{% url 'informationhub:meeting_detail' meeting.id %}" class="btn btn-sm btn-outline-primary" data-lang-key="view_details">View Details</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th data-lang-key="meeting">Meeting</th>
+                                    <th data-lang-key="date_time">Date & Time</th>
+                                    <th data-lang-key="location">Location</th>
+                                    <th data-lang-key="action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for meeting in upcoming_meetings %}
+                                <tr>
+                                    <td><strong>{{ meeting.meeting_title|truncatewords:6 }}</strong></td>
+                                    <td>
+                                        <small class="d-block"><i class="bi bi-calendar"></i> {{
+                                            meeting.meeting_date|date:"M d, Y" }}</small>
+                                        <small class="text-muted"><i class="bi bi-clock"></i> {{ meeting.time|time:"h:i
+                                            A" }}</small>
+                                    </td>
+                                    <td>{{ meeting.location }}</td>
+                                    <td><a href="{% url 'informationhub:meeting_detail' meeting.id %}"
+                                            class="btn btn-sm btn-outline-primary" data-lang-key="view_details">View
+                                            Details</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                     {% else %}
-                        <div class="alert alert-info" data-lang-key="no_meetings_scheduled">No meetings scheduled at the moment.</div>
+                    <div class="alert alert-info" data-lang-key="no_meetings_scheduled">No meetings scheduled at the
+                        moment.</div>
                     {% endif %}
                 </div>
-                
-
             </div>
 
             <div class="tab-pane fade" id="financial">
                 <div class="content-box">
                     <h3 class="content-box-title" data-lang-key="sidebar_financial">Financial Services</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:pay_tax' %}" class="action-card">
                                 <div class="icon-circle bg-card-blue"><i class="bi bi-house-check-fill"></i></div>
                                 <h6 data-lang-key="action_pay_tax">Pay Property Tax</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:pay_water_bill' %}" class="action-card">
                                 <div class="icon-circle bg-secondary"><i class="bi bi-droplet-fill"></i></div>
                                 <h6 data-lang-key="action_pay_water">Pay Water & Utility Bills</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:pay_garbage_bill' %}" class="action-card">
                                 <div class="icon-circle bg-warning text-dark"><i class="bi bi-trash-fill"></i></div>
                                 <h6 data-lang-key="pay_garbage_bill">Pay Garbage Tax</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:pay_health_bill' %}" class="action-card">
                                 <div class="icon-circle bg-success"><i class="bi bi-heart-pulse-fill"></i></div>
                                 <h6 data-lang-key="pay_health_bill">Pay Health Tax</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:view_budget' %}" class="action-card">
                                 <div class="icon-circle bg-info"><i class="bi bi-pie-chart-fill"></i></div>
                                 <h6 data-lang-key="action_panchayat_budget">View Panchayat Budget</h6>
@@ -275,13 +269,13 @@
                 <div class="content-box">
                     <h3 class="content-box-title" data-lang-key="sidebar_grievance">Grievance Redressal</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'citizen:lodge_grievance' %}" class="action-card">
                                 <div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div>
                                 <h6 data-lang-key="action_lodge_new">Lodge New Complaint</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'citizen:my_grievances' %}" class="action-card">
                                 <div class="icon-circle bg-warning text-dark"><i class="bi bi-card-checklist"></i></div>
                                 <h6 data-lang-key="action_track_grievance">Track My Grievances</h6>
@@ -295,7 +289,7 @@
                 <div class="content-box">
                     <h3 class="content-box-title" data-lang-key="sidebar_schemes">Schemes & Subsidies</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'citizen:view_schemes' %}" class="action-card">
                                 <div class="icon-circle bg-card-green"><i class="bi bi-patch-check-fill"></i></div>
                                 <h6 data-lang-key="action_all_schemes">View All Schemes</h6>
@@ -309,25 +303,25 @@
                 <div class="content-box">
                     <h3 class="content-box-title" data-lang-key="sidebar_info">Information Hub</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'informationhub:notices_list' %}" class="action-card">
                                 <div class="icon-circle bg-primary"><i class="bi bi-bell-fill"></i></div>
                                 <h6 data-lang-key="action_notices">Village Notices</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'informationhub:meetings_list' %}" class="action-card">
                                 <div class="icon-circle bg-success"><i class="bi bi-calendar-event-fill"></i></div>
                                 <h6 data-lang-key="action_meetings">Meeting Schedules</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'emergencydirectory:emergency_list' %}" class="action-card">
                                 <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
                                 <h6 data-lang-key="action_emergency_directory">Emergency Directory</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'asset_project_tracker:list' %}" class="action-card">
                                 <div class="icon-circle bg-warning text-dark"><i class="bi bi-building"></i></div>
                                 <h6 data-lang-key="action_asset_tracker">Assets & Projects</h6>
@@ -341,37 +335,37 @@
                 <div class="content-box">
                     <h3 class="content-box-title" data-lang-key="sidebar_requests">Certificates & RTI</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/certificates/apply/" class="action-card">
                                 <div class="icon-circle bg-primary"><i class="bi bi-file-earmark-text-fill"></i></div>
                                 <h6 data-lang-key="action_apply_cert">Apply Certificate</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/rti/submit/" class="action-card">
                                 <div class="icon-circle bg-danger"><i class="bi bi-shield-lock-fill"></i></div>
                                 <h6 data-lang-key="action_submit_rti">Submit RTI Request</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/land-records/link/" class="action-card">
                                 <div class="icon-circle bg-success"><i class="bi bi-map-fill"></i></div>
                                 <h6 data-lang-key="action_link_land">Link Land Records</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/certificates/" class="action-card">
                                 <div class="icon-circle bg-info"><i class="bi bi-list-check"></i></div>
                                 <h6 data-lang-key="my_certificates">My Certificates</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/rti/" class="action-card">
                                 <div class="icon-circle bg-warning text-dark"><i class="bi bi-list-ul"></i></div>
                                 <h6 data-lang-key="my_rti_requests">My RTI Requests</h6>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/land-records/status/" class="action-card">
                                 <div class="icon-circle bg-secondary"><i class="bi bi-check2-square"></i></div>
                                 <h6 data-lang-key="my_land_records">My Land Records</h6>
@@ -380,12 +374,12 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="tab-pane fade" id="engagement">
-                 <div class="content-box">
+                <div class="content-box">
                     <h3 class="content-box-title" data-lang-key="sidebar_engagement">Citizen Engagement</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4">
+                        <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'citizen:feedback_suggestions' %}" class="action-card">
                                 <div class="icon-circle bg-info text-dark"><i class="bi bi-lightbulb-fill"></i></div>
                                 <h6 data-lang-key="action_feedback">Feedback & Suggestions</h6>
