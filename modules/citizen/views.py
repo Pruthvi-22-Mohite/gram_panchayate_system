@@ -81,6 +81,10 @@ def citizen_dashboard(request):
         submitted_by=request.user
     ).order_by('-submitted_at')[:5]
     
+    # Get total counts for dashboard
+    total_applications_count = SchemeApplication.objects.filter(applicant=request.user).count()
+    total_grievances_count = Grievance.objects.filter(submitted_by=request.user).count()
+    
     pending_taxes = TaxRecord.objects.filter(
         taxpayer=request.user,
         status='pending'
@@ -99,6 +103,16 @@ def citizen_dashboard(request):
         citizen_tax_data = CitizenTaxData.objects.get(aadhaar_number=citizen_profile.aadhaar_number)
     except (CitizenProfile.DoesNotExist, CitizenTaxData.DoesNotExist):
         citizen_tax_data = None
+    
+    # Get additional counts for dashboard
+    pending_applications_count = SchemeApplication.objects.filter(
+        applicant=request.user,
+        status='pending'
+    ).count()
+    resolved_grievances_count = Grievance.objects.filter(
+        submitted_by=request.user,
+        status='resolved'
+    ).count()
     
     # Information Hub data
     today = timezone.now().date()
@@ -125,8 +139,10 @@ def citizen_dashboard(request):
         'pending_taxes': pending_taxes,
         'overdue_taxes': overdue_taxes,
         'citizen_tax_data': citizen_tax_data,
-        'total_applications': recent_applications.count(),
-        'total_grievances': recent_grievances.count(),
+        'total_applications': total_applications_count,
+        'total_grievances': total_grievances_count,
+        'pending_applications_count': pending_applications_count,
+        'resolved_grievances_count': resolved_grievances_count,
         'pending_tax_amount': sum(tax.amount for tax in pending_taxes),
         # Information Hub
         'latest_notices': latest_notices,

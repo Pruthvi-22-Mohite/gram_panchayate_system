@@ -58,6 +58,10 @@ def clerk_dashboard(request):
         status='pending'
     ).count()
     
+    # Get total counts for dashboard
+    total_applications_count = SchemeApplication.objects.count()
+    resolved_grievances_count = Grievance.objects.filter(status='resolved').count()
+    
     # Get recent activities
     recent_applications = SchemeApplication.objects.filter(
         status='pending'
@@ -71,6 +75,8 @@ def clerk_dashboard(request):
         'pending_applications': pending_applications,
         'open_grievances': open_grievances,
         'pending_taxes': pending_taxes,
+        'total_applications_count': total_applications_count,
+        'resolved_grievances_count': resolved_grievances_count,
         'recent_applications': recent_applications,
         'recent_grievances': recent_grievances,
     }

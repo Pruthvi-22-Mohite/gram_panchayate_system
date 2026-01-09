@@ -1,7 +1,7 @@
 {% extends 'common/base.html' %}
 {% load static %}
 
-{% block title %}LokSevaGram - Gram Panchayat Digital Services{% endblock %}
+{% block title %}Grampanchayat, Koparde - Gram Panchayat Digital Services{% endblock %}
 
 {% block body_class %} class="main-page"{% endblock %}
 
@@ -12,8 +12,8 @@
 {% block content %}
 <br>
 <div class="max-w-3xl mx-auto">
-    <div class="bg-white p-6 md:p-10 rounded-lg shadow-md fancy-box text-center position-relative overflow-hidden">
-        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(135deg, rgba(13, 98, 169, 0.05) 0%, rgba(19, 136, 8, 0.05) 100%); z-index: 0;"></div>
+    <div class="bg-white p-6 md:p-10 rounded-lg shadow-md fancy-box text-center position-relative overflow-hidden" style="background: linear-gradient(to right, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd;">
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 0;"></div>
         <div class="position-relative z-1">
             <br>
             <div class="d-flex align-items-center justify-content-center mb-3">
@@ -87,175 +87,214 @@
         </div>
 
         <br>
-        <!-- Public Announcements Section -->
-        <div class="bg-white p-6 rounded-lg shadow-md mt-8 fancy-box">
+        <!-- Combined Information Section -->
+        <div class="bg-white p-6 md:p-10 rounded-lg shadow-md mt-8 fancy-box" style="background: linear-gradient(to right, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd;">
             <div class="d-flex align-items-center justify-content-center mb-4">
-                <i class="bi bi-megaphone-fill text-primary me-2" style="font-size: 1.5rem;"></i>
-                <h2 class="text-2xl font-bold mb-0" data-lang-key="latest_announcements">Latest Announcements</h2>
+                <i class="bi bi-grid-3x3-gap-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+                <h2 class="text-2xl font-bold text-dark mb-0">Latest Updates & Information</h2>
             </div>
             
-            {% if latest_notices %}
-                <div class="row">
-                    {% for notice in latest_notices %}
-                        <div class="col-md-12 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-3">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-3">
-                                            <div class="d-flex align-items-center mb-2">
-                                                <i class="bi bi-info-circle-fill text-primary me-2"></i>
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-0">{{ notice.get_notice_type_display }}</div>
+            <!-- Latest Announcements Section -->
+            <div class="mb-4 pb-4 border-bottom">
+                <div class="d-flex align-items-center justify-content-center mb-3">
+                    <i class="bi bi-megaphone-fill text-primary me-2" style="font-size: 1.2rem;"></i>
+                    <h3 class="h5 mb-0" data-lang-key="latest_announcements">Latest Announcements</h3>
+                </div>
+                
+                {% if latest_notices %}
+                    <div class="announcements-container">
+                        {% for notice in latest_notices|slice:":3" %}
+                            <div class="mb-3">
+                                <div class="card border-left-primary shadow-sm h-100">
+                                    <div class="card-body p-3">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-3">
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <i class="bi bi-info-circle-fill text-primary me-1" style="font-size: 0.8rem;"></i>
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-0">{{ notice.get_notice_type_display }}</div>
+                                                </div>
+                                                <div class="small font-weight-bold text-gray-800">{{ notice.title|truncatewords:8 }}</div>
+                                                <div class="text-muted small">
+                                                    <i class="bi bi-calendar me-1" style="font-size: 0.8rem;"></i> {{ notice.date|date:"d M" }}
+                                                </div>
                                             </div>
-                                            <div class="h5 mb-2 font-weight-bold text-gray-800">{{ notice.title }}</div>
-                                            <div class="text-muted small mb-2">
-                                                <i class="bi bi-person-fill me-1"></i> <span data-lang-key="issued_by">Issued by:</span> {{ notice.issued_by }}
-                                                <i class="bi bi-calendar ms-3 me-1"></i> {{ notice.date|date:"d M Y" }}
-                                            </div>
-                                            <p class="mb-0 text-gray-700">{{ notice.description|truncatewords:25 }}</p>
-                                        </div>
-                                        <div class="col-auto">
-                                            <span class="badge {{ notice.get_badge_class }} px-3 py-2">{{ notice.get_notice_type_display }}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <div class="text-center mt-2">
-                    <a href="{% url 'informationhub:notices_list' %}" class="btn btn-primary btn-lg px-4 py-2">
-                        <i class="bi bi-eye-fill me-2"></i><span data-lang-key="view_all_announcements">View All Announcements</span>
-                    </a>
-                </div>
-            {% else %}
-                <div class="alert alert-info text-center py-4">
-                    <i class="bi bi-info-circle-fill me-2"></i><span data-lang-key="no_announcements">No announcements available at the moment.</span>
-                </div>
-            {% endif %}
-        </div>
-        <br>
-        
-        <!-- Upcoming Meetings Section -->
-        <div class="bg-white p-6 rounded-lg shadow-md mt-8 fancy-box">
-            <div class="d-flex align-items-center justify-content-center mb-4">
-                <i class="bi bi-calendar-event-fill text-success me-2" style="font-size: 1.5rem;"></i>
-                <h2 class="text-2xl font-bold mb-0" data-lang-key="upcoming_meetings_title">Upcoming Meetings</h2>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-2">
+                        <a href="{% url 'informationhub:notices_list' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-eye me-1"></i><span data-lang-key="view_all_announcements">View All</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-light text-center py-2">
+                        <i class="bi bi-info-circle-fill me-1"></i><span data-lang-key="no_announcements">None</span>
+                    </div>
+                {% endif %}
             </div>
             
-            {% if upcoming_meetings %}
-                <div class="row">
-                    {% for meeting in upcoming_meetings %}
-                        <div class="col-md-12 mb-4">
-                            <div class="card border-left-success shadow h-100 py-3">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-3">
-                                            <div class="d-flex align-items-center mb-2">
-                                                <i class="bi bi-people-fill text-success me-2"></i>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ meeting.meeting_title }}</div>
+            <!-- Upcoming Meetings Section -->
+            <div class="mb-4 pb-4 border-bottom">
+                <div class="d-flex align-items-center justify-content-center mb-3">
+                    <i class="bi bi-calendar-event-fill text-success me-2" style="font-size: 1.2rem;"></i>
+                    <h3 class="h5 mb-0" data-lang-key="upcoming_meetings_title">Upcoming Meetings</h3>
+                </div>
+                
+                {% if upcoming_meetings %}
+                    <div class="meetings-container">
+                        {% for meeting in upcoming_meetings|slice:":3" %}
+                            <div class="mb-3">
+                                <div class="card border-left-success shadow-sm h-100">
+                                    <div class="card-body p-3">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-3">
+                                                <div class="small font-weight-bold text-gray-800">{{ meeting.meeting_title|truncatewords:6 }}</div>
+                                                <div class="text-muted small mb-1">
+                                                    <i class="bi bi-calendar-check me-1" style="font-size: 0.8rem;"></i> {{ meeting.meeting_date|date:"d M" }}
+                                                    <i class="bi bi-clock ms-2 me-1" style="font-size: 0.8rem;"></i> {{ meeting.time|time:"H:i" }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    <i class="bi bi-geo-alt me-1" style="font-size: 0.8rem;"></i> {{ meeting.location|truncatechars:20 }}
+                                                </div>
                                             </div>
-                                            <div class="text-muted small mb-2">
-                                                <i class="bi bi-calendar-check me-1"></i> {{ meeting.meeting_date|date:"d M Y" }}
-                                                <i class="bi bi-clock ms-3 me-1"></i> {{ meeting.time|time:"H:i" }}
-                                                <br>
-                                                <i class="bi bi-geo-alt ms-1 me-1"></i> {{ meeting.location }}
-                                            </div>
-                                            <p class="mb-0 text-gray-700">
-                                                <i class="bi bi-person-workspace me-1"></i> <span data-lang-key="organized_by">Organized by:</span> {{ meeting.organized_by }}
-                                            </p>
-                                        </div>
-                                        <div class="col-auto">
-                                            <span class="badge bg-success px-3 py-2">Upcoming</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-2">
+                        <a href="{% url 'informationhub:meetings_list' %}" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-eye me-1"></i><span data-lang-key="view_all_meetings">View All</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-light text-center py-2">
+                        <i class="bi bi-calendar-x-fill me-1"></i><span data-lang-key="no_meetings">None</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Panchayat Budget Section -->
+            <div>
+                <div class="d-flex align-items-center justify-content-center mb-3">
+                    <i class="bi bi-file-pdf-fill text-danger me-2" style="font-size: 1.2rem;"></i>
+                    <h3 class="h5 mb-0" data-lang-key="panchayat_budget">Budget Documents</h3>
+                </div>
+                
+                <div class="budget-container">
+                    {% if budgets %}
+                        <div class="mb-3">
+                            {% for budget in budgets|slice:":3" %}
+                                <div class="mb-2">
+                                    <a href="{% url 'panchayat_budget:budget_pdf_view' budget.financial_year %}" target="_blank" class="btn btn-outline-danger btn-sm d-block">
+                                        <i class="bi bi-file-pdf me-1"></i>{{ budget.title|truncatechars:25 }}
+                                    </a>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                        <div class="text-center">
+                            <a href="{% url 'panchayat_budget:public_budget_list' %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-eye me-1"></i>View All
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-light text-center py-2">
+                            <i class="bi bi-file-earmark-text me-1"></i><span data-lang-key="no_budget_docs">None Available</span>
+                        </div>
+                    {% endif %}
                 </div>
-                <div class="text-center mt-2">
-                    <a href="{% url 'informationhub:meetings_list' %}" class="btn btn-success btn-lg px-4 py-2">
-                        <i class="bi bi-eye-fill me-2"></i><span data-lang-key="view_all_meetings">View All Meetings</span>
-                    </a>
-                </div>
-            {% else %}
-                <div class="alert alert-info text-center py-4">
-                    <i class="bi bi-calendar-x-fill me-2"></i><span data-lang-key="no_meetings">No upcoming meetings scheduled.</span>
-                </div>
-            {% endif %}
+                
+                <p class="text-center text-muted small mt-2" data-lang-key="budget_accessibility" style="font-size: 0.7rem;">
+                    Access for transparency
+                </p>
+            </div>
         </div>
-        <br>
         
         <!-- Access Guide Section -->
-        <div class="bg-white p-6 md:p-10 rounded-lg shadow-md mt-8 fancy-box access-guide-section" data-lang-key="access_guide_section">
-            <br>
+        <div class="bg-white p-6 md:p-10 rounded-lg shadow-md mt-8 fancy-box" style="background: linear-gradient(to right, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd;">
             <div class="d-flex align-items-center justify-content-center mb-4">
-                <i class="bi bi-lightbulb-fill text-warning me-2" style="font-size: 1.5rem;"></i>
-                <h2 class="text-2xl font-bold mb-0" data-lang-key="access_guide_title">How to Access LokSevaGram</h2>
+                <div class="bg-info bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="bi bi-lightbulb-fill text-info" style="font-size: 1.5rem;"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-dark mb-0" data-lang-key="access_guide_title">How to Access LokSevaGram</h2>
             </div>
-            <p class="mb-4 text-center" data-lang-key="access_guide_intro">Follow these simple steps to log in and start using the services:</p>
+            <p class="mb-4 text-center text-muted" data-lang-key="access_guide_intro">Follow these simple steps to log in and start using the services:</p>
             
-            <ol class="list-group list-group-numbered w-100 access-guide-list" data-lang-key="access_guide_steps">
-                <li class="list-group-item d-flex flex-column align-items-center border-0 py-4" data-lang-key="access_guide_step1">
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="bi bi-megaphone-fill text-primary me-2" style="font-size: 1.2rem;"></i>
-                        <div class="fw-bold text-center h5 mb-0" data-lang-key="access_guide_step1_title">Step 1: Go to the Login Page</div>
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="step-card p-4 rounded-lg bg-white shadow-sm border mb-4" style="border: 1px solid #e2e8f0;">
+                            <div class="d-flex">
+                                <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-4" style="min-width: 50px; width: 50px; height: 50px; font-weight: bold; font-size: 1.5rem; flex-shrink: 0;">1</div>
+                                <div class="text-start">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-megaphone-fill text-primary me-3" style="font-size: 1.8rem;"></i>
+                                        <h4 class="h5 fw-bold mb-0" data-lang-key="access_guide_step1_title">Navigate to Login</h4>
+                                    </div>
+                                    <p class="text-muted mb-0" data-lang-key="access_guide_step1_desc">Click on the login button in the navigation bar.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p class="mb-0 text-center" data-lang-key="access_guide_step1_desc">Click on the "Login" button at the top right corner of the home page or navigate directly to Login Page.</p>
-                </li>
-                <li class="list-group-item d-flex flex-column align-items-center border-0 py-4" data-lang-key="access_guide_step2">
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="bi bi-person-badge-fill text-success me-2" style="font-size: 1.2rem;"></i>
-                        <div class="fw-bold text-center h5 mb-0" data-lang-key="access_guide_step2_title">Step 2: Choose Your User Type</div>
+                    <div class="col-12">
+                        <div class="step-card p-4 rounded-lg bg-white shadow-sm border mb-4" style="border: 1px solid #e2e8f0;">
+                            <div class="d-flex">
+                                <div class="step-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-4" style="min-width: 50px; width: 50px; height: 50px; font-weight: bold; font-size: 1.5rem; flex-shrink: 0;">2</div>
+                                <div class="text-start">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-person-badge-fill text-success me-3" style="font-size: 1.8rem;"></i>
+                                        <h4 class="h5 fw-bold mb-0" data-lang-key="access_guide_step2_title">Select User Role</h4>
+                                    </div>
+                                    <p class="text-muted mb-0" data-lang-key="access_guide_step2_desc">Choose your user type: Citizen, Clerk, or Admin.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p class="mb-0 text-center" data-lang-key="access_guide_step2_desc">Select whether you are logging in as an Admin, Clerk, or Citizen to access the appropriate services.</p>
-                </li>
-                <li class="list-group-item d-flex flex-column align-items-center border-0 py-4" data-lang-key="access_guide_step3">
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="bi bi-key-fill text-warning me-2" style="font-size: 1.2rem;"></i>
-                        <div class="fw-bold text-center h5 mb-0" data-lang-key="access_guide_step3_title">Step 3: Enter Your Credentials</div>
+                    <div class="col-12">
+                        <div class="step-card p-4 rounded-lg bg-white shadow-sm border mb-4" style="border: 1px solid #e2e8f0;">
+                            <div class="d-flex">
+                                <div class="step-number bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-4" style="min-width: 50px; width: 50px; height: 50px; font-weight: bold; font-size: 1.5rem; flex-shrink: 0;">3</div>
+                                <div class="text-start">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-key-fill text-warning me-3" style="font-size: 1.8rem;"></i>
+                                        <h4 class="h5 fw-bold mb-0" data-lang-key="access_guide_step3_title">Sign In</h4>
+                                    </div>
+                                    <p class="text-muted mb-0" data-lang-key="access_guide_step3_desc">Enter your credentials or register as a new citizen.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p class="mb-0 text-center" data-lang-key="access_guide_step3_desc">Enter your username and password to access your account. Citizens can register for a new account if needed.</p>
-                </li>
-                <li class="list-group-item d-flex flex-column align-items-center border-0 py-4" data-lang-key="access_guide_step4">
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="bi bi-speedometer2 text-info me-2" style="font-size: 1.2rem;"></i>
-                        <div class="fw-bold text-center h5 mb-0" data-lang-key="access_guide_step4_title">Step 4: Access Your Dashboard</div>
+                    <div class="col-12">
+                        <div class="step-card p-4 rounded-lg bg-white shadow-sm border" style="border: 1px solid #e2e8f0;">
+                            <div class="d-flex">
+                                <div class="step-number bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-4" style="min-width: 50px; width: 50px; height: 50px; font-weight: bold; font-size: 1.5rem; flex-shrink: 0;">4</div>
+                                <div class="text-start">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-speedometer2 text-info me-3" style="font-size: 1.8rem;"></i>
+                                        <h4 class="h5 fw-bold mb-0" data-lang-key="access_guide_step4_title">Access Services</h4>
+                                    </div>
+                                    <p class="text-muted mb-0" data-lang-key="access_guide_step4_desc">Access your personalized dashboard to use services.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p class="mb-0 text-center" data-lang-key="access_guide_step4_desc">Once logged in, you will be directed to your personalized dashboard where you can access all available services and information.</p>
-                </li>
-            </ol>
+                </div>
+            </div>
         </div>
-    </main>
 </div>
 
-<!-- Panchayat Budget Section -->
-<div class="bg-white p-6 rounded-lg shadow-md mt-8 fancy-box">
-    <div class="d-flex align-items-center justify-content-center mb-4">
-        <i class="bi bi-file-pdf-fill text-danger me-2" style="font-size: 1.5rem;"></i>
-        <h2 class="text-2xl font-bold mb-0">Panchayat Budget Documents</h2>
-    </div>
-    
-    <p class="mb-4 text-center">Access our annual budget documents for transparency and accountability.</p>
-    
-    <div class="text-center mb-4">
-        {% if budgets %}
-            {% for budget in budgets %}
-            <div class="mb-2">
-                <a href="{% url 'panchayat_budget:budget_pdf_view' budget.financial_year %}" target="_blank" class="btn btn-link text-danger btn-lg px-4 py-2 d-block">
-                    <i class="bi bi-file-pdf me-2"></i>{{ budget.title }} ({{ budget.financial_year }})
-                </a>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-muted">No budget documents available.</p>
-        {% endif %}
-    </div>
-    
-    <p class="text-center text-muted small">
-        View our budget documents to understand how funds are allocated and spent for village development.
-    </p>
 </div>
 <br>
+
+<!-- Footer -->
+<footer class="footer mt-8 py-4 bg-light text-dark">
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2026 Grampanchayat Koparde. All rights reserved.</p>
+    </div>
+</footer>
 
 {% endblock %}

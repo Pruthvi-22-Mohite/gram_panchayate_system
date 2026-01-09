@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -12,7 +12,7 @@ from modules.common.models import CustomUser
 from modules.common.decorators import admin_required
 from .models import AdminProfile, SystemSettings, AuditLog
 from .forms import AdminLoginForm, ClerkCreationForm, ClerkEditForm
-from modules.clerk.models import ClerkProfile, Grievance, Scheme, TaxRecord
+from modules.clerk.models import ClerkProfile, Grievance, Scheme, TaxRecord, SchemeApplication
 from modules.clerk.forms import SchemeForm
 from modules.citizen.models import CitizenProfile, FeedbackSuggestion
 from modules.citizen.forms import FeedbackResponseForm
@@ -93,6 +93,20 @@ def admin_dashboard(request):
         admin_user=request.user
     ).order_by('-timestamp')[:10]
     
+    # Get additional statistics
+    active_schemes = Scheme.objects.filter(is_active=True).count()
+    pending_grievances = Grievance.objects.filter(status='pending').count()
+    total_grievances = Grievance.objects.count()
+    resolved_grievances = Grievance.objects.filter(status='resolved').count()
+    scheme_applications = SchemeApplication.objects.count()
+    
+    # Calculate tax collection
+    total_tax_collected = TaxRecord.objects.filter(status='paid').aggregate(total=Sum('amount'))['total'] or 0
+    tax_collection = f'₹{total_tax_collected:,}'
+    
+    # Calculate resolution rate
+    grievance_resolution_rate = f'{round(resolved_grievances / total_grievances * 100)}%' if total_grievances > 0 else '0%'
+    
     context = {
         'total_clerks': total_clerks,
         'total_citizens': total_citizens,
@@ -100,11 +114,11 @@ def admin_dashboard(request):
         'recent_citizens': recent_citizens,
         'user_stats': user_stats,
         'recent_logs': recent_logs,
-        'active_schemes': 18,  # This would come from a schemes model
-        'pending_grievances': 42,  # This would come from a grievances model
-        'tax_collection': '₹12,45,000',  # This would come from a tax model
-        'grievance_resolution_rate': '78%',  # Calculated from grievances
-        'scheme_applications': 342  # This would come from applications model
+        'active_schemes': active_schemes,
+        'pending_grievances': pending_grievances,
+        'tax_collection': tax_collection,
+        'grievance_resolution_rate': grievance_resolution_rate,
+        'scheme_applications': scheme_applications
     }
     return render(request, 'admin/dashboard.html', context)
 

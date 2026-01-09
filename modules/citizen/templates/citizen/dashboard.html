@@ -2,7 +2,7 @@
 {% block body_class %} class="citizen-dashboard"{% endblock %}
 {% load static %}
 
-{% block title %}Citizen Dashboard - LokSevaGram{% endblock %}
+{% block title %}Citizen Dashboard - Grampanchayat, Koparde{% endblock %}
 
 {% block sub_navbar %}
 <nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
@@ -49,25 +49,39 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="dashboard">
                 <div class="row" id="summary-cards-container">
-                    <div class="col-4 force-mobile-3col mb-4 px-1">
+                    <div class="col-3 force-mobile-3col mb-4 px-1">
                         <div class="summary-card bg-card-blue p-2">
                             <h5 class="small text-truncate" data-lang-key="my_applications">Applications</h5>
                             <div class="summary-number fs-4">{{ total_applications|default:0 }}</div>
                             <i class="bi bi-file-earmark-check summary-icon fs-5"></i>
                         </div>
                     </div>
-                    <div class="col-4 force-mobile-3col mb-4 px-1">
+                    <div class="col-3 force-mobile-3col mb-4 px-1">
                         <div class="summary-card bg-card-saffron p-2">
                             <h5 class="small text-truncate" data-lang-key="my_grievances">Grievances</h5>
                             <div class="summary-number fs-4">{{ total_grievances|default:0 }}</div>
                             <i class="bi bi-megaphone summary-icon fs-5"></i>
                         </div>
                     </div>
-                    <div class="col-4 force-mobile-3col mb-4 px-1">
-                        <div class="summary-card bg-card-green p-2">
+                    <div class="col-3 force-mobile-3col mb-4 px-1">
+                        <div class="summary-card bg-card-purple p-2">
+                            <h5 class="small text-truncate" data-lang-key="pending_applications">Pending Applications</h5>
+                            <div class="summary-number fs-4">{{ pending_applications_count|default:0 }}</div>
+                            <i class="bi bi-hourglass-top summary-icon fs-5"></i>
+                        </div>
+                    </div>
+                    <div class="col-3 force-mobile-3col mb-4 px-1">
+                        <div class="summary-card bg-card-orange p-2">
                             <h5 class="small text-truncate" data-lang-key="pending_taxes">Tax Due</h5>
                             <div class="summary-number fs-4">₹{{ pending_tax_amount|default:0 }}</div>
                             <i class="bi bi-cash-coin summary-icon fs-5"></i>
+                        </div>
+                    </div>
+                    <div class="col-3 force-mobile-3col mb-4 px-1">
+                        <div class="summary-card bg-card-green p-2">
+                            <h5 class="small text-truncate" data-lang-key="resolved_grievances">Resolved Grievances</h5>
+                            <div class="summary-number fs-4">{{ resolved_grievances_count|default:0 }}</div>
+                            <i class="bi bi-check-circle summary-icon fs-5"></i>
                         </div>
                     </div>
                 </div>

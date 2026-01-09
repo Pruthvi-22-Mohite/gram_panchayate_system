@@ -1,7 +1,7 @@
 {% extends 'common/base.html' %}
 {% load static %}
 
-{% block title %}Citizen Login - LokSevaGram{% endblock %}
+{% block title %}Citizen Login - Grampanchayat, Koparde{% endblock %}
 
 {% block body_class %} class="login-page"{% endblock %}
 
@@ -29,7 +29,7 @@
             </form>
             
             <div class="text-center mt-4">
-                <p class="text-muted" data-lang-key="dont_have_account">Don't have an account? <a href="{% url 'citizen:register' %}" data-lang-key="register_here">Register here</a></p>
+                <p class="text-muted"><span data-lang-key="dont_have_account">Don't have an account?</span> <a href="{% url 'citizen:register' %}" data-lang-key="register_here">Register here</a></p>
             </div>
         </div>
     </div>
