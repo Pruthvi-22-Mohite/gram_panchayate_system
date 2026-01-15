@@ -9,7 +9,7 @@
         <a class="navbar-brand" href="{% url 'clerk:dashboard' %}">Clerk Portal</a>
         <div class="ms-auto">
             <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
-            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+            <a href="/auth/logout/" class="btn btn-sm btn-outline-light">Logout</a>
         </div>
     </div>
 </nav>

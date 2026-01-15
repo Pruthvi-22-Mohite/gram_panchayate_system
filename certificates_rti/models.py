@@ -158,10 +158,6 @@ class LandRecordLink(models.Model):
         
         if not self.gat_number or not self.gat_number.strip():
             raise ValidationError({'gat_number': 'Gat Number is required.'})
-        
-        # Validate that numeric fields are non-negative
-        if self.area < 0:
-            raise ValidationError({'area': 'Negative values are not allowed.'})
 
 
 class LandParcel(models.Model):

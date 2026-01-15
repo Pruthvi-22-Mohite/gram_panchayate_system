@@ -17,32 +17,60 @@
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
+                
+                <!-- Display form errors if any -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label class="form-label">Meeting Title *</label>
                         {{ form.meeting_title }}
+                        {% if form.meeting_title.errors %}
+                            <div class="text-danger">{{ form.meeting_title.errors }}</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Agenda *</label>
                     {{ form.agenda }}
+                    {% if form.agenda.errors %}
+                        <div class="text-danger">{{ form.agenda.errors }}</div>
+                    {% endif %}
                 </div>
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <label class="form-label">Date *</label>
                         {{ form.meeting_date }}
+                        {% if form.meeting_date.errors %}
+                            <div class="text-danger">{{ form.meeting_date.errors }}</div>
+                        {% endif %}
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label">Time *</label>
                         {{ form.time }}
+                        {% if form.time.errors %}
+                            <div class="text-danger">{{ form.time.errors }}</div>
+                        {% endif %}
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label">Location *</label>
                         {{ form.location }}
+                        {% if form.location.errors %}
+                            <div class="text-danger">{{ form.location.errors }}</div>
+                        {% endif %}
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label">Organized By *</label>
                         {{ form.organized_by }}
+                        {% if form.organized_by.errors %}
+                            <div class="text-danger">{{ form.organized_by.errors }}</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="form-check mb-3">

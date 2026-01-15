@@ -10,7 +10,8 @@
         <a class="navbar-brand" href="#" data-lang-key="citizen_portal">Citizen Portal</a>
         <div class="ms-auto">
             <span class="navbar-text me-3" data-lang-key="welcome_citizen">Welcome, {{ user.username }}!</span>
-            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light" data-lang-key="logout">Logout</a>
+            <a href="{% url 'common:change_password' %}" class="btn btn-sm btn-outline-light me-2" data-lang-key="change_password">Change Password</a>
+            <a href="/auth/logout/" class="btn btn-sm btn-outline-light" data-lang-key="logout">Logout</a>
         </div>
     </div>
 </nav>
@@ -50,35 +51,35 @@
             <div class="tab-pane fade show active" id="dashboard">
                 <div class="row" id="summary-cards-container">
                     <div class="col-3 force-mobile-3col mb-4 px-1">
-                        <div class="summary-card bg-card-blue p-2">
+                        <div class="summary-card bg-card-blue p-2 no-cursor">
                             <h5 class="small text-truncate" data-lang-key="my_applications">Applications</h5>
                             <div class="summary-number fs-4">{{ total_applications|default:0 }}</div>
                             <i class="bi bi-file-earmark-check summary-icon fs-5"></i>
                         </div>
                     </div>
                     <div class="col-3 force-mobile-3col mb-4 px-1">
-                        <div class="summary-card bg-card-saffron p-2">
+                        <div class="summary-card bg-card-saffron p-2 no-cursor">
                             <h5 class="small text-truncate" data-lang-key="my_grievances">Grievances</h5>
                             <div class="summary-number fs-4">{{ total_grievances|default:0 }}</div>
                             <i class="bi bi-megaphone summary-icon fs-5"></i>
                         </div>
                     </div>
                     <div class="col-3 force-mobile-3col mb-4 px-1">
-                        <div class="summary-card bg-card-purple p-2">
+                        <div class="summary-card bg-card-purple p-2 no-cursor">
                             <h5 class="small text-truncate" data-lang-key="pending_applications">Pending Applications</h5>
                             <div class="summary-number fs-4">{{ pending_applications_count|default:0 }}</div>
                             <i class="bi bi-hourglass-top summary-icon fs-5"></i>
                         </div>
                     </div>
                     <div class="col-3 force-mobile-3col mb-4 px-1">
-                        <div class="summary-card bg-card-orange p-2">
+                        <div class="summary-card bg-card-orange p-2 no-cursor">
                             <h5 class="small text-truncate" data-lang-key="pending_taxes">Tax Due</h5>
                             <div class="summary-number fs-4">₹{{ pending_tax_amount|default:0 }}</div>
                             <i class="bi bi-cash-coin summary-icon fs-5"></i>
                         </div>
                     </div>
                     <div class="col-3 force-mobile-3col mb-4 px-1">
-                        <div class="summary-card bg-card-green p-2">
+                        <div class="summary-card bg-card-green p-2 no-cursor">
                             <h5 class="small text-truncate" data-lang-key="resolved_grievances">Resolved Grievances</h5>
                             <div class="summary-number fs-4">{{ resolved_grievances_count|default:0 }}</div>
                             <i class="bi bi-check-circle summary-icon fs-5"></i>
@@ -247,31 +248,31 @@
                         <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:pay_tax' %}" class="action-card">
                                 <div class="icon-circle bg-card-blue"><i class="bi bi-house-check-fill"></i></div>
-                                <h6 data-lang-key="action_pay_tax">Pay Property Tax</h6>
+                                <h6 class="no-cursor" data-lang-key="action_pay_tax">Pay Property Tax</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:pay_water_bill' %}" class="action-card">
                                 <div class="icon-circle bg-secondary"><i class="bi bi-droplet-fill"></i></div>
-                                <h6 data-lang-key="action_pay_water">Pay Water & Utility Bills</h6>
+                                <h6 class="no-cursor" data-lang-key="action_pay_water">Pay Water & Utility Bills</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:pay_garbage_bill' %}" class="action-card">
                                 <div class="icon-circle bg-warning text-dark"><i class="bi bi-trash-fill"></i></div>
-                                <h6 data-lang-key="pay_garbage_bill">Pay Garbage Tax</h6>
+                                <h6 class="no-cursor" data-lang-key="pay_garbage_bill">Pay Garbage Tax</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:pay_health_bill' %}" class="action-card">
                                 <div class="icon-circle bg-success"><i class="bi bi-heart-pulse-fill"></i></div>
-                                <h6 data-lang-key="pay_health_bill">Pay Health Tax</h6>
+                                <h6 class="no-cursor" data-lang-key="pay_health_bill">Pay Health Tax</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 force-mobile-3col mb-4">
                             <a href="{% url 'citizen:view_budget' %}" class="action-card">
                                 <div class="icon-circle bg-info"><i class="bi bi-pie-chart-fill"></i></div>
-                                <h6 data-lang-key="action_panchayat_budget">View Panchayat Budget</h6>
+                                <h6 class="no-cursor" data-lang-key="action_panchayat_budget">View Panchayat Budget</h6>
                             </a>
                         </div>
 
@@ -286,13 +287,13 @@
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'citizen:lodge_grievance' %}" class="action-card">
                                 <div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div>
-                                <h6 data-lang-key="action_lodge_new">Lodge New Complaint</h6>
+                                <h6 class="no-cursor" data-lang-key="action_lodge_new">Lodge New Complaint</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'citizen:my_grievances' %}" class="action-card">
                                 <div class="icon-circle bg-warning text-dark"><i class="bi bi-card-checklist"></i></div>
-                                <h6 data-lang-key="action_track_grievance">Track My Grievances</h6>
+                                <h6 class="no-cursor" data-lang-key="action_track_grievance">Track My Grievances</h6>
                             </a>
                         </div>
                     </div>
@@ -306,7 +307,7 @@
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'citizen:view_schemes' %}" class="action-card">
                                 <div class="icon-circle bg-card-green"><i class="bi bi-patch-check-fill"></i></div>
-                                <h6 data-lang-key="action_all_schemes">View All Schemes</h6>
+                                <h6 class="no-cursor" data-lang-key="action_all_schemes">View All Schemes</h6>
                             </a>
                         </div>
                     </div>
@@ -320,25 +321,25 @@
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'informationhub:notices_list' %}" class="action-card">
                                 <div class="icon-circle bg-primary"><i class="bi bi-bell-fill"></i></div>
-                                <h6 data-lang-key="action_notices">Village Notices</h6>
+                                <h6 class="no-cursor" data-lang-key="action_notices">Village Notices</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'informationhub:meetings_list' %}" class="action-card">
                                 <div class="icon-circle bg-success"><i class="bi bi-calendar-event-fill"></i></div>
-                                <h6 data-lang-key="action_meetings">Meeting Schedules</h6>
+                                <h6 class="no-cursor" data-lang-key="action_meetings">Meeting Schedules</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'emergencydirectory:emergency_list' %}" class="action-card">
                                 <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
-                                <h6 data-lang-key="action_emergency_directory">Emergency Directory</h6>
+                                <h6 class="no-cursor" data-lang-key="action_emergency_directory">Emergency Directory</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'asset_project_tracker:list' %}" class="action-card">
                                 <div class="icon-circle bg-warning text-dark"><i class="bi bi-building"></i></div>
-                                <h6 data-lang-key="action_asset_tracker">Assets & Projects</h6>
+                                <h6 class="no-cursor" data-lang-key="action_asset_tracker">Assets & Projects</h6>
                             </a>
                         </div>
                     </div>
@@ -352,37 +353,37 @@
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/certificates/apply/" class="action-card">
                                 <div class="icon-circle bg-primary"><i class="bi bi-file-earmark-text-fill"></i></div>
-                                <h6 data-lang-key="action_apply_cert">Apply Certificate</h6>
+                                <h6 class="no-cursor" data-lang-key="action_apply_cert">Apply Certificate</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/rti/submit/" class="action-card">
                                 <div class="icon-circle bg-danger"><i class="bi bi-shield-lock-fill"></i></div>
-                                <h6 data-lang-key="action_submit_rti">Submit RTI Request</h6>
+                                <h6 class="no-cursor" data-lang-key="action_submit_rti">Submit RTI Request</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/land-records/link/" class="action-card">
                                 <div class="icon-circle bg-success"><i class="bi bi-map-fill"></i></div>
-                                <h6 data-lang-key="action_link_land">Link Land Records</h6>
+                                <h6 class="no-cursor" data-lang-key="action_link_land">Link Land Records</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/certificates/" class="action-card">
                                 <div class="icon-circle bg-info"><i class="bi bi-list-check"></i></div>
-                                <h6 data-lang-key="my_certificates">My Certificates</h6>
+                                <h6 class="no-cursor" data-lang-key="my_certificates">My Certificates</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/rti/" class="action-card">
                                 <div class="icon-circle bg-warning text-dark"><i class="bi bi-list-ul"></i></div>
-                                <h6 data-lang-key="my_rti_requests">My RTI Requests</h6>
+                                <h6 class="no-cursor" data-lang-key="my_rti_requests">My RTI Requests</h6>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="/citizen/land-records/status/" class="action-card">
                                 <div class="icon-circle bg-secondary"><i class="bi bi-check2-square"></i></div>
-                                <h6 data-lang-key="my_land_records">My Land Records</h6>
+                                <h6 class="no-cursor" data-lang-key="my_land_records">My Land Records</h6>
                             </a>
                         </div>
                     </div>
@@ -396,7 +397,7 @@
                         <div class="col-lg-3 col-md-4 col-4 mb-4">
                             <a href="{% url 'citizen:feedback_suggestions' %}" class="action-card">
                                 <div class="icon-circle bg-info text-dark"><i class="bi bi-lightbulb-fill"></i></div>
-                                <h6 data-lang-key="action_feedback">Feedback & Suggestions</h6>
+                                <h6 class="no-cursor" data-lang-key="action_feedback">Feedback & Suggestions</h6>
                             </a>
                         </div>
                     </div>

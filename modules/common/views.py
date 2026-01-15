@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout
+from django.contrib.auth import logout, update_session_auth_hash
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import translation
@@ -7,6 +8,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from modules.informationhub.models import VillageNotice, MeetingSchedule
 from modules.panchayat_budget.models import PanchayatBudget
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 def home(request):
@@ -95,3 +97,55 @@ def switch_language(request):
             return response
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request'})
+
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'common/password_reset_form.html'
+    email_template_name = 'common/password_reset_email.html'
+    subject_template_name = 'common/password_reset_subject.txt'
+    success_url = '/auth/password/reset/done/'
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'common/password_reset_done.html'
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'common/password_reset_confirm.html'
+    success_url = '/auth/password/reset/complete/'
+
+
+from django.contrib.auth import logout
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'common/password_reset_complete.html'
+    
+    def get(self, request, *args, **kwargs):
+        # Ensure user is logged out after password reset
+        if request.user.is_authenticated:
+            logout(request)
+        return super().get(request, *args, **kwargs)
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Update session to keep user logged in after password change
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated. Please log in with your new password.')
+            # Log the user out after password change for security
+            from django.contrib.auth import logout
+            logout(request)
+            # Redirect to login page with message
+            return redirect('auth:login')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    return render(request, 'common/change_password.html', {
+        'form': form
+    })

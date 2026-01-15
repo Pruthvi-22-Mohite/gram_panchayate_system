@@ -88,6 +88,12 @@ class CitizenRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("A user with this mobile number already exists")
         return mobile_number
     
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if email and CustomUser.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("This email is already registered")
+        return email
+    
     def clean_aadhaar_number(self):
         aadhaar_number = self.cleaned_data.get("aadhaar_number")
         if aadhaar_number:

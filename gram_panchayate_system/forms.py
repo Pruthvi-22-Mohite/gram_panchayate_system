@@ -78,7 +78,7 @@ class CitizenRegistrationForm(forms.ModelForm):
     
     class Meta:
         model = CustomUser
-        fields = ('username', 'mobile_number')
+        fields = ('username', 'mobile_number', 'email')
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -87,6 +87,10 @@ class CitizenRegistrationForm(forms.ModelForm):
             'mobile_number': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter your mobile number'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your email address'
             })
         }
     
@@ -99,6 +103,12 @@ class CitizenRegistrationForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Passwords don't match")
         return password2
+    
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if email and CustomUser.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("This email is already registered")
+        return email
     
     def save(self, commit=True):
         """

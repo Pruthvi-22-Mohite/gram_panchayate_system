@@ -6,7 +6,7 @@
 {% block body_class %} class="login-page"{% endblock %}
 
 {% block header_actions %}
-<a href="{% url 'common:login' %}" class="btn btn-primary btn-sm" data-lang-key="back_main">Back to Login Options</a>
+<a href="/" class="btn btn-primary btn-sm" data-lang-key="back_main">Back to Login Options</a>
 {% endblock %}
 
 {% block content %}
@@ -41,6 +41,10 @@
                 </div>
                 <button type="submit" class="btn btn-success w-100" data-lang-key="login_button">Login</button>
             </form>
+            
+            <div class="text-center mt-3">
+                <p class="text-muted"><a href="/auth/password/reset/" data-lang-key="forgot_password">Forgot Password?</a></p>
+            </div>
         </div>
     </div>
 </div>

@@ -35,28 +35,28 @@
             <div class="tab-pane fade show active" id="dashboard">
                 <div class="row">
                     <div class="col-md-3 mb-4">
-                        <div class="summary-card bg-card-blue">
+                        <div class="summary-card bg-card-blue no-cursor">
                             <h5>Total Clerks</h5>
                             <div class="summary-number">12</div>
                             <div class="summary-icon"><i class="bi bi-person-badge"></i></div>
                         </div>
                     </div>
                     <div class="col-md-3 mb-4">
-                        <div class="summary-card bg-card-green">
+                        <div class="summary-card bg-card-green no-cursor">
                             <h5>Total Citizens</h5>
                             <div class="summary-number">2,458</div>
                             <div class="summary-icon"><i class="bi bi-people-fill"></i></div>
                         </div>
                     </div>
                     <div class="col-md-3 mb-4">
-                        <div class="summary-card bg-card-saffron">
+                        <div class="summary-card bg-card-saffron no-cursor">
                             <h5>Active Schemes</h5>
                             <div class="summary-number">18</div>
                             <div class="summary-icon"><i class="bi bi-award-fill"></i></div>
                         </div>
                     </div>
                     <div class="col-md-3 mb-4">
-                        <div class="summary-card bg-danger">
+                        <div class="summary-card bg-danger no-cursor">
                             <h5>Pending Grievances</h5>
                             <div class="summary-number">42</div>
                             <div class="summary-icon"><i class="bi bi-exclamation-circle"></i></div>
@@ -151,10 +151,10 @@
                 <div class="content-box">
                     <h3 class="content-box-title">User Management</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-person-plus-fill"></i></div><h6>Add New Clerk</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-list-ul"></i></div><h6>View All Clerks</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-person-lines-fill"></i></div><h6>Assign Roles</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-person-x-fill"></i></div><h6>Deactivate Users</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-person-plus-fill"></i></div><h6 class="no-cursor">Add New Clerk</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-list-ul"></i></div><h6 class="no-cursor">View All Clerks</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-person-lines-fill"></i></div><h6 class="no-cursor">Assign Roles</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-person-x-fill"></i></div><h6 class="no-cursor">Deactivate Users</h6></a></div>
                     </div>
                     <div class="table-container mt-4">
                         <h4 class="table-title">Clerk Assignments</h4>
@@ -204,10 +204,10 @@
                 <div class="content-box">
                     <h3 class="content-box-title">Reports & Analytics</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'admin_module:reports' %}" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-currency-rupee"></i></div><h6>Financial Reports</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'admin_module:reports' %}" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-bar-chart-fill"></i></div><h6>Grievance Analytics</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'admin_module:reports' %}" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-people-fill"></i></div><h6>Scheme Reports</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'admin_module:reports' %}" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-file-earmark-bar-graph-fill"></i></div><h6>Export Data</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'admin_module:reports' %}" class="action-card"><div class="icon-circle bg-card-blue"><i class="bi bi-currency-rupee"></i></div><h6 class="no-cursor">Financial Reports</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'admin_module:reports' %}" class="action-card"><div class="icon-circle bg-card-green"><i class="bi bi-bar-chart-fill"></i></div><h6 class="no-cursor">Grievance Analytics</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'admin_module:reports' %}" class="action-card"><div class="icon-circle bg-warning text-dark"><i class="bi bi-people-fill"></i></div><h6 class="no-cursor">Scheme Reports</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="{% url 'admin_module:reports' %}" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-file-earmark-bar-graph-fill"></i></div><h6 class="no-cursor">Export Data</h6></a></div>
                     </div>
                     <div class="row mt-4">
                         <div class="col-md-12">
@@ -228,9 +228,9 @@
                 <div class="content-box">
                     <h3 class="content-box-title">Global Notices</h3>
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div><h6>Publish Global Notice</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-primary"><i class="bi bi-list-ul"></i></div><h6>View All Notices</h6></a></div>
-                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-calendar-event-fill"></i></div><h6>Scheduled Notices</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-danger"><i class="bi bi-megaphone-fill"></i></div><h6 class="no-cursor">Publish Global Notice</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-primary"><i class="bi bi-list-ul"></i></div><h6 class="no-cursor">View All Notices</h6></a></div>
+                        <div class="col-lg-3 col-md-4 col-6 mb-4"><a href="#" class="action-card"><div class="icon-circle bg-success"><i class="bi bi-calendar-event-fill"></i></div><h6 class="no-cursor">Scheduled Notices</h6></a></div>
                     </div>
                     <div class="form-container mt-4">
                         <h4 class="form-title">Publish New Notice</h4>

@@ -15,17 +15,32 @@
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                
+                <!-- Display form errors if any -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-md-8">
                         <div class="mb-3">
                             <label class="form-label">Project Name <span class="text-danger">*</span></label>
                             {{ form.project_name }}
+                            {% if form.project_name.errors %}
+                                <div class="text-danger">{{ form.project_name.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="form-label">Project Type <span class="text-danger">*</span></label>
                             {{ form.project_type }}
+                            {% if form.project_type.errors %}
+                                <div class="text-danger">{{ form.project_type.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -33,6 +48,9 @@
                 <div class="mb-3">
                     <label class="form-label">Description *</label>
                     {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="text-danger">{{ form.description.errors }}</div>
+                    {% endif %}
                 </div>
                 
                 <div class="row">
@@ -40,12 +58,18 @@
                         <div class="mb-3">
                             <label class="form-label">Location *</label>
                             {{ form.location }}
+                            {% if form.location.errors %}
+                                <div class="text-danger">{{ form.location.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="form-label">Ward Number</label>
                             {{ form.ward_number }}
+                            {% if form.ward_number.errors %}
+                                <div class="text-danger">{{ form.ward_number.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -55,12 +79,18 @@
                         <div class="mb-3">
                             <label class="form-label">Budget Allocated <span class="text-danger">*</span></label>
                             {{ form.budget_allocated }}
+                            {% if form.budget_allocated.errors %}
+                                <div class="text-danger">{{ form.budget_allocated.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="form-label">Budget Spent</label>
                             {{ form.budget_spent }}
+                            {% if form.budget_spent.errors %}
+                                <div class="text-danger">{{ form.budget_spent.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -76,12 +106,18 @@
                         <div class="mb-3">
                             <label class="form-label">Start Date <span class="text-danger">*</span></label>
                             {{ form.start_date }}
+                            {% if form.start_date.errors %}
+                                <div class="text-danger">{{ form.start_date.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="form-label">Target Completion <span class="text-danger">*</span></label>
                             {{ form.target_completion_date }}
+                            {% if form.target_completion_date.errors %}
+                                <div class="text-danger">{{ form.target_completion_date.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -103,6 +139,9 @@
                         <div class="mb-3">
                             <label class="form-label">Progress (%) <span class="text-danger">*</span></label>
                             {{ form.progress_percentage }}
+                            {% if form.progress_percentage.errors %}
+                                <div class="text-danger">{{ form.progress_percentage.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -112,12 +151,18 @@
                         <div class="mb-3">
                             <label class="form-label">Contractor Name</label>
                             {{ form.contractor_name }}
+                            {% if form.contractor_name.errors %}
+                                <div class="text-danger">{{ form.contractor_name.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label">Contractor Contact</label>
                             {{ form.contractor_contact }}
+                            {% if form.contractor_contact.errors %}
+                                <div class="text-danger">{{ form.contractor_contact.errors }}</div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

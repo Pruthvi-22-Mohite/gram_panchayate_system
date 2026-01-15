@@ -1752,3 +1752,42 @@ body.clerk-dashboard .sub-navbar {
         padding-right: 2px !important;
     }
 }
+
+/* No cursor and unselectable text for dashboard cards */
+.no-cursor,
+.action-card,
+.summary-card,
+.dashboard-card {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: pointer;
+}
+
+.readonly-ui {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+}
+
+/* Specific styles for clickable dashboard cards */
+.action-card {
+    cursor: pointer;
+}
+
+.action-card h6 {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.action-card .icon-circle {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}

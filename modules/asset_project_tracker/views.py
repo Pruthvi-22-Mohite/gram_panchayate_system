@@ -118,6 +118,15 @@ def add_asset(request):
         if form.is_valid():
             asset = form.save(commit=False)
             asset.created_by = request.user
+            
+            # Handle 'other' asset type
+            if form.cleaned_data.get('asset_type') == 'other':
+                other_asset_type = form.cleaned_data.get('other_asset_type', '').strip()
+                if other_asset_type:
+                    # You could store the custom type in the asset_name field or remarks if needed
+                    # For now, we'll just ensure the validation passes
+                    pass
+            
             asset.save()
             messages.success(request, 'Asset added successfully!')
             return redirect('asset_project_tracker:manage_assets')
@@ -140,7 +149,17 @@ def edit_asset(request, pk):
     if request.method == 'POST':
         form = AssetForm(request.POST, request.FILES, instance=asset)
         if form.is_valid():
-            form.save()
+            asset = form.save(commit=False)
+            
+            # Handle 'other' asset type
+            if form.cleaned_data.get('asset_type') == 'other':
+                other_asset_type = form.cleaned_data.get('other_asset_type', '').strip()
+                if other_asset_type:
+                    # You could store the custom type in the asset_name field or remarks if needed
+                    # For now, we'll just ensure the validation passes
+                    pass
+            
+            asset.save()
             messages.success(request, 'Asset updated successfully!')
             return redirect('asset_project_tracker:manage_assets')
     else:

@@ -184,6 +184,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'modules/panchayat_budget/static'),
 ]
 
+# Media files (User uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -193,9 +197,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'common.CustomUser'
 
 # Login URLs
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/login/'  # Default redirect, will be overridden by role-specific redirects
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/auth/login/'  # Default redirect, will be overridden by role-specific redirects
 LOGOUT_REDIRECT_URL = '/'
 
 # Admin settings
 ADMIN_URL = 'django-admin/'  # Changed from default 'admin/'
+
+# Email configuration for password reset
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Using Gmail SMTP
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'grampanchayat2726@gmail.com'  # Replace with actual email
+EMAIL_HOST_PASSWORD = 'epcc mjna wdah ftcc'  # Replace with app password
+DEFAULT_FROM_EMAIL = 'Gram Panchayate System <noreply@grampanchayat.gov.in>'

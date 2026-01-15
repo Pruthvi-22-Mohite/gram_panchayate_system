@@ -13,6 +13,18 @@ class AssetForm(forms.ModelForm):
         self.fields['purchase_cost'].widget.attrs.update({'required': 'required'})
         self.fields['current_value'].widget.attrs.update({'required': 'required'})
         self.fields['contact_number'].widget.attrs.update({'required': 'required'})
+        
+        # Add other asset type field for 'other' option
+        self.fields['other_asset_type'] = forms.CharField(
+            max_length=100,
+            required=False,
+            widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Specify asset type',
+                'id': 'other_asset_type',
+                'style': 'display:none; margin-top: 10px;'
+            })
+        )
     
     class Meta:
         model = Asset
@@ -40,19 +52,6 @@ class AssetForm(forms.ModelForm):
             'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Additional remarks'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Add other asset type field for 'other' option
-        self.fields['other_asset_type'] = forms.CharField(
-            max_length=100,
-            required=False,
-            widget=forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Specify asset type',
-                'id': 'other_asset_type'
-            })
-        )
     
     def clean_ward_number(self):
         ward_number = self.cleaned_data.get('ward_number')

@@ -10,7 +10,8 @@
         <a class="navbar-brand" href="#" data-lang-key="clerk_portal">Clerk Portal</a>
         <div class="ms-auto">
             <span class="navbar-text me-3" data-lang-key="welcome_user">Welcome, {{ user.username }}!</span>
-            <a href="{% url 'common:logout' %}" class="btn btn-sm btn-outline-light" data-lang-key="logout">Logout</a>
+            <a href="{% url 'common:change_password' %}" class="btn btn-sm btn-outline-light me-2" data-lang-key="change_password">Change Password</a>
+            <a href="/auth/logout/" class="btn btn-sm btn-outline-light" data-lang-key="logout">Logout</a>
         </div>
     </div>
 </nav>
@@ -27,21 +28,21 @@
     
     <div class="row mt-4">
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="summary-card bg-card-blue">
+            <div class="summary-card bg-card-blue no-cursor">
                 <h5 data-lang-key="pending_applications">Pending Applications</h5>
                 <div class="summary-number">{{ pending_applications|default:0 }}</div>
                 <i class="bi bi-file-earmark-check summary-icon"></i>
             </div>
         </div>
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="summary-card bg-card-saffron">
+            <div class="summary-card bg-card-saffron no-cursor">
                 <h5 data-lang-key="open_grievances">Open Grievances</h5>
                 <div class="summary-number">{{ open_grievances|default:0 }}</div>
                 <i class="bi bi-megaphone summary-icon"></i>
             </div>
         </div>
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="summary-card bg-card-green">
+            <div class="summary-card bg-card-green no-cursor">
                 <h5 data-lang-key="pending_taxes">Pending Taxes</h5>
                 <div class="summary-number">{{ pending_taxes|default:0 }}</div>
                 <i class="bi bi-cash-coin summary-icon"></i>
@@ -55,79 +56,79 @@
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{% url 'clerk:manage_schemes' %}" class="action-card">
                     <div class="icon-circle bg-card-green"><i class="bi bi-patch-check-fill"></i></div>
-                    <h6 data-lang-key="action_manage_schemes">Manage Schemes</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_schemes">Manage Schemes</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{% url 'clerk:manage_grievances' %}" class="action-card">
                     <div class="icon-circle bg-card-saffron"><i class="bi bi-megaphone-fill"></i></div>
-                    <h6 data-lang-key="action_handle_grievances">Handle Grievances</h6>
+                    <h6 class="no-cursor" data-lang-key="action_handle_grievances">Handle Grievances</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{% url 'clerk:manage_taxes' %}" class="action-card">
                     <div class="icon-circle bg-success"><i class="bi bi-cash-coin"></i></div>
-                    <h6 data-lang-key="action_manage_taxes">Manage Taxes</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_taxes">Manage Taxes</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{% url 'clerk:manage_notices' %}" class="action-card">
                     <div class="icon-circle bg-primary"><i class="bi bi-bell-fill"></i></div>
-                    <h6 data-lang-key="action_manage_notices">Manage Notices</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_notices">Manage Notices</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{% url 'clerk:manage_meetings' %}" class="action-card">
                     <div class="icon-circle bg-info"><i class="bi bi-calendar-event-fill"></i></div>
-                    <h6 data-lang-key="action_manage_meetings">Manage Meetings</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_meetings">Manage Meetings</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{% url 'emergencydirectory:manage_contacts' %}" class="action-card">
                     <div class="icon-circle bg-danger"><i class="bi bi-telephone-fill"></i></div>
-                    <h6 data-lang-key="action_emergency_directory">Emergency Directory</h6>
+                    <h6 class="no-cursor" data-lang-key="action_emergency_directory">Emergency Directory</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="/clerk/certificates/" class="action-card">
                     <div class="icon-circle bg-primary"><i class="bi bi-file-earmark-text-fill"></i></div>
-                    <h6 data-lang-key="action_manage_certificates">Manage Certificates</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_certificates">Manage Certificates</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="/clerk/rti/" class="action-card">
                     <div class="icon-circle bg-warning text-dark"><i class="bi bi-shield-lock-fill"></i></div>
-                    <h6 data-lang-key="action_manage_rti">Manage RTI Requests</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_rti">Manage RTI Requests</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="/clerk/land-records/" class="action-card">
                     <div class="icon-circle bg-success"><i class="bi bi-map-fill"></i></div>
-                    <h6 data-lang-key="action_manage_land_records">Manage Land Records</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_land_records">Manage Land Records</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{% url 'clerk:manage_feedback' %}" class="action-card">
                     <div class="icon-circle bg-info text-dark"><i class="bi bi-chat-quote-fill"></i></div>
-                    <h6 data-lang-key="action_manage_feedback">Manage Feedback</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_feedback">Manage Feedback</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{% url 'asset_project_tracker:manage_assets' %}" class="action-card">
                     <div class="icon-circle bg-success"><i class="bi bi-box-seam"></i></div>
-                    <h6 data-lang-key="action_manage_assets">Manage Assets</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_assets">Manage Assets</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{% url 'asset_project_tracker:manage_projects' %}" class="action-card">
                     <div class="icon-circle bg-warning text-dark"><i class="bi bi-hammer"></i></div>
-                    <h6 data-lang-key="action_manage_projects">Manage Projects</h6>
+                    <h6 class="no-cursor" data-lang-key="action_manage_projects">Manage Projects</h6>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-6 mb-4">
             <a href="{% url 'panchayat_budget:manage_budget_pdfs' %}" class="action-card">
                 <div class="icon-circle bg-primary"><i class="bi bi-currency-rupee"></i></div>
-                <h6 data-lang-key="action_panchayat_budget">Panchayat Budget</h6>
+                <h6 class="no-cursor" data-lang-key="action_panchayat_budget">Panchayat Budget</h6>
             </a>
         </div>
         </div>

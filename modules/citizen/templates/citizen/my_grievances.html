@@ -8,9 +8,9 @@
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0"><i class="bi bi-card-checklist me-2"></i>My Grievances</h4>
+                    <h4 class="mb-0 display-only"><i class="bi bi-card-checklist me-2"></i>My Grievances</h4>
                     <a href="{% url 'citizen:lodge_grievance' %}" class="btn btn-light btn-sm">
-                        <i class="bi bi-plus-circle me-1"></i>Lodge New Grievance
+                        <i class="bi bi-plus-circle me-1"></i><span class="display-only">Lodge New Grievance</span>
                     </a>
                 </div>
                 <div class="card-body">
@@ -19,21 +19,21 @@
                         <table class="table table-hover">
                             <thead class="table-light">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Priority</th>
-                                    <th>Status</th>
-                                    <th>Submitted</th>
-                                    <th>Action</th>
+                                    <th class="display-only">ID</th>
+                                    <th class="display-only">Title</th>
+                                    <th class="display-only">Category</th>
+                                    <th class="display-only">Priority</th>
+                                    <th class="display-only">Status</th>
+                                    <th class="display-only">Submitted</th>
+                                    <th class="display-only">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for grievance in grievances %}
                                 <tr>
-                                    <td>#{{ grievance.id }}</td>
-                                    <td>{{ grievance.title }}</td>
-                                    <td>{{ grievance.category }}</td>
+                                    <td class="display-only">#{{ grievance.id }}</td>
+                                    <td class="display-only">{{ grievance.title }}</td>
+                                    <td class="display-only">{{ grievance.category }}</td>
                                     <td>
                                         {% if grievance.priority == 'urgent' %}
                                         <span class="badge bg-danger">Urgent</span>
@@ -56,7 +56,7 @@
                                         <span class="badge bg-primary">Open</span>
                                         {% endif %}
                                     </td>
-                                    <td>{{ grievance.submitted_at|date:"d M Y" }}</td>
+                                    <td class="display-only">{{ grievance.submitted_at|date:"d M Y" }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                             data-bs-target="#grievanceModal{{ grievance.id }}">
@@ -70,22 +70,22 @@
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header bg-primary text-white">
-                                                <h5 class="modal-title">Grievance Details - #{{ grievance.id }}</h5>
+                                                <h5 class="modal-title display-only">Grievance Details - #{{ grievance.id }}</h5>
                                                 <button type="button" class="btn-close btn-close-white"
                                                     data-bs-dismiss="modal"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
-                                                        <strong>Title:</strong> {{ grievance.title }}
+                                                        <strong class="display-only">Title:</strong> <span class="display-only">{{ grievance.title }}</span>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <strong>Category:</strong> {{ grievance.category }}
+                                                        <strong class="display-only">Category:</strong> <span class="display-only">{{ grievance.category }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
-                                                        <strong>Priority:</strong>
+                                                        <strong class="display-only">Priority:</strong>
                                                         {% if grievance.priority == 'urgent' %}
                                                         <span class="badge bg-danger">Urgent</span>
                                                         {% elif grievance.priority == 'high' %}
@@ -97,7 +97,7 @@
                                                         {% endif %}
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <strong>Status:</strong>
+                                                        <strong class="display-only">Status:</strong>
                                                         {% if grievance.status == 'resolved' %}
                                                         <span class="badge bg-success">Resolved</span>
                                                         {% elif grievance.status == 'in_progress' %}
@@ -111,14 +111,14 @@
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-12">
-                                                        <strong>Description:</strong>
-                                                        <p class="mt-2">{{ grievance.description }}</p>
+                                                        <strong class="display-only">Description:</strong>
+                                                        <p class="mt-2 display-only">{{ grievance.description }}</p>
                                                     </div>
                                                 </div>
                                                 {% if grievance.photo %}
                                                 <div class="row mb-3">
                                                     <div class="col-12">
-                                                        <strong>Attached Photo:</strong>
+                                                        <strong class="display-only">Attached Photo:</strong>
                                                         <div class="mt-2 text-center">
                                                             <img src="{{ grievance.photo.url }}" alt="Grievance Photo"
                                                                 class="img-fluid rounded"
@@ -129,21 +129,21 @@
                                                 {% endif %}
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
-                                                        <strong>Submitted On:</strong> {{ grievance.submitted_at|date:"d
-                                                        M Y, h:i A" }}
+                                                        <strong class="display-only">Submitted On:</strong> <span class="display-only">{{ grievance.submitted_at|date:"d
+                                                        M Y, h:i A" }}</span>
                                                     </div>
                                                     {% if grievance.resolved_at %}
                                                     <div class="col-md-6">
-                                                        <strong>Resolved On:</strong> {{ grievance.resolved_at|date:"d M
-                                                        Y, h:i A" }}
+                                                        <strong class="display-only">Resolved On:</strong> <span class="display-only">{{ grievance.resolved_at|date:"d M
+                                                        Y, h:i A" }}</span>
                                                     </div>
                                                     {% endif %}
                                                 </div>
                                                 {% if grievance.assigned_to %}
                                                 <div class="row mb-3">
                                                     <div class="col-12">
-                                                        <strong>Assigned To:</strong> {{ grievance.assigned_to.username
-                                                        }} ({{ grievance.assigned_to.user_type|title }})
+                                                        <strong class="display-only">Assigned To:</strong> <span class="display-only">{{ grievance.assigned_to.username
+                                                        }}</span> (<span class="display-only">{{ grievance.assigned_to.user_type|title }}</span>)
                                                     </div>
                                                 </div>
                                                 {% endif %}
@@ -151,9 +151,9 @@
                                                 <div class="row mb-3">
                                                     <div class="col-12">
                                                         <div class="alert alert-info">
-                                                            <strong><i class="bi bi-info-circle me-2"></i>Response from
-                                                                {{ grievance.assigned_to.user_type|title }}:</strong>
-                                                            <p class="mb-0 mt-2">{{ grievance.resolution_notes }}</p>
+                                                            <strong class="display-only"><i class="bi bi-info-circle me-2"></i>Response from
+                                                                <span class="display-only">{{ grievance.assigned_to.user_type|title }}</span>:</strong>
+                                                            <p class="mb-0 mt-2 display-only">{{ grievance.resolution_notes }}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -172,17 +172,17 @@
                     </div>
                     {% else %}
                     <div class="text-center py-5">
-                        <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
-                        <p class="mt-3 text-muted">You haven't lodged any grievances yet.</p>
+                        <i class="bi bi-inbox display-only" style="font-size: 4rem; color: #ccc;"></i>
+                        <p class="mt-3 text-muted display-only">You haven't lodged any grievances yet.</p>
                         <a href="{% url 'citizen:lodge_grievance' %}" class="btn btn-primary">
-                            <i class="bi bi-plus-circle me-2"></i>Lodge Your First Grievance
+                            <i class="bi bi-plus-circle me-2"></i><span class="display-only">Lodge Your First Grievance</span>
                         </a>
                     </div>
                     {% endif %}
 
                     <div class="mt-3">
                         <a href="{% url 'citizen:dashboard' %}" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                            <i class="bi bi-arrow-left me-2"></i><span class="display-only">Back to Dashboard</span>
                         </a>
                     </div>
                 </div>

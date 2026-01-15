@@ -16,13 +16,13 @@
             <h2 class="card-title text-center mb-4" data-lang-key="login_title">Choose Login Type</h2>
             
             <div class="d-grid gap-3">
-                <a href="{% url 'admin_module:login' %}" class="btn btn-primary btn-lg">
+                <a href="/auth/admin-panel/login/" class="btn btn-primary btn-lg">
                     <i class="bi bi-shield-lock-fill me-2"></i>Admin Login
                 </a>
-                <a href="{% url 'clerk:login' %}" class="btn btn-success btn-lg">
+                <a href="/auth/clerk/login/" class="btn btn-success btn-lg">
                     <i class="bi bi-person-badge-fill me-2"></i>Clerk Login
                 </a>
-                <a href="{% url 'citizen:login' %}" class="btn btn-info btn-lg">
+                <a href="/auth/citizen/login/" class="btn btn-info btn-lg">
                     <i class="bi bi-person-fill me-2"></i>Citizen Login
                 </a>
             </div>

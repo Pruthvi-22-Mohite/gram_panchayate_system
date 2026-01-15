@@ -48,9 +48,9 @@
                 {% if user.is_authenticated %}
                 <span class="navbar-text me-3 d-none d-md-inline" data-lang-key="welcome_user">Welcome, {{ user.username
                     }}!</span>
-                <a href="{% url 'common:logout' %}" class="btn btn-primary btn-sm" data-lang-key="logout">Logout</a>
+                <a href="/auth/logout/" class="btn btn-primary btn-sm" data-lang-key="logout">Logout</a>
                 {% else %}
-                <a href="{% url 'common:login' %}" class="btn btn-primary btn-sm" data-lang-key="login">Login</a>
+                <a href="/auth/login/" class="btn btn-primary btn-sm" data-lang-key="login">Login</a>
                 {% endif %}
                 {% endblock %}
             </div>

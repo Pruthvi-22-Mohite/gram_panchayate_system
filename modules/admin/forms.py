@@ -150,6 +150,10 @@ class ClerkCreationForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         if not email or not email.strip():
             raise forms.ValidationError("Email is required.")
+        
+        # Check if email is already registered
+        if CustomUser.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("This email is already registered")
         return email
     
     def clean_mobile_number(self):
@@ -313,6 +317,17 @@ class ClerkEditForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         if not email or not email.strip():
             raise forms.ValidationError("Email is required.")
+        
+        # Check if email is already registered by another user
+        if self.instance and self.instance.pk:
+            # Editing existing user - exclude current user from check
+            if CustomUser.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError("This email is already registered")
+        else:
+            # Creating new user
+            if CustomUser.objects.filter(email__iexact=email).exists():
+                raise forms.ValidationError("This email is already registered")
+        
         return email
         
     def clean_mobile_number(self):

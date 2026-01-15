@@ -27,6 +27,10 @@
                             <label class="form-label">Asset Type <span class="text-danger">*</span></label>
                             {{ form.asset_type }}
                         </div>
+                        <div class="mb-3" id="other-asset-type-container" style="display: none;">
+                            <label class="form-label">Specify Asset Type <span class="text-danger">*</span></label>
+                            {{ form.other_asset_type }}
+                        </div>
                     </div>
                 </div>
                 
@@ -126,6 +130,36 @@
                     <a href="{% url 'asset_project_tracker:manage_assets' %}" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">Save Asset</button>
                 </div>
+                
+                <script>
+                function toggleOtherAssetType() {
+                    var assetTypeSelect = document.getElementById('id_asset_type');
+                    var otherAssetContainer = document.getElementById('other-asset-type-container');
+                    
+                    if (assetTypeSelect && otherAssetContainer) {
+                        if (assetTypeSelect.value === 'other') {
+                            otherAssetContainer.style.display = 'block';
+                            // Make the field required when 'other' is selected
+                            var otherAssetInput = document.getElementById('other_asset_type');
+                            if(otherAssetInput) {
+                                otherAssetInput.required = true;
+                            }
+                        } else {
+                            otherAssetContainer.style.display = 'none';
+                            // Remove required attribute when 'other' is not selected
+                            var otherAssetInput = document.getElementById('other_asset_type');
+                            if(otherAssetInput) {
+                                otherAssetInput.required = false;
+                            }
+                        }
+                    }
+                }
+                
+                // Call the function on page load to set initial state
+                document.addEventListener('DOMContentLoaded', function() {
+                    toggleOtherAssetType();
+                });
+                </script>
             </form>
         </div>
     </div>

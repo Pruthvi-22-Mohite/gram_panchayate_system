@@ -14,9 +14,13 @@
                         <h4 class="mb-0">
                             <i class="fas fa-calendar-alt"></i> Meeting Details
                         </h4>
-                        {% with badge_class, badge_text = meeting.get_status_badge %}
-                        <span class="badge {{ badge_class }} fs-6">{{ badge_text }}</span>
-                        {% endwith %}
+                        {% if meeting.is_cancelled %}
+                        <span class="badge bg-danger fs-6">Cancelled</span>
+                        {% elif meeting.is_upcoming %}
+                        <span class="badge bg-success fs-6">Upcoming</span>
+                        {% else %}
+                        <span class="badge bg-secondary fs-6">Completed</span>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="card-body">

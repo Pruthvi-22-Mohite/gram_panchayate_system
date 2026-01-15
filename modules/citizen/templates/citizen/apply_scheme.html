@@ -1,0 +1,104 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Apply for {{ scheme.name }} - Citizen Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">{{ scheme.name }}</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="/auth/logout/" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'citizen:dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="{% url 'citizen:view_schemes' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-award-fill me-2"></i>View All Schemes
+                    </a>
+                    <a href="{% url 'citizen:my_applications' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-check-fill me-2"></i>My Applied Schemes
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-9">
+            <div class="content-box">
+                <h3 class="content-box-title">Apply for {{ scheme.name }}</h3>
+                
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> <strong>Important:</strong> Please fill out all required fields accurately. Once submitted, you won't be able to edit this application.
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Scheme Details</h5>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td width="30%"><strong>Description:</strong></td>
+                                <td>{{ scheme.description }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Eligibility:</strong></td>
+                                <td>{{ scheme.eligibility_criteria|linebreaks }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Benefits:</strong></td>
+                                <td>{{ scheme.benefits|linebreaks }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Required Documents:</strong></td>
+                                <td>{{ scheme.required_documents|linebreaks }}</td>
+                            </tr>
+                            {% if scheme.last_date %}
+                            <tr>
+                                <td><strong>Last Date:</strong></td>
+                                <td>{{ scheme.last_date|date:"d M Y" }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if scheme.contact_person %}
+                            <tr>
+                                <td><strong>Contact:</strong></td>
+                                <td>{{ scheme.contact_person }}</td>
+                            </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <h5><i class="bi bi-info-circle text-info me-2"></i>Important Information</h5>
+                    <p>To apply for this scheme, please visit the Gram Panchayat Office in person.</p>
+                    <p><strong>Office Address:</strong> Gram Panchayat Koparde, Taluka-Mahad, District-Raigad</p>
+                    <p><strong>Working Hours:</strong> Monday to Friday, 10:00 AM to 5:00 PM</p>
+                    <p>Please carry the following documents with you:</p>
+                    <ul>
+                        <li>Aadhaar Card</li>
+                        <li>Proof of Residence</li>
+                        <li>Income Certificate (if applicable)</li>
+                        <li>Any other relevant documents for this scheme</li>
+                    </ul>
+                </div>
+                
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'citizen:view_schemes' %}" class="btn btn-primary">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Schemes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
