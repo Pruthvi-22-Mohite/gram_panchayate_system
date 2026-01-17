@@ -66,6 +66,32 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <div class="form-check">
+                                    {{ form.available_24x7 }}
+                                    {{ form.available_24x7.label_tag }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="time_fields" class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.opening_time.id_for_label }}" class="form-label">{{ form.opening_time.label }}</label>
+                                {{ form.opening_time }}
+                                {% if form.opening_time.errors %}
+                                    <div class="text-danger">{{ form.opening_time.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.closing_time.id_for_label }}" class="form-label">{{ form.closing_time.label }}</label>
+                                {{ form.closing_time }}
+                                {% if form.closing_time.errors %}
+                                    <div class="text-danger">{{ form.closing_time.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
                         <div class="mt-4">
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-check-circle"></i> {{ action }} Contact
@@ -74,6 +100,28 @@
                                 <i class="bi bi-x-circle"></i> Cancel
                             </a>
                         </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const available247Checkbox = document.getElementById('available_24x7_checkbox');
+                                const timeFields = document.getElementById('time_fields');
+                                
+                                function toggleTimeFields() {
+                                    if (available247Checkbox.checked) {
+                                        timeFields.style.display = 'none';
+                                    } else {
+                                        timeFields.style.display = 'flex';
+                                        timeFields.className = 'row';
+                                    }
+                                }
+                                
+                                // Set initial state
+                                toggleTimeFields();
+                                
+                                // Add event listener
+                                available247Checkbox.addEventListener('change', toggleTimeFields);
+                            });
+                        </script>
                     </form>
                 </div>
             </div>

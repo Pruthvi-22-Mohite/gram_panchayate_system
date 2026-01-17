@@ -48,7 +48,7 @@
                                 {% for rti in rti_requests %}
                                 <tr>
                                     <td>#{{ rti.id }}</td>
-                                    <td>{{ rti.citizen.get_full_name }}</td>
+                                    <td>{% if rti.citizen.first_name and rti.citizen.last_name %}{{ rti.citizen.first_name }} {{ rti.citizen.last_name }}{% elif rti.citizen.first_name %}{{ rti.citizen.first_name }}{% elif rti.citizen.last_name %}{{ rti.citizen.last_name }}{% else %}{{ rti.citizen.username }}{% endif %}</td>
                                     <td>{{ rti.subject|truncatewords:5 }}</td>
                                     <td>{{ rti.get_category_display }}</td>
                                     <td>{{ rti.created_at|date:"M d, Y" }}</td>

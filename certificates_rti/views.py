@@ -365,7 +365,7 @@ def clerk_rti_upload_response(request, pk):
         form = RTIResponseUploadForm(request.POST, request.FILES)
         if form.is_valid():
             rti.response_file = form.cleaned_data['response_file']
-            rti.status = 'under_review'
+            rti.status = 'responded'
             rti.save()
             
             messages.success(request, "Response uploaded successfully!")

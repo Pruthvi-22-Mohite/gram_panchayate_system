@@ -5,12 +5,15 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Add Budget Entry</h2>
+    <div class="d-flex gap-2">
         <a href="{% url 'panchayat_budget:budget_list' %}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
+        <a href="{% url 'clerk:dashboard' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-speedometer2 me-2"></i>Back to Dashboard
+        </a>
     </div>
+    <h2 class="mt-4">Add Budget Entry</h2>
 
     <div class="card">
         <div class="card-body">

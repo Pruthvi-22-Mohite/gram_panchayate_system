@@ -20,6 +20,9 @@ class EmergencyContactForm(forms.ModelForm):
             'phone_number',
             'email',
             'address',
+            'available_24x7',
+            'opening_time',
+            'closing_time',
         ]
         
         widgets = {
@@ -46,6 +49,20 @@ class EmergencyContactForm(forms.ModelForm):
                 'rows': 3,
                 'placeholder': 'Enter complete address'
             }),
+            'available_24x7': forms.CheckboxInput(attrs={
+                'class': 'form-check-input',
+                'id': 'available_24x7_checkbox'
+            }),
+            'opening_time': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time',
+                'id': 'opening_time_input'
+            }),
+            'closing_time': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time',
+                'id': 'closing_time_input'
+            }),
         }
     
     def __init__(self, *args, **kwargs):
@@ -67,6 +84,9 @@ class EmergencyContactForm(forms.ModelForm):
             'phone_number': 'Phone Number *',
             'email': 'Email *',  # Updated to indicate required
             'address': 'Address *',
+            'available_24x7': 'Available 24/7',
+            'opening_time': 'Opening Time',
+            'closing_time': 'Closing Time',
         }
     
     def clean_email(self):

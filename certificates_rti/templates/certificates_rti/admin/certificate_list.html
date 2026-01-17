@@ -20,9 +20,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2><i class="bi bi-file-earmark-text"></i> Certificate Applications - Admin View</h2>
-                <a href="{% url 'admin_module:dashboard' %}" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                <h2><i class="bi bi-file-earmark-text"></i> <span data-lang-key="certificate_applications_admin">Certificate Applications - Admin View</span></h2>
+                <a href="{% url "admin_module:dashboard" %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> <span data-lang-key="back_to_dashboard">Back to Dashboard</span>
                 </a>
             </div>
 
@@ -31,7 +31,7 @@
                 <div class="col-md-3">
                     <div class="card bg-primary text-white">
                         <div class="card-body">
-                            <h5>Total Applications</h5>
+                            <h5 data-lang-key="total_applications">Total Applications</h5>
                             <h3>{{ applications.count }}</h3>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                 <div class="col-md-3">
                     <div class="card bg-warning">
                         <div class="card-body">
-                            <h5>Pending Review</h5>
+                            <h5 data-lang-key="pending_review">Pending Review</h5>
                             <h3>{{ applications|length }}</h3>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                 <div class="col-md-3">
                     <div class="card bg-success text-white">
                         <div class="card-body">
-                            <h5>Approved</h5>
+                            <h5 data-lang-key="approved">Approved</h5>
                             <h3>0</h3>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                 <div class="col-md-3">
                     <div class="card bg-danger text-white">
                         <div class="card-body">
-                            <h5>Rejected</h5>
+                            <h5 data-lang-key="rejected">Rejected</h5>
                             <h3>0</h3>
                         </div>
                     </div>
@@ -65,26 +65,26 @@
             <!-- Applications Table -->
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">All Certificate Applications</h5>
+                    <h5 class="card-title" data-lang-key="all_certificate_applications">All Certificate Applications</h5>
                     {% if applications %}
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Citizen</th>
-                                    <th>Certificate Type</th>
-                                    <th>Assigned Clerk</th>
-                                    <th>Applied On</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th data-lang-key="citizen">Citizen</th>
+                                    <th data-lang-key="certificate_type">Certificate Type</th>
+                                    <th data-lang-key="assigned_clerk">Assigned Clerk</th>
+                                    <th data-lang-key="applied_on">Applied On</th>
+                                    <th data-lang-key="status">Status</th>
+                                    <th data-lang-key="action">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for app in applications %}
                                 <tr>
                                     <td>#{{ app.id }}</td>
-                                    <td>{{ app.citizen.get_full_name }}</td>
+                                    <td>{% if app.citizen.first_name and app.citizen.last_name %}{{ app.citizen.first_name }} {{ app.citizen.last_name }}{% elif app.citizen.first_name %}{{ app.citizen.first_name }}{% elif app.citizen.last_name %}{{ app.citizen.last_name }}{% else %}{{ app.citizen.username }}{% endif %}</td>
                                     <td>{{ app.get_certificate_type_display }}</td>
                                     <td>{{ app.assigned_clerk.get_full_name|default:"Not Assigned" }}</td>
                                     <td>{{ app.created_at|date:"M d, Y" }}</td>
@@ -101,7 +101,7 @@
                                     </td>
                                     <td>
                                         <a href="/admin-panel/certificates/{{ app.id }}/" class="btn btn-sm btn-primary">
-                                            <i class="bi bi-eye"></i> View
+                                            <i class="bi bi-eye"></i> <span data-lang-key="view">View</span>
                                         </a>
                                     </td>
                                 </tr>
@@ -111,7 +111,7 @@
                     </div>
                     {% else %}
                     <div class="alert alert-info">
-                        <i class="bi bi-info-circle"></i> No certificate applications found.
+                        <i class="bi bi-info-circle"></i> <span data-lang-key="no_certificate_applications">No certificate applications found.</span>
                     </div>
                     {% endif %}
                 </div>

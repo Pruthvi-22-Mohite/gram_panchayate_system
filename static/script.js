@@ -126,6 +126,7 @@ const translations = {
         "admin_dashboard": "Admin Dashboard",
         "admin_services": "Admin Services",
         "action_manage_clerks": "Manage Clerks",
+                "manage_clerks": "Manage Clerks",
         "action_create_clerk": "Create New Clerk",
         "action_manage_citizens": "Manage Citizens",
         "action_view_grievances": "View Grievances",
@@ -137,6 +138,22 @@ const translations = {
         "action_manage_certificates": "Manage Certificates",
         "action_manage_rti": "Manage RTI Requests",
         "action_manage_land_records": "Manage Land Records",
+        // Certificate management translations
+        "certificate_applications_admin": "Certificate Applications - Admin View",
+        "total_applications": "Total Applications",
+        "pending_review": "Pending Review",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "all_certificate_applications": "All Certificate Applications",
+        "citizen": "Citizen",
+        "certificate_type": "Certificate Type",
+        "assigned_clerk": "Assigned Clerk",
+        "applied_on": "Applied On",
+        "status": "Status",
+        "action": "Action",
+        "view": "View",
+        "no_certificate_applications": "No certificate applications found.",
+        "back_to_dashboard": "Back to Dashboard",
         "action_manage_feedback": "Manage Feedback",
         "action_manage_assets": "Manage Assets",
         "action_manage_projects": "Manage Projects",
@@ -315,6 +332,7 @@ const translations = {
         "admin_dashboard": "प्रशासक डॅशबोर्ड",
         "admin_services": "प्रशासक सेवा",
         "action_manage_clerks": "कर्मचारी व्यवस्थापित करा",
+                "manage_clerks": "कर्मचारी व्यवस्थापित करा",
         "action_create_clerk": "नवीन कर्मचारी तयार करा",
         "action_manage_citizens": "नागरिक व्यवस्थापित करा",
         "action_view_grievances": "तक्रारी पहा",
@@ -526,6 +544,7 @@ const translations = {
         "admin_dashboard": "व्यवस्थापक डैशबोर्ड",
         "admin_services": "व्यवस्थापक सेवाएँ",
         "action_manage_clerks": "कर्मचारियों का प्रबंधन करें",
+                "manage_clerks": "कर्मचारियों का प्रबंधन करें",
         "action_create_clerk": "नया कर्मचारी बनाएं",
         "action_manage_citizens": "नागरिकों का प्रबंधन करें",
         "action_view_grievances": "शिकायतें देखें",
@@ -537,6 +556,22 @@ const translations = {
         "action_manage_certificates": "प्रमाणपत्रों का प्रबंधन करें",
         "action_manage_rti": "आरटीआई अनुरोधों का प्रबंधन करें",
         "action_manage_land_records": "भूमि रिकॉर्ड का प्रबंधन करें",
+        // Certificate management translations
+        "certificate_applications_admin": "प्रमाणपत्र आवेदन - व्यवस्थापक दृश्य",
+        "total_applications": "कुल आवेदन",
+        "pending_review": "समीक्षा लंबित",
+        "approved": "अनुमोदित",
+        "rejected": "अस्वीकृत",
+        "all_certificate_applications": "सभी प्रमाणपत्र आवेदन",
+        "citizen": "नागरिक",
+        "certificate_type": "प्रमाणपत्र प्रकार",
+        "assigned_clerk": "नियुक्त कर्मचारी",
+        "applied_on": "आवेदन किया गया",
+        "status": "स्थिति",
+        "action": "कार्य",
+        "view": "देखें",
+        "no_certificate_applications": "कोई प्रमाणपत्र आवेदन नहीं मिला।",
+        "back_to_dashboard": "डैशबोर्ड पर वापस जाएं",
         "action_manage_feedback": "प्रतिक्रियाओं का प्रबंधन करें",
         "action_manage_assets": "संपत्ति का प्रबंधन करें",
         "action_manage_projects": "परियोजनाओं का प्रबंधन करें",
@@ -592,7 +627,46 @@ const interpolate = (str, params) => {
     });
 };
 
-const setLanguage = (lang) => {
+// Function to force translate all elements with data-lang-key
+const forceTranslateAll = (lang) => {
+    document.querySelectorAll('[data-lang-key]').forEach(element => {
+        const key = element.getAttribute('data-lang-key');
+        if (translations[lang] && translations[lang][key]) {
+            let translatedText = translations[lang][key];
+            
+            // Handle dynamic content
+            if (key.includes('welcome') && window.userUsername) {
+                translatedText = interpolate(translatedText, { username: window.userUsername });
+            }
+            
+            if (element.tagName === 'TITLE') {
+                document.title = translatedText;
+            } else {
+                element.innerText = translatedText;
+            }
+        }
+    });
+};
+
+const setLanguage = async (lang) => {
+    // Persist language selection to server
+    try {
+        const response = await fetch('/common/switch-language/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '',
+            },
+            body: `language=${lang}`
+        });
+        
+        if (!response.ok) {
+            console.warn('Failed to save language preference to server');
+        }
+    } catch (error) {
+        console.warn('Error saving language preference:', error);
+    }
+    
     // Apply translations to all elements with data-lang-key attribute
     document.querySelectorAll('[data-lang-key]').forEach(element => {
         let key = element.getAttribute('data-lang-key');
@@ -650,6 +724,8 @@ const setLanguage = (lang) => {
                     key = 'citizen_registration_title';
                 } else if (titleContent.includes('Clerk Dashboard')) {
                     key = 'clerk_dashboard_title';
+                } else if (titleContent.includes('Certificate')) {
+                    key = 'certificate_applications_admin';
                 } else {
                     // Default to page_title for generic pages
                     key = 'page_title';
@@ -673,7 +749,18 @@ const setLanguage = (lang) => {
         });
     }, 100);
     
+    // Force re-translation of all elements to ensure nothing is missed
+    setTimeout(() => {
+        forceTranslateAll(lang);
+    }, 200);
+    
+    // Store language preference in multiple places for redundancy
     localStorage.setItem('userLanguage', lang);
+    sessionStorage.setItem('userLanguage', lang);
+    
+    // Set HTML lang attribute
+    document.documentElement.lang = lang;
+    
     const langSwitcher = document.getElementById('language-switcher');
     if (langSwitcher) langSwitcher.value = lang;
     
@@ -685,13 +772,49 @@ const setLanguage = (lang) => {
 // ==========================================================
 //  PAGE INITIALIZATION
 // ==========================================================
-document.addEventListener('DOMContentLoaded', () => {
+async function initializeLanguage() {
+    // First, try to get language from server-side session/cookie
+    try {
+        const response = await fetch('/common/get-current-language/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data.language) {
+                // Server has a language preference, use it
+                return data.language;
+            }
+        }
+    } catch (error) {
+        console.log('Could not fetch server language preference');
+    }
+    
+    // Fallback to client-side storage
+    return sessionStorage.getItem('userLanguage') || 
+           localStorage.getItem('userLanguage') || 
+           document.documentElement.lang || 
+           'en';
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
     const langSwitcher = document.getElementById('language-switcher');
     if (langSwitcher) {
         langSwitcher.addEventListener('change', (event) => setLanguage(event.target.value));
     }
-    const savedLang = localStorage.getItem('userLanguage') || 'en';
-    setLanguage(savedLang);
+    
+    // Initialize language with server-side preference
+    const savedLang = await initializeLanguage();
+    await setLanguage(savedLang);
+    
+    // Aggressive translation - apply multiple times to catch all elements
+    setTimeout(() => setLanguage(savedLang), 50);
+    setTimeout(() => setLanguage(savedLang), 200);
+    setTimeout(() => setLanguage(savedLang), 500);
+    setTimeout(() => setLanguage(savedLang), 1000);
 
     if (document.querySelector('.sidebar')) {
         loadCitizenDashboard();
@@ -703,7 +826,10 @@ document.addEventListener('DOMContentLoaded', () => {
         tabTrigger.addEventListener('shown.bs.tab', function (event) {
             // Small delay to ensure content is fully rendered
             setTimeout(() => {
-                const currentLang = localStorage.getItem('userLanguage') || 'en';
+                const currentLang = sessionStorage.getItem('userLanguage') || 
+                                  localStorage.getItem('userLanguage') || 
+                                  document.documentElement.lang || 
+                                  'en';
                 setLanguage(currentLang);
             }, 50);
         });
@@ -746,7 +872,10 @@ function loadCitizenDashboard() {
     renderSummaryCards();
     
     // Ensure all elements are translated after rendering
-    const currentLang = localStorage.getItem('userLanguage') || 'en';
+    const currentLang = sessionStorage.getItem('userLanguage') || 
+                       localStorage.getItem('userLanguage') || 
+                       document.documentElement.lang || 
+                       'en';
     setLanguage(currentLang);
     
     // Additional translation pass to catch any missed elements
@@ -781,7 +910,10 @@ function renderSummaryCards() {
             </div>
         </div>`;
     
-    const currentLang = localStorage.getItem('userLanguage') || 'en';
+    const currentLang = sessionStorage.getItem('userLanguage') || 
+                       localStorage.getItem('userLanguage') || 
+                       document.documentElement.lang || 
+                       'en';
     setLanguage(currentLang);
     
     // Also update welcome messages dynamically if user data is available

@@ -28,6 +28,22 @@ class CitizenRegistrationForm(forms.ModelForm):
     """
     Form for citizen registration
     """
+    first_name = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your first name',
+            'required': 'required'
+        })
+    )
+    last_name = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your last name',
+            'required': 'required'
+        })
+    )
     aadhaar_number = forms.CharField(
         max_length=12,
         widget=forms.TextInput(attrs={
@@ -59,11 +75,19 @@ class CitizenRegistrationForm(forms.ModelForm):
     
     class Meta:
         model = CustomUser
-        fields = ('username', 'mobile_number', 'email')
+        fields = ('username', 'first_name', 'last_name', 'mobile_number', 'email')
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Choose a username'
+            }),
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First name'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last name'
             }),
             'mobile_number': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -78,21 +102,87 @@ class CitizenRegistrationForm(forms.ModelForm):
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
+            
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Passwords don't match")
+            
+        # Validate password strength
+        if password1:
+            self.validate_password_strength(password1)
+            
         return password2
+        
+    def validate_password_strength(self, password):
+        """Validate password strength: minimum 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char"""
+        import re
+            
+        if len(password) < 8:
+            raise forms.ValidationError("Password must be at least 8 characters long.")
+            
+        if not re.search(r'[A-Z]', password):
+            raise forms.ValidationError("Password must contain at least one uppercase letter.")
+            
+        if not re.search(r'[a-z]', password):
+            raise forms.ValidationError("Password must contain at least one lowercase letter.")
+            
+        if not re.search(r'\d', password):
+            raise forms.ValidationError("Password must contain at least one number.")
+            
+        if not re.search(r'[!@#$%^&*()_+\-=\[\]{};\"\'\\|,.<>/?]', password):
+            raise forms.ValidationError("Password must contain at least one special character (!@#$%^&*()_+-=[]{};\'\\|,.<>?).")
+            
+        return password
     
     def clean_mobile_number(self):
         mobile_number = self.cleaned_data.get("mobile_number")
-        if CustomUser.objects.filter(mobile_number=mobile_number).exists():
+        if not mobile_number:
+            raise forms.ValidationError("Mobile number is required.")
+        
+        # Remove any spaces, hyphens, or other characters
+        mobile_clean = mobile_number.replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
+        
+        # Check length
+        if len(mobile_clean) != 10:
+            raise forms.ValidationError("Mobile number must be exactly 10 digits.")
+        
+        # Check if all characters are digits
+        if not mobile_clean.isdigit():
+            raise forms.ValidationError("Mobile number must contain only digits.")
+        
+        # Check if number already exists
+        if CustomUser.objects.filter(mobile_number=mobile_clean).exists():
             raise forms.ValidationError("A user with this mobile number already exists")
-        return mobile_number
+        
+        return mobile_clean
     
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if email and CustomUser.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError("This email is already registered")
         return email
+    
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if not username:
+            raise forms.ValidationError("Username is required.")
+        
+        # Check username length
+        if len(username) < 3:
+            raise forms.ValidationError("Username must be at least 3 characters long.")
+        
+        if len(username) > 150:
+            raise forms.ValidationError("Username cannot exceed 150 characters.")
+        
+        # Check for invalid characters
+        import re
+        if not re.match(r"^[a-zA-Z0-9_]+$", username):
+            raise forms.ValidationError("Username can only contain letters, numbers, and underscores.")
+        
+        # Check if username already exists
+        if CustomUser.objects.filter(username__iexact=username).exists():
+            raise forms.ValidationError("This username is already taken.")
+        
+        return username
     
     def clean_aadhaar_number(self):
         aadhaar_number = self.cleaned_data.get("aadhaar_number")
@@ -102,6 +192,22 @@ class CitizenRegistrationForm(forms.ModelForm):
             if not aadhaar_number.isdigit():
                 raise forms.ValidationError("Aadhaar number must contain only digits")
         return aadhaar_number
+    
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if not first_name or not first_name.strip():
+            raise forms.ValidationError("First name is required.")
+        if not first_name.replace(' ', '').isalpha():
+            raise forms.ValidationError("First name must contain only alphabets.")
+        return first_name
+    
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not last_name or not last_name.strip():
+            raise forms.ValidationError("Last name is required.")
+        if not last_name.replace(' ', '').isalpha():
+            raise forms.ValidationError("Last name must contain only alphabets.")
+        return last_name
     
     def save(self, commit=True):
         user = super().save(commit=False)

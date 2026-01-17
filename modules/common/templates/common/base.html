@@ -93,6 +93,26 @@
                     });
                 });
             }
+            
+            // Enhance language switcher to handle async operations
+            const langSwitcher = document.getElementById('language-switcher');
+            if (langSwitcher) {
+                langSwitcher.addEventListener('change', async function(event) {
+                    const selectedLang = event.target.value;
+                    // Show loading indicator
+                    const originalText = event.target.options[event.target.selectedIndex].text;
+                    event.target.options[event.target.selectedIndex].text = 'Loading...';
+                    
+                    try {
+                        await setLanguage(selectedLang);
+                    } catch (error) {
+                        console.error('Language switch failed:', error);
+                    } finally {
+                        // Restore original text
+                        event.target.options[event.target.selectedIndex].text = originalText;
+                    }
+                });
+            }
         });
     </script>
 

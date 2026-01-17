@@ -99,6 +99,23 @@ def switch_language(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 
 
+def get_current_language(request):
+    """View to get the current language preference"""
+    # Get language from session first
+    language = request.session.get('django_language')
+    
+    # If not in session, try cookie
+    if not language:
+        language = request.COOKIES.get('django_language')
+    
+    # If still not found, use default
+    if not language:
+        from django.conf import settings
+        language = settings.LANGUAGE_CODE.split('-')[0]
+    
+    return JsonResponse({'language': language})
+
+
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'common/password_reset_form.html'
     email_template_name = 'common/password_reset_email.html'

@@ -13,6 +13,8 @@ urlpatterns = [
     path('clerks/<int:clerk_id>/toggle-status/', views.toggle_clerk_status, name='toggle_clerk_status'),
     path('citizens/', views.manage_citizens, name='manage_citizens'),
     path('citizens/<int:citizen_id>/toggle-status/', views.toggle_citizen_status, name='toggle_citizen_status'),
+    path('citizens/<int:citizen_id>/view-details/', views.view_citizen_details, name='view_citizen_details'),
+    path('citizens/bulk-actions/', views.bulk_citizen_actions, name='bulk_citizen_actions'),
     path('citizens/<int:citizen_id>/delete/', views.delete_citizen, name='delete_citizen'),
     # Removed system settings URL
     path('audit-logs/', views.audit_logs, name='audit_logs'),
@@ -34,5 +36,5 @@ urlpatterns = [
     # Feedback & Suggestions URLs
     path('feedback/', views.manage_feedback, name='manage_feedback'),
     path('feedback/<int:feedback_id>/', views.feedback_detail, name='feedback_detail'),
-    path('feedback/<int:feedback_id>/delete/', views.delete_feedback, name='delete_feedback'),
+
 ]

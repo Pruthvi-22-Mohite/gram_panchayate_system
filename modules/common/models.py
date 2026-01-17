@@ -53,6 +53,21 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f"{self.username} ({self.user_type})"
     
+    def get_full_name(self):
+        """Return the full name of the user, fallback to username if names are empty."""
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}".strip()
+        elif self.first_name:
+            return self.first_name.strip()
+        elif self.last_name:
+            return self.last_name.strip()
+        else:
+            return self.username
+    
+    def get_short_name(self):
+        """Return the first name or username."""
+        return self.first_name or self.username
+    
     # Use the custom manager
     objects = CustomUserManager()
 

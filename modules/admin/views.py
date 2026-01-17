@@ -291,6 +291,101 @@ def toggle_citizen_status(request, citizen_id):
 
 
 @admin_required
+def view_citizen_details(request, citizen_id):
+    """View to show citizen details"""
+    citizen = get_object_or_404(CitizenProfile, user_id=citizen_id)
+    
+    context = {
+        'citizen': citizen,
+    }
+    return render(request, 'admin/citizen_details.html', context)
+
+
+@admin_required
+def bulk_citizen_actions(request):
+    """Handle bulk actions for citizens"""
+    if request.method == 'POST':
+        import json
+        try:
+            data = json.loads(request.body)
+            action = data.get('action')
+            citizen_ids = data.get('citizen_ids', [])
+            
+            if not action or not citizen_ids:
+                return JsonResponse({'success': False, 'message': 'Action and citizen IDs are required.'})
+            
+            if action not in ['activate', 'deactivate', 'delete']:
+                return JsonResponse({'success': False, 'message': 'Invalid action specified.'})
+            
+            # Get citizen profiles
+            citizens = CitizenProfile.objects.filter(user_id__in=citizen_ids)
+            affected_count = 0
+            
+            if action == 'activate':
+                for citizen in citizens:
+                    citizen.user.is_active = True
+                    citizen.user.save()
+                    affected_count += 1
+                    
+                    # Log the action
+                    AuditLog.objects.create(
+                        admin_user=request.user,
+                        action="Citizen Account Activated (Bulk)",
+                        target_model="CitizenProfile",
+                        target_id=str(citizen.user.id),
+                        details=f"Activated citizen account for {citizen.user.username} (User ID: {citizen.user.id}) via bulk action"
+                    )
+                
+                message = f"Successfully activated {affected_count} citizen accounts."
+                
+            elif action == 'deactivate':
+                for citizen in citizens:
+                    citizen.user.is_active = False
+                    citizen.user.save()
+                    affected_count += 1
+                    
+                    # Log the action
+                    AuditLog.objects.create(
+                        admin_user=request.user,
+                        action="Citizen Account Deactivated (Bulk)",
+                        target_model="CitizenProfile",
+                        target_id=str(citizen.user.id),
+                        details=f"Deactivated citizen account for {citizen.user.username} (User ID: {citizen.user.id}) via bulk action"
+                    )
+                
+                message = f"Successfully deactivated {affected_count} citizen accounts."
+                
+            elif action == 'delete':
+                # Prepare for logging before deletion
+                deleted_citizens = []
+                for citizen in citizens:
+                    deleted_citizens.append((citizen.user.id, citizen.user.username))
+                
+                # Delete the citizens
+                deleted_count, _ = citizens.delete()
+                affected_count = deleted_count
+                
+                # Log the deletions
+                for user_id, username in deleted_citizens:
+                    AuditLog.objects.create(
+                        admin_user=request.user,
+                        action="Citizen Account Deleted (Bulk)",
+                        target_model="CitizenProfile",
+                        target_id=str(user_id),
+                        details=f"Deleted citizen account for {username} (User ID: {user_id}) via bulk action"
+                    )
+                
+                message = f"Successfully deleted {affected_count} citizen accounts."
+            
+            return JsonResponse({'success': True, 'message': message, 'affected_count': affected_count})
+            
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'An error occurred: {str(e)}'})
+    
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+
+@admin_required
 def delete_citizen(request, citizen_id):
     """View to delete citizen account"""
     citizen = get_object_or_404(CitizenProfile, user_id=citizen_id)

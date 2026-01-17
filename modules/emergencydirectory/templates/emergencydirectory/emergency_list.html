@@ -253,6 +253,8 @@
                                 <span class="badge {{ contact.get_badge_class }}">{{ contact.get_contact_type_display }}</span>
                                 {% if contact.available_24x7 %}
                                     <span class="badge bg-success ms-1">24x7</span>
+                                {% else %}
+                                    <span class="badge bg-warning ms-1">{{ contact.opening_time|time:"H:i" }}-{{ contact.closing_time|time:"H:i" }} Hrs</span>
                                 {% endif %}
                             </div>
                         </div>

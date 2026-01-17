@@ -10,5 +10,6 @@ urlpatterns = [
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
     path('switch-language/', views.switch_language, name='switch_language'),
+    path('get-current-language/', views.get_current_language, name='get_current_language'),
     path('change-password/', views.change_password, name='change_password'),
 ]

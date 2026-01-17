@@ -83,7 +83,7 @@
                                 {% for app in applications %}
                                 <tr>
                                     <td>#{{ app.id }}</td>
-                                    <td>{{ app.citizen.get_full_name }}</td>
+                                    <td>{% if app.citizen.first_name and app.citizen.last_name %}{{ app.citizen.first_name }} {{ app.citizen.last_name }}{% elif app.citizen.first_name %}{{ app.citizen.first_name }}{% elif app.citizen.last_name %}{{ app.citizen.last_name }}{% else %}{{ app.citizen.username }}{% endif %}</td>
                                     <td>{{ app.get_certificate_type_display }}</td>
                                     <td>{{ app.created_at|date:"M d, Y" }}</td>
                                     <td>

@@ -28,8 +28,18 @@ class EmergencyContact(models.Model):
     address = models.TextField(help_text="Complete address")
     email = models.EmailField(max_length=100, help_text="Email address", blank=True, null=True)
     available_24x7 = models.BooleanField(
-        default=True,
+        default=False,  # Changed to False as per requirement
         help_text="Is this service available 24x7?"
+    )
+    
+    # Service hours for non-24/7 services (default to 10 AM to 6 PM)
+    opening_time = models.TimeField(
+        default="10:00",  # 10 AM
+        help_text="Opening time for the service"
+    )
+    closing_time = models.TimeField(
+        default="18:00",  # 6 PM
+        help_text="Closing time for the service"
     )
     icon = models.CharField(
         max_length=50,
@@ -83,6 +93,13 @@ class EmergencyContact(models.Model):
             'others': 'bg-secondary',
         }
         return badge_map.get(self.contact_type, 'bg-secondary')
+    
+    def get_availability_text(self):
+        """Return appropriate availability text based on 24x7 status"""
+        if self.available_24x7:
+            return "24/7 Available"
+        else:
+            return f"{self.opening_time.strftime('%I:%M %p')} - {self.closing_time.strftime('%I:%M %p')}"
     
     def clean(self):
         from django.core.exceptions import ValidationError

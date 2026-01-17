@@ -80,6 +80,49 @@
                         {{ form.address }}
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="form-check">
+                            {{ form.available_24x7 }}
+                            {{ form.available_24x7.label_tag }}
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3" id="opening_time_container">
+                        {{ form.opening_time.label_tag }}
+                        {{ form.opening_time }}
+                    </div>
+                    <div class="col-md-4 mb-3" id="closing_time_container">
+                        {{ form.closing_time.label_tag }}
+                        {{ form.closing_time }}
+                    </div>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const available247Checkbox = document.querySelector('#id_available_24x7');
+                        const openingContainer = document.getElementById('opening_time_container');
+                        const closingContainer = document.getElementById('closing_time_container');
+                        
+                        function toggleTimeInputs() {
+                            if (available247Checkbox && openingContainer && closingContainer) {
+                                if (available247Checkbox.checked) {
+                                    openingContainer.style.display = 'none';
+                                    closingContainer.style.display = 'none';
+                                } else {
+                                    openingContainer.style.display = 'block';
+                                    closingContainer.style.display = 'block';
+                                }
+                            }
+                        }
+                        
+                        // Set initial state
+                        if (available247Checkbox) {
+                            toggleTimeInputs();
+                            
+                            // Add event listener
+                            available247Checkbox.addEventListener('change', toggleTimeInputs);
+                        }
+                    });
+                </script>
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-plus-circle"></i> Add Contact
                 </button>
@@ -100,7 +143,7 @@
                             <th>Name</th>
                             <th>Type</th>
                             <th>Phone</th>
-                            <th>24x7</th>
+                            <th>Available Hrs</th>
                             <th>Status</th>
                             <th>Last Updated</th>
                             <th>Actions</th>
@@ -114,9 +157,9 @@
                             <td><a href="tel:{{ contact.phone_number }}">{{ contact.phone_number }}</a></td>
                             <td>
                                 {% if contact.available_24x7 %}
-                                    <span class="badge bg-success">Yes</span>
+                                    <span class="badge bg-success">24/7</span>
                                 {% else %}
-                                    <span class="badge bg-secondary">No</span>
+                                    <span class="badge bg-warning">{{ contact.opening_time|time:"H:i" }} - {{ contact.closing_time|time:"H:i" }}</span>
                                 {% endif %}
                             </td>
                             <td>

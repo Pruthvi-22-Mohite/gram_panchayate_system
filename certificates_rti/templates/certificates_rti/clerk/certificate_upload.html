@@ -1,0 +1,105 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Upload Certificate - Clerk Portal{% endblock %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'clerk:dashboard' %}">Clerk Portal</a>
+        <div class="ms-auto">
+            <span class="navbar-text me-3">Welcome, {{ user.username }}!</span>
+            <a href="/auth/logout/" class="btn btn-sm btn-outline-light">Logout</a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4><i class="bi bi-upload"></i> Upload Certificate PDF</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Certificate Application Details</h5>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="30%">Application ID</th>
+                            <td>{{ application.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Certificate Type</th>
+                            <td>{{ application.get_certificate_type_display }}</td>
+                        </tr>
+                        <tr>
+                            <th>Applicant Name</th>
+                            <td>{{ application.citizen.get_full_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Applied On</th>
+                            <td>{{ application.created_at|date:"M d, Y h:i A" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td><span class="badge bg-warning">{{ application.get_status_display }}</span></td>
+                        </tr>
+                    </table>
+
+                    <h5 class="mt-4">Upload Certificate</h5>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.certificate_number.id_for_label }}" class="form-label">Certificate Number</label>
+                            {{ form.certificate_number }}
+                            {% if form.certificate_number.errors %}
+                                <div class="text-danger mt-1">{{ form.certificate_number.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.certificate_file.id_for_label }}" class="form-label">Certificate File (PDF)</label>
+                            {{ form.certificate_file }}
+                            <div class="form-text">Upload the final approved certificate as PDF</div>
+                            {% if form.certificate_file.errors %}
+                                <div class="text-danger mt-1">{{ form.certificate_file.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'certificates_rti:clerk_certificate_detail' application.pk %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to Details
+                            </a>
+                            <a href="{% url 'clerk:dashboard' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-speedometer2 me-2"></i>Back to Dashboard
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-upload"></i> Upload Certificate
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info">
+                    <h5>Instructions</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Upload final approved certificate as PDF</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Certificate number should be unique</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> File size should not exceed 5MB</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> After upload, status will be set to Approved</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
