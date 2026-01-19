@@ -62,9 +62,7 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                     <h5 class="card-title mb-0">{{ notice.title }}</h5>
-                                    <span class="badge {{ notice.get_badge_class }}">
-                                        {{ notice.get_notice_type_display }}
-                                    </span>
+                                    <span class="badge {{ notice.get_badge_class }}">{{ notice.get_notice_type_display }}</span>
                                 </div>
                                 
                                 <p class="card-text text-muted">

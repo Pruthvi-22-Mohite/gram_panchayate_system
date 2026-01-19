@@ -14,9 +14,7 @@
                         <h4 class="mb-0">
                             <i class="fas fa-bell"></i> Notice Details
                         </h4>
-                        <span class="badge {{ notice.get_badge_class }} fs-6">
-                            {{ notice.get_notice_type_display }}
-                        </span>
+                        <span class="badge {{ notice.get_badge_class }} fs-6">{{ notice.get_notice_type_display }}</span>
                     </div>
                 </div>
                 <div class="card-body">
@@ -84,9 +82,7 @@
                                     <i class="fas fa-calendar"></i> {{ related.date|date:"d M, Y" }}
                                 </small>
                             </div>
-                            <span class="badge {{ related.get_badge_class }}">
-                                {{ related.get_notice_type_display }}
-                            </span>
+                            <span class="badge {{ related.get_badge_class }}">{{ related.get_notice_type_display }}</span>
                         </div>
                     </a>
                     {% endfor %}

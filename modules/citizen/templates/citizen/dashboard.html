@@ -126,9 +126,7 @@
                         {% for tax in pending_taxes %}
                         <div class="alert alert-warning">
                             <i class="bi bi-exclamation-triangle"></i>
-                            <strong data-lang-key="tax_due">Tax Due:</strong> ₹{{ tax.amount }} for {{
-                            tax.get_tax_type_display }} <span data-lang-key="is_due_on">is due on</span> {{
-                            tax.due_date|date:"d M Y" }}
+                            <strong data-lang-key="tax_due">Tax Due:</strong> ₹{{ tax.amount }} for {{ tax.get_tax_type_display }} <span data-lang-key="is_due_on">is due on</span> {{ tax.due_date|date:"d M Y" }}
                             <a href="{% url 'citizen:pay_tax' %}" class="alert-link ms-2" data-lang-key="pay_now">Pay
                                 Now</a>
                         </div>
@@ -139,9 +137,7 @@
                         {% for tax in overdue_taxes %}
                         <div class="alert alert-danger">
                             <i class="bi bi-exclamation-circle"></i>
-                            <strong data-lang-key="overdue_tax">Overdue Tax:</strong> ₹{{ tax.amount }} for {{
-                            tax.get_tax_type_display }} <span data-lang-key="was_due_on">was due on</span> {{
-                            tax.due_date|date:"d M Y" }}
+                            <strong data-lang-key="overdue_tax">Overdue Tax:</strong> ₹{{ tax.amount }} for {{ tax.get_tax_type_display }} <span data-lang-key="was_due_on">was due on</span> {{ tax.due_date|date:"d M Y" }}
                             <a href="{% url 'citizen:pay_tax' %}" class="alert-link ms-2" data-lang-key="pay_now">Pay
                                 Now</a>
                         </div>
@@ -174,13 +170,11 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <h6 class="card-title mb-0">{{ notice.title|truncatewords:8 }}</h6>
-                                        <span class="badge {{ notice.get_badge_class }}">{{
-                                            notice.get_notice_type_display }}</span>
+                                        <span class="badge {{ notice.get_badge_class }}">{{ notice.get_notice_type_display }}</span>
                                     </div>
                                     <p class="card-text text-muted small">{{ notice.description|truncatewords:15 }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted"><i class="bi bi-calendar"></i> {{ notice.date|date:"M
-                                            d, Y" }}</small>
+                                        <small class="text-muted"><i class="bi bi-calendar"></i> {{ notice.date|date:"M d, Y" }}</small>
                                         <a href="{% url 'informationhub:notice_detail' notice.id %}"
                                             class="btn btn-sm btn-outline-secondary" data-lang-key="read_more">Read
                                             More</a>
@@ -220,10 +214,8 @@
                                 <tr>
                                     <td><strong>{{ meeting.meeting_title|truncatewords:6 }}</strong></td>
                                     <td>
-                                        <small class="d-block"><i class="bi bi-calendar"></i> {{
-                                            meeting.meeting_date|date:"M d, Y" }}</small>
-                                        <small class="text-muted"><i class="bi bi-clock"></i> {{ meeting.time|time:"h:i
-                                            A" }}</small>
+                                        <small class="d-block"><i class="bi bi-calendar"></i> {{ meeting.meeting_date|date:"M d, Y" }}</small>
+                                        <small class="text-muted"><i class="bi bi-clock"></i> {{ meeting.time|time:"h:i A" }}</small>
                                     </td>
                                     <td>{{ meeting.location }}</td>
                                     <td><a href="{% url 'informationhub:meeting_detail' meeting.id %}"
