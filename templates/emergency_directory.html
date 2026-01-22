@@ -5,10 +5,10 @@
 {% block content %}
 <nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Emergency Services</a>
+        <a class="navbar-brand" href="#" data-lang-key="emergency_services_brand">Emergency Services</a>
         <div class="ms-auto">
-            <span class="navbar-text me-3">Welcome, Citizen!</span>
-            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+            <span class="navbar-text me-3" data-lang-key="welcome_user">Welcome, Citizen!</span>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light" data-lang-key="logout">Logout</a>
         </div>
     </div>
 </nav>
@@ -19,86 +19,101 @@
             <div class="sidebar">
                 <div class="list-group list-group-flush">
                     <a href="{% url 'citizen_dashboard' %}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                        <i class="bi bi-arrow-left me-2"></i><span data-lang-key="back_to_dashboard">Back to
+                            Dashboard</span>
                     </a>
                     <a href="#" class="list-group-item list-group-item-action active">
-                        <i class="bi bi-telephone-fill me-2"></i>Emergency Directory
+                        <i class="bi bi-telephone-fill me-2"></i><span
+                            data-lang-key="emergency_directory_sidebar">Emergency Directory</span>
                     </a>
                 </div>
             </div>
         </div>
         <div class="col-lg-9">
             <div class="content-box">
-                <h3 class="content-box-title">Emergency Contact Directory</h3>
-                
+                <h3 class="content-box-title" data-lang-key="emergency_contact_directory_header">Emergency Contact
+                    Directory</h3>
+
                 <div class="alert alert-info">
-                    <i class="bi bi-info-circle me-2"></i>In case of emergency, please dial 112 (National Emergency Number) or the specific numbers listed below.
+                    <i class="bi bi-info-circle me-2"></i><span data-lang-key="emergency_info_alert">In case of
+                        emergency, please dial 112 (National Emergency Number) or the specific numbers listed
+                        below.</span>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <div class="card">
                             <div class="card-header bg-danger text-white">
-                                <h5 class="mb-0"><i class="bi bi-telephone-fill me-2"></i>Police Emergency</h5>
+                                <h5 class="mb-0"><i class="bi bi-telephone-fill me-2"></i><span
+                                        data-lang-key="service_police">Police Emergency</span></h5>
                             </div>
                             <div class="card-body text-center">
                                 <h2 class="display-4 text-danger">100</h2>
-                                <p>For immediate police assistance</p>
-                                <a href="tel:100" class="btn btn-danger"><i class="bi bi-telephone-fill me-2"></i>Call Now</a>
+                                <p data-lang-key="desc_police">For immediate police assistance</p>
+                                <a href="tel:100" class="btn btn-danger"><i class="bi bi-telephone-fill me-2"></i><span
+                                        data-lang-key="btn_call_now">Call Now</span></a>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-6 mb-4">
                         <div class="card">
                             <div class="card-header bg-success text-white">
-                                <h5 class="mb-0"><i class="bi bi-telephone-fill me-2"></i>Ambulance Services</h5>
+                                <h5 class="mb-0"><i class="bi bi-telephone-fill me-2"></i><span
+                                        data-lang-key="service_ambulance">Ambulance Services</span></h5>
                             </div>
                             <div class="card-body text-center">
                                 <h2 class="display-4 text-success">102</h2>
-                                <p>For medical emergencies</p>
-                                <a href="tel:102" class="btn btn-success"><i class="bi bi-telephone-fill me-2"></i>Call Now</a>
+                                <p data-lang-key="desc_ambulance">For medical emergencies</p>
+                                <a href="tel:102" class="btn btn-success"><i class="bi bi-telephone-fill me-2"></i><span
+                                        data-lang-key="btn_call_now">Call Now</span></a>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-6 mb-4">
                         <div class="card">
                             <div class="card-header bg-primary text-white">
-                                <h5 class="mb-0"><i class="bi bi-telephone-fill me-2"></i>Fire Services</h5>
+                                <h5 class="mb-0"><i class="bi bi-telephone-fill me-2"></i><span
+                                        data-lang-key="service_fire">Fire Services</span></h5>
                             </div>
                             <div class="card-body text-center">
                                 <h2 class="display-4 text-primary">101</h2>
-                                <p>For fire and rescue operations</p>
-                                <a href="tel:101" class="btn btn-primary"><i class="bi bi-telephone-fill me-2"></i>Call Now</a>
+                                <p data-lang-key="desc_fire">For fire and rescue operations</p>
+                                <a href="tel:101" class="btn btn-primary"><i class="bi bi-telephone-fill me-2"></i><span
+                                        data-lang-key="btn_call_now">Call Now</span></a>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-6 mb-4">
                         <div class="card">
                             <div class="card-header bg-warning text-dark">
-                                <h5 class="mb-0"><i class="bi bi-telephone-fill me-2"></i>Women Helpline</h5>
+                                <h5 class="mb-0"><i class="bi bi-telephone-fill me-2"></i><span
+                                        data-lang-key="service_women">Women Helpline</span></h5>
                             </div>
                             <div class="card-body text-center">
                                 <h2 class="display-4 text-warning">1091</h2>
-                                <p>For women in distress</p>
-                                <a href="tel:1091" class="btn btn-warning"><i class="bi bi-telephone-fill me-2"></i>Call Now</a>
+                                <p data-lang-key="desc_women">For women in distress</p>
+                                <a href="tel:1091" class="btn btn-warning"><i
+                                        class="bi bi-telephone-fill me-2"></i><span data-lang-key="btn_call_now">Call
+                                        Now</span></a>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="table-container mt-4">
-                    <h4 class="table-title">Local Emergency Contacts</h4>
+                    <h4 class="table-title" data-lang-key="local_emergency_contacts_header">Local Emergency Contacts
+                    </h4>
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Service</th>
-                                <th>Contact Person</th>
-                                <th>Phone Number</th>
-                                <th>Available</th>
-                                <th>Action</th>
+                                <th data-lang-key="th_service">Service</th>
+                                <th data-lang-key="th_contact_person">Contact Person</th>
+                                <th data-lang-key="th_phone_number">Phone Number</th>
+                                <th data-lang-key="th_available">Available</th>
+                                <th data-lang-key="th_action">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,66 +122,85 @@
                                 <td>Sarpanch - Ramesh Patel</td>
                                 <td>9876543210</td>
                                 <td>9:00 AM - 5:00 PM</td>
-                                <td><a href="tel:9876543210" class="btn btn-sm btn-primary"><i class="bi bi-telephone-fill me-1"></i>Call</a></td>
+                                <td><a href="tel:9876543210" class="btn btn-sm btn-primary"><i
+                                            class="bi bi-telephone-fill me-1"></i><span
+                                            data-lang-key="btn_call_now">Call</span></a></td>
                             </tr>
                             <tr>
                                 <td>Health Center</td>
                                 <td>Dr. Sunita Sharma</td>
                                 <td>9876543211</td>
                                 <td>24/7</td>
-                                <td><a href="tel:9876543211" class="btn btn-sm btn-primary"><i class="bi bi-telephone-fill me-1"></i>Call</a></td>
+                                <td><a href="tel:9876543211" class="btn btn-sm btn-primary"><i
+                                            class="bi bi-telephone-fill me-1"></i><span
+                                            data-lang-key="btn_call_now">Call</span></a></td>
                             </tr>
                             <tr>
                                 <td>Primary School</td>
                                 <td>Headmaster - Amit Kumar</td>
                                 <td>9876543212</td>
                                 <td>10:00 AM - 4:00 PM</td>
-                                <td><a href="tel:9876543212" class="btn btn-sm btn-primary"><i class="bi bi-telephone-fill me-1"></i>Call</a></td>
+                                <td><a href="tel:9876543212" class="btn btn-sm btn-primary"><i
+                                            class="bi bi-telephone-fill me-1"></i><span
+                                            data-lang-key="btn_call_now">Call</span></a></td>
                             </tr>
                             <tr>
                                 <td>Water Supply Department</td>
                                 <td>Supervisor - Rajesh Mehta</td>
                                 <td>9876543213</td>
                                 <td>9:00 AM - 6:00 PM</td>
-                                <td><a href="tel:9876543213" class="btn btn-sm btn-primary"><i class="bi bi-telephone-fill me-1"></i>Call</a></td>
+                                <td><a href="tel:9876543213" class="btn btn-sm btn-primary"><i
+                                            class="bi bi-telephone-fill me-1"></i><span
+                                            data-lang-key="btn_call_now">Call</span></a></td>
                             </tr>
                             <tr>
                                 <td>Electricity Department</td>
                                 <td>Lineman - Sunil Yadav</td>
                                 <td>9876543214</td>
                                 <td>24/7</td>
-                                <td><a href="tel:9876543214" class="btn btn-sm btn-primary"><i class="bi bi-telephone-fill me-1"></i>Call</a></td>
+                                <td><a href="tel:9876543214" class="btn btn-sm btn-primary"><i
+                                            class="bi bi-telephone-fill me-1"></i><span
+                                            data-lang-key="btn_call_now">Call</span></a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                
+
                 <div class="form-container mt-4">
-                    <h4 class="form-title">Report Emergency</h4>
+                    <h4 class="form-title" data-lang-key="report_emergency_header">Report Emergency</h4>
                     <form>
                         <div class="mb-3">
-                            <label for="emergencyType" class="form-label">Emergency Type</label>
+                            <label for="emergencyType" class="form-label" data-lang-key="label_emergency_type">Emergency
+                                Type</label>
                             <select class="form-select" id="emergencyType">
-                                <option value="">Select Emergency Type</option>
-                                <option value="medical">Medical Emergency</option>
-                                <option value="fire">Fire</option>
-                                <option value="crime">Crime/Security</option>
-                                <option value="accident">Accident</option>
-                                <option value="other">Other</option>
+                                <option value="" data-lang-key="option_select_emergency_type">Select Emergency Type
+                                </option>
+                                <option value="medical" data-lang-key="option_medical">Medical Emergency</option>
+                                <option value="fire" data-lang-key="option_fire">Fire</option>
+                                <option value="crime" data-lang-key="option_crime">Crime/Security</option>
+                                <option value="accident" data-lang-key="option_accident">Accident</option>
+                                <option value="other" data-lang-key="option_other">Other</option>
                             </select>
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="emergencyLocation" class="form-label">Location</label>
-                            <input type="text" class="form-control" id="emergencyLocation" placeholder="Enter location of emergency">
+                            <label for="emergencyLocation" class="form-label"
+                                data-lang-key="label_location">Location</label>
+                            <input type="text" class="form-control" id="emergencyLocation"
+                                placeholder="Enter location of emergency" data-lang-key="placeholder_location">
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="emergencyDetails" class="form-label">Details</label>
-                            <textarea class="form-control" id="emergencyDetails" rows="3" placeholder="Provide details about the emergency"></textarea>
+                            <label for="emergencyDetails" class="form-label"
+                                data-lang-key="label_details">Details</label>
+                            <textarea class="form-control" id="emergencyDetails" rows="3"
+                                placeholder="Provide details about the emergency"
+                                data-lang-key="placeholder_details"></textarea>
                         </div>
-                        
-                        <button type="submit" class="btn btn-danger" onclick="handleFormSubmit(event, 'Emergency Report')">Report Emergency</button>
+
+                        <button type="submit" class="btn btn-danger"
+                            onclick="handleFormSubmit(event, 'Emergency Report')"
+                            data-lang-key="btn_report_emergency">Report Emergency</button>
                     </form>
                 </div>
             </div>

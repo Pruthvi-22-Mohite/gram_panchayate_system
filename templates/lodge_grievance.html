@@ -5,10 +5,10 @@
 {% block content %}
 <nav class="navbar navbar-expand-lg navbar-dark sub-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Grievance Redressal</a>
+        <a class="navbar-brand" href="#" data-lang-key="grievance_redressal_brand">Grievance Redressal</a>
         <div class="ms-auto">
-            <span class="navbar-text me-3">Welcome, Citizen!</span>
-            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+            <span class="navbar-text me-3" data-lang-key="welcome_user">Welcome, Citizen!</span>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light" data-lang-key="logout">Logout</a>
         </div>
     </div>
 </nav>
@@ -19,109 +19,128 @@
             <div class="sidebar">
                 <div class="list-group list-group-flush">
                     <a href="{% url 'citizen_dashboard' %}" class="list-group-item list-group-item-action">
-                        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                        <i class="bi bi-arrow-left me-2"></i><span data-lang-key="back_to_dashboard">Back to
+                            Dashboard</span>
                     </a>
                     <a href="#" class="list-group-item list-group-item-action active">
-                        <i class="bi bi-megaphone-fill me-2"></i>Lodge New Grievance
+                        <i class="bi bi-megaphone-fill me-2"></i><span data-lang-key="lodge_new_grievance_sidebar">Lodge
+                            New Grievance</span>
                     </a>
                     <a href="#" class="list-group-item list-group-item-action">
-                        <i class="bi bi-card-checklist me-2"></i>Track My Grievances
+                        <i class="bi bi-card-checklist me-2"></i><span data-lang-key="track_grievance_sidebar">Track My
+                            Grievances</span>
                     </a>
                 </div>
             </div>
         </div>
         <div class="col-lg-9">
             <div class="content-box">
-                <h3 class="content-box-title">Lodge New Grievance</h3>
-                
+                <h3 class="content-box-title" data-lang-key="lodge_new_grievance_header">Lodge New Grievance</h3>
+
                 <div class="form-container">
                     <form>
                         <div class="mb-3">
-                            <label for="grievanceCategory" class="form-label">Grievance Category</label>
+                            <label for="grievanceCategory" class="form-label"
+                                data-lang-key="label_grievance_category">Grievance Category</label>
                             <select class="form-select" id="grievanceCategory">
-                                <option value="">Select Category</option>
-                                <option value="road">Road Maintenance</option>
-                                <option value="water">Water Supply</option>
-                                <option value="electricity">Electricity</option>
-                                <option value="sanitation">Sanitation</option>
-                                <option value="health">Health Services</option>
-                                <option value="education">Education</option>
-                                <option value="other">Other</option>
+                                <option value="" data-lang-key="option_select_category">Select Category</option>
+                                <option value="road" data-lang-key="option_road">Road Maintenance</option>
+                                <option value="water" data-lang-key="option_water">Water Supply</option>
+                                <option value="electricity" data-lang-key="option_electricity">Electricity</option>
+                                <option value="sanitation" data-lang-key="option_sanitation">Sanitation</option>
+                                <option value="health" data-lang-key="option_health">Health Services</option>
+                                <option value="education" data-lang-key="option_education">Education</option>
+                                <option value="other" data-lang-key="option_other">Other</option>
                             </select>
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="grievanceSubject" class="form-label">Subject</label>
-                            <input type="text" class="form-control" id="grievanceSubject" placeholder="Enter subject of your grievance">
+                            <label for="grievanceSubject" class="form-label"
+                                data-lang-key="label_subject">Subject</label>
+                            <input type="text" class="form-control" id="grievanceSubject"
+                                placeholder="Enter subject of your grievance" data-lang-key="placeholder_subject">
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="grievanceDetails" class="form-label">Details</label>
-                            <textarea class="form-control" id="grievanceDetails" rows="5" placeholder="Provide detailed description of your grievance"></textarea>
+                            <label for="grievanceDetails" class="form-label"
+                                data-lang-key="label_details">Details</label>
+                            <textarea class="form-control" id="grievanceDetails" rows="5"
+                                placeholder="Provide detailed description of your grievance"
+                                data-lang-key="placeholder_details"></textarea>
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="grievanceLocation" class="form-label">Location</label>
-                            <input type="text" class="form-control" id="grievanceLocation" placeholder="Enter location of the issue">
+                            <label for="grievanceLocation" class="form-label"
+                                data-lang-key="label_location">Location</label>
+                            <input type="text" class="form-control" id="grievanceLocation"
+                                placeholder="Enter location of the issue" data-lang-key="placeholder_location">
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="grievancePhotos" class="form-label">Upload Photos (Optional)</label>
+                            <label for="grievancePhotos" class="form-label" data-lang-key="label_photos">Upload Photos
+                                (Optional)</label>
                             <input class="form-control" type="file" id="grievancePhotos" multiple>
-                            <div class="form-text">You can upload up to 5 photos (max 2MB each)</div>
+                            <div class="form-text" data-lang-key="help_photos">You can upload up to 5 photos (max 2MB
+                                each)</div>
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="grievancePriority" class="form-label">Priority</label>
+                            <label for="grievancePriority" class="form-label"
+                                data-lang-key="label_priority">Priority</label>
                             <select class="form-select" id="grievancePriority">
-                                <option value="low">Low</option>
-                                <option value="medium" selected>Medium</option>
-                                <option value="high">High</option>
-                                <option value="urgent">Urgent</option>
+                                <option value="low" data-lang-key="option_low">Low</option>
+                                <option value="medium" selected data-lang-key="option_medium">Medium</option>
+                                <option value="high" data-lang-key="option_high">High</option>
+                                <option value="urgent" data-lang-key="option_urgent">Urgent</option>
                             </select>
                         </div>
-                        
-                        <button type="submit" class="btn btn-primary" onclick="handleFormSubmit(event, 'Grievance')">Submit Grievance</button>
+
+                        <button type="submit" class="btn btn-primary" onclick="handleFormSubmit(event, 'Grievance')"
+                            data-lang-key="btn_submit_grievance">Submit Grievance</button>
                     </form>
                 </div>
-                
+
                 <div class="table-container mt-4">
-                    <h4 class="table-title">My Recent Grievances</h4>
+                    <h4 class="table-title" data-lang-key="header_my_recent_grievances">My Recent Grievances</h4>
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Grievance ID</th>
-                                <th>Subject</th>
-                                <th>Category</th>
-                                <th>Date Filed</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th data-lang-key="th_grievance_id">Grievance ID</th>
+                                <th data-lang-key="th_subject">Subject</th>
+                                <th data-lang-key="th_category">Category</th>
+                                <th data-lang-key="th_date_filed">Date Filed</th>
+                                <th data-lang-key="th_status">Status</th>
+                                <th data-lang-key="th_action">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>GRV-2025-004</td>
                                 <td>Street light not working</td>
-                                <td>Electricity</td>
+                                <td data-lang-key="option_electricity">Electricity</td>
                                 <td>15 May 2025</td>
-                                <td><span class="badge bg-warning">In Progress</span></td>
-                                <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                                <td><span class="badge bg-warning" data-lang-key="status_in_progress">In Progress</span>
+                                </td>
+                                <td><button class="btn btn-sm btn-outline-primary" data-lang-key="btn_view_details">View
+                                        Details</button></td>
                             </tr>
                             <tr>
                                 <td>GRV-2025-002</td>
                                 <td>Water supply issue</td>
-                                <td>Water Supply</td>
+                                <td data-lang-key="option_water">Water Supply</td>
                                 <td>03 Apr 2025</td>
-                                <td><span class="badge bg-success">Resolved</span></td>
-                                <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                                <td><span class="badge bg-success" data-lang-key="summary_resolved">Resolved</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary" data-lang-key="btn_view_details">View
+                                        Details</button></td>
                             </tr>
                             <tr>
                                 <td>GRV-2025-001</td>
                                 <td>Potholes on main road</td>
-                                <td>Road Maintenance</td>
+                                <td data-lang-key="option_road">Road Maintenance</td>
                                 <td>18 Mar 2025</td>
-                                <td><span class="badge bg-success">Resolved</span></td>
-                                <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                                <td><span class="badge bg-success" data-lang-key="summary_resolved">Resolved</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary" data-lang-key="btn_view_details">View
+                                        Details</button></td>
                             </tr>
                         </tbody>
                     </table>

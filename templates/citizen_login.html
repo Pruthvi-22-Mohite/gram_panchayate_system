@@ -3,37 +3,43 @@
 {% block title %}Citizen Login - Gram Panchayat Portal{% endblock %}
 
 {% block content %}
+
 <body class="login-page">
     <div class="container d-flex justify-content-center align-items-center min-vh-custom">
         <div class="card shadow p-4 login-card-width">
             <div class="card-body">
-                <h2 class="card-title text-center mb-4">Citizen Login</h2>
-                
+                <h2 class="card-title text-center mb-4" data-lang-key="citizen_login_title">Citizen Login</h2>
+
                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    {% endfor %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
                 {% endif %}
-                
+
                 <form method="post">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                        <label for="username" class="form-label" data-lang-key="label_username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            placeholder="Enter your username" data-lang-key="placeholder_username" required>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                        <label for="password" class="form-label" data-lang-key="label_password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Enter your password" data-lang-key="placeholder_password" required>
                     </div>
-                    <button type="submit" class="btn btn-info w-100">Login</button>
+                    <button type="submit" class="btn btn-info w-100" data-lang-key="btn_login">Login</button>
                 </form>
-                
+
                 <div class="text-center mt-4">
-                    <p>Don't have an account? <a href="{% url 'auth:citizen_registration' %}" class="text-decoration-none">Register here</a></p>
-                    <p><a href="{% url 'auth:login' %}" class="text-decoration-none">Back to main login</a></p>
+                    <p><span data-lang-key="no_account_msg">Don't have an account?</span> <a
+                            href="{% url 'auth:citizen_registration' %}" class="text-decoration-none"
+                            data-lang-key="register_here">Register here</a></p>
+                    <p><a href="{% url 'auth:login' %}" class="text-decoration-none"
+                            data-lang-key="back_to_main_login">Back to main login</a></p>
                 </div>
             </div>
         </div>
