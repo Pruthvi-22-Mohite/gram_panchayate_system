@@ -6,7 +6,19 @@ from django.db.models import Count, Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
+
+
+def calculate_percentage_change(previous_value, current_value):
+    """Helper function to calculate percentage change"""
+    if previous_value == 0:
+        if current_value == 0:
+            return '0.0'
+        else:
+            return 'inf'
+    else:
+        change = ((current_value - previous_value) / previous_value) * 100
+        return f'{round(change, 1)}'
 
 from modules.common.models import CustomUser
 from modules.common.decorators import admin_required
@@ -423,11 +435,6 @@ def audit_logs(request):
 @admin_required
 def reports(request):
     """View to display various system reports"""
-    # User registration trends
-    user_trends = CustomUser.objects.extra(
-        select={'month': 'EXTRACT(month FROM created_at)'}
-    ).values('month').annotate(count=Count('id'))
-    
     # Get counts for KPIs
     total_users = CustomUser.objects.count()
     total_clerks = ClerkProfile.objects.count()
@@ -437,7 +444,6 @@ def reports(request):
     recent_logs = AuditLog.objects.all().order_by('-timestamp')[:10]
     
     context = {
-        'user_trends': user_trends,
         'total_users': total_users,
         'total_clerks': total_clerks,
         'total_citizens': total_citizens,
@@ -457,16 +463,24 @@ def reports_data(request):
         total_clerks = ClerkProfile.objects.count()
         total_citizens = CitizenProfile.objects.count()
         
-        # Calculate growth from last month
-        last_month = timezone.now() - timedelta(days=30)
-        users_last_month = CustomUser.objects.filter(created_at__lt=last_month).count()
-        clerks_last_month = ClerkProfile.objects.filter(user__created_at__lt=last_month).count()
-        citizens_last_month = CitizenProfile.objects.filter(user__created_at__lt=last_month).count()
+        # Calculate growth from last period (last 30 days)
+        thirty_days_ago = timezone.now() - timedelta(days=30)
+        users_last_period = CustomUser.objects.filter(created_at__lt=thirty_days_ago).count()
+        clerks_last_period = ClerkProfile.objects.filter(user__created_at__lt=thirty_days_ago).count()
+        citizens_last_period = CitizenProfile.objects.filter(user__created_at__lt=thirty_days_ago).count()
         
         # Calculate percentage changes
-        user_growth = round(((total_users - users_last_month) / users_last_month * 100) if users_last_month > 0 else 0, 1)
-        clerk_growth = round(((total_clerks - clerks_last_month) / clerks_last_month * 100) if clerks_last_month > 0 else 0, 1)
-        citizen_growth = round(((total_citizens - citizens_last_month) / citizens_last_month * 100) if citizens_last_month > 0 else 0, 1)
+        user_growth = round(((total_users - users_last_period) / users_last_period * 100) if users_last_period > 0 else 0, 1)
+        clerk_growth = round(((total_clerks - clerks_last_period) / clerks_last_period * 100) if clerks_last_period > 0 else 0, 1)
+        citizen_growth = round(((total_citizens - citizens_last_period) / citizens_last_period * 100) if citizens_last_period > 0 else 0, 1)
+        
+        # Additional KPIs
+        total_grievances = Grievance.objects.count()
+        pending_grievances = Grievance.objects.filter(status='pending').count()
+        resolved_grievances = Grievance.objects.filter(status='resolved').count()
+        total_schemes = Scheme.objects.count()
+        active_schemes = Scheme.objects.filter(is_active=True).count()
+        total_tax_collected = TaxRecord.objects.filter(status='paid').aggregate(total=Sum('amount'))['total'] or 0
         
         data = {
             'total_users': total_users,
@@ -474,50 +488,137 @@ def reports_data(request):
             'total_citizens': total_citizens,
             'user_growth': user_growth,
             'clerk_growth': clerk_growth,
-            'citizen_growth': citizen_growth
+            'citizen_growth': citizen_growth,
+            'total_grievances': total_grievances,
+            'pending_grievances': pending_grievances,
+            'resolved_grievances': resolved_grievances,
+            'total_schemes': total_schemes,
+            'active_schemes': active_schemes,
+            'total_tax_collected': total_tax_collected
         }
     elif data_type == 'charts':
         # Chart data
-        user_trends = CustomUser.objects.extra(
-            select={'month': 'EXTRACT(month FROM created_at)'}
-        ).values('month').annotate(count=Count('id'))
+        # Registration trends over last 30 days
+        thirty_days_ago = timezone.now() - timedelta(days=30)
+        daily_registrations = CustomUser.objects.filter(
+            created_at__gte=thirty_days_ago
+        ).extra(select={'date': 'DATE(created_at)'}).values('date').annotate(count=Count('id')).order_by('date')
         
         # Format for chart
-        months = []
+        dates = []
         counts = []
-        for item in user_trends:
-            months.append(f"Month {int(item['month'])}")
+        for item in daily_registrations:
+            # The date from extra(select={'date': 'DATE(created_at)'}) is already a string in YYYY-MM-DD format
+            try:
+                date_obj = datetime.strptime(str(item['date']), '%Y-%m-%d').date()
+                formatted_date = date_obj.strftime('%m/%d')
+                dates.append(formatted_date)
+            except ValueError:
+                # If the date is already in a different format, use as-is
+                dates.append(str(item['date']))
             counts.append(item['count'])
+        
+        # Handle case where there are no recent registrations
+        if not dates:
+            # Generate last 7 days as fallback
+            for i in range(7):
+                date = (timezone.now() - timedelta(days=i)).strftime('%m/%d')
+                dates.insert(0, date)
+                counts.insert(0, 0)
         
         # User distribution
         citizen_count = CitizenProfile.objects.count()
         clerk_count = ClerkProfile.objects.count()
         admin_count = CustomUser.objects.filter(user_type='admin').count()
         
+        # Ensure at least one value is non-zero to avoid empty chart
+        if citizen_count == 0 and clerk_count == 0 and admin_count == 0:
+            user_dist_labels = ['No Data Available']
+            user_dist_data = [1]
+        else:
+            user_dist_labels = ['Citizens', 'Clerks', 'Admins']
+            user_dist_data = [citizen_count, clerk_count, admin_count]
+        
+        # Grievance status distribution
+        grievance_status_counts = Grievance.objects.values('status').annotate(count=Count('id'))
+        grievance_labels = []
+        grievance_data = []
+        for item in grievance_status_counts:
+            grievance_labels.append(item['status'].title())
+            grievance_data.append(item['count'])
+        
+        # Handle case where there are no grievances
+        if not grievance_labels:
+            grievance_labels = ['No Data']
+            grievance_data = [1]
+        
+        # Tax collection by type
+        tax_by_type = TaxRecord.objects.values('tax_type').annotate(total=Sum('amount')).order_by('tax_type')
+        tax_labels = []
+        tax_data = []
+        for item in tax_by_type:
+            if item['total'] is not None:  # Only add if there's actual data
+                tax_labels.append(item['tax_type'].replace('_', ' ').title())
+                tax_data.append(float(item['total']))
+        
+        # Handle case where there is no tax data
+        if not tax_labels:
+            tax_labels = ['No Data']
+            tax_data = [0]
+        
         data = {
             'registration_trends': {
-                'labels': months,
+                'labels': dates,
                 'data': counts
             },
             'user_distribution': {
-                'labels': ['Citizens', 'Clerks', 'Admins'],
-                'data': [citizen_count, clerk_count, admin_count]
+                'labels': user_dist_labels,
+                'data': user_dist_data
+            },
+            'grievance_distribution': {
+                'labels': grievance_labels,
+                'data': grievance_data
+            },
+            'tax_collection': {
+                'labels': tax_labels,
+                'data': tax_data
             }
         }
     elif data_type == 'summary':
-        # Summary table data
+        # Summary table data - fetch actual data from database
+        total_users = CustomUser.objects.count()
+        total_clerks = ClerkProfile.objects.count()
+        total_citizens = CitizenProfile.objects.count()
+        
+        # Grievance statistics
+        total_grievances = Grievance.objects.count()
+        pending_grievances = Grievance.objects.filter(status='pending').count()
+        resolved_grievances = Grievance.objects.filter(status='resolved').count()
+        
+        # Tax statistics
+        total_tax_collected = TaxRecord.objects.filter(status='paid').aggregate(total=Sum('amount'))['total'] or 0
+        total_tax_pending = TaxRecord.objects.filter(status='pending').aggregate(total=Sum('amount'))['total'] or 0
+        
+        # Calculate changes compared to last period
+        thirty_days_ago = timezone.now() - timedelta(days=30)
+        prev_total_grievances = Grievance.objects.filter(submitted_at__lt=thirty_days_ago).count()
+        prev_resolved_grievances = Grievance.objects.filter(resolved_at__lt=thirty_days_ago, status='resolved').count()
+        
+        grievance_change = f'+{round(((total_grievances - prev_total_grievances) / prev_total_grievances * 100), 1)}%' if prev_total_grievances > 0 else '0%'
+        resolved_change = f'+{round(((resolved_grievances - prev_resolved_grievances) / prev_resolved_grievances * 100), 1)}%' if prev_resolved_grievances > 0 else '0%'
+        
         data = [
-            {'metric': 'Total Users', 'current': CustomUser.objects.count(), 'previous': 2567, 'change': '+10.8%'},
-            {'metric': 'Total Clerks', 'current': ClerkProfile.objects.count(), 'previous': 38, 'change': '+10.5%'},
-            {'metric': 'Total Citizens', 'current': CitizenProfile.objects.count(), 'previous': 2524, 'change': '+10.9%'},
-            {'metric': 'Grievances Submitted', 'current': 342, 'previous': 298, 'change': '+14.8%'},
-            {'metric': 'Grievances Resolved', 'current': 287, 'previous': 245, 'change': '+17.1%'},
-            {'metric': 'Tax Collections (₹)', 'current': '12,45,000', 'previous': '10,87,500', 'change': '+14.5%'}
+            {'metric': 'Total Users', 'current': total_users, 'previous': CustomUser.objects.filter(created_at__lt=thirty_days_ago).count(), 'change': f'+{calculate_percentage_change(CustomUser.objects.filter(created_at__lt=thirty_days_ago).count(), total_users)}%'},
+            {'metric': 'Total Clerks', 'current': total_clerks, 'previous': ClerkProfile.objects.filter(user__created_at__lt=thirty_days_ago).count(), 'change': f'+{calculate_percentage_change(ClerkProfile.objects.filter(user__created_at__lt=thirty_days_ago).count(), total_clerks)}%'},
+            {'metric': 'Total Citizens', 'current': total_citizens, 'previous': CitizenProfile.objects.filter(user__created_at__lt=thirty_days_ago).count(), 'change': f'+{calculate_percentage_change(CitizenProfile.objects.filter(user__created_at__lt=thirty_days_ago).count(), total_citizens)}%'},
+            {'metric': 'Grievances Submitted', 'current': total_grievances, 'previous': prev_total_grievances, 'change': f'+{calculate_percentage_change(prev_total_grievances, total_grievances)}%'},
+            {'metric': 'Grievances Resolved', 'current': resolved_grievances, 'previous': prev_resolved_grievances, 'change': f'+{calculate_percentage_change(prev_resolved_grievances, resolved_grievances)}%'},
+            {'metric': 'Tax Collections (₹)', 'current': f'₹{total_tax_collected:,}', 'previous': f'₹{TaxRecord.objects.filter(status="paid", created_at__lt=thirty_days_ago).aggregate(total=Sum("amount"))["total"] or 0:,}', 'change': f'+{calculate_percentage_change(TaxRecord.objects.filter(status="paid", created_at__lt=thirty_days_ago).aggregate(total=Sum("amount"))["total"] or 0, total_tax_collected)}%'}
         ]
         return JsonResponse(data, safe=False)
     elif data_type == 'activity':
-        # Recent activity data
-        logs = AuditLog.objects.all().order_by('-timestamp')[:10]
+        # Recent activity data - fetch from database
+        logs = AuditLog.objects.all().order_by('-timestamp')[:15]  # Increased to 15
         data = []
         for log in logs:
             data.append({
@@ -528,6 +629,27 @@ def reports_data(request):
                 'status': 'success' if 'created' in log.action.lower() or 'updated' in log.action.lower() else 'info'
             })
         return JsonResponse(data, safe=False)
+    elif data_type == 'detailed_charts':
+        # More detailed chart data for advanced reporting
+        # Monthly trend analysis
+        monthly_data = CustomUser.objects.extra(
+            select={'month': 'EXTRACT(month FROM created_at)', 'year': 'EXTRACT(year FROM created_at)'}
+        ).values('year', 'month').annotate(count=Count('id')).order_by('year', 'month')
+        
+        months = []
+        user_counts = []
+        for item in monthly_data:
+            month_str = f"{item['year']}-{item['month']:02d}"
+            months.append(month_str)
+            user_counts.append(item['count'])
+        
+        data = {
+            'monthly_trends': {
+                'labels': months,
+                'data': user_counts
+            }
+        }
+        return JsonResponse(data)
     else:
         data = {'error': 'Invalid data type'}
     

@@ -162,7 +162,7 @@
         
         <!-- Charts Section -->
         <div class="row mb-4">
-            <div class="col-md-8 mb-4">
+            <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">User Registration Trends</h5>
@@ -177,13 +177,40 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Grievance Status Distribution</h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="toggleChartType('grievanceDistributionChart')">
+                                <i class="bi bi-arrow-left-right"></i> Switch View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="grievanceDistributionChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header bg-white">
                         <h5 class="mb-0">User Distribution by Type</h5>
                     </div>
                     <div class="card-body">
                         <canvas id="userTypeChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Tax Collection by Type</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="taxCollectionChart" height="300"></canvas>
                     </div>
                 </div>
             </div>
@@ -275,7 +302,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Global variables for charts
-    let userRegChart, userTypeChart;
+    let userRegChart, userTypeChart, grievanceChart, taxChart;
     let currentChartType = 'line'; // For toggling chart types
     
     // Initialize when the page loads
@@ -287,6 +314,7 @@
     
     // Initialize charts
     function initializeCharts() {
+        // User Registration Chart
         const userRegCtx = document.getElementById('userRegistrationChart').getContext('2d');
         userRegChart = new Chart(userRegCtx, {
             type: 'line',
@@ -325,6 +353,7 @@
             }
         });
         
+        // User Type Distribution Chart
         const userTypeCtx = document.getElementById('userTypeChart').getContext('2d');
         userTypeChart = new Chart(userTypeCtx, {
             type: 'doughnut',
@@ -349,6 +378,65 @@
                 }
             }
         });
+        
+        // Grievance Distribution Chart
+        const grievanceCtx = document.getElementById('grievanceDistributionChart').getContext('2d');
+        grievanceChart = new Chart(grievanceCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [
+                        '#fd7e14',
+                        '#198754',
+                        '#6f42c1',
+                        '#dc3545',
+                        '#20c997'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        
+        // Tax Collection Chart
+        const taxCtx = document.getElementById('taxCollectionChart').getContext('2d');
+        taxChart = new Chart(taxCtx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Tax Amount (₹)',
+                    data: [],
+                    backgroundColor: 'rgba(13, 110, 253, 0.7)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    }
+                }
+            }
+        });
     }
     
     // Load all data
@@ -364,13 +452,16 @@
         fetch('{% url "admin_module:reports_data" %}?type=kpi')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('totalUsers').textContent = data.total_users;
-                document.getElementById('totalClerks').textContent = data.total_clerks;
-                document.getElementById('totalCitizens').textContent = data.total_citizens;
+                document.getElementById('totalUsers').textContent = formatNumber(data.total_users);
+                document.getElementById('totalClerks').textContent = formatNumber(data.total_clerks);
+                document.getElementById('totalCitizens').textContent = formatNumber(data.total_citizens);
                 
                 document.getElementById('userGrowth').textContent = data.user_growth + '%';
                 document.getElementById('clerkGrowth').textContent = data.clerk_growth + '%';
                 document.getElementById('citizenGrowth').textContent = data.citizen_growth + '%';
+                
+                // Update pending grievances counter
+                document.getElementById('pendingGrievances').textContent = formatNumber(data.pending_grievances);
                 
                 // Update colors based on growth
                 document.getElementById('userGrowth').className = data.user_growth >= 0 ? 'text-success' : 'text-danger';
@@ -386,6 +477,7 @@
                 document.getElementById('userGrowth').textContent = '+10.8%';
                 document.getElementById('clerkGrowth').textContent = '+10.5%';
                 document.getElementById('citizenGrowth').textContent = '+10.9%';
+                document.getElementById('pendingGrievances').textContent = '55';
             });
     }
     
@@ -403,6 +495,20 @@
                 userTypeChart.data.labels = data.user_distribution.labels;
                 userTypeChart.data.datasets[0].data = data.user_distribution.data;
                 userTypeChart.update();
+                
+                // Update grievance distribution chart
+                if (data.grievance_distribution && data.grievance_distribution.labels.length > 0) {
+                    grievanceChart.data.labels = data.grievance_distribution.labels;
+                    grievanceChart.data.datasets[0].data = data.grievance_distribution.data;
+                    grievanceChart.update();
+                }
+                
+                // Update tax collection chart
+                if (data.tax_collection && data.tax_collection.labels.length > 0) {
+                    taxChart.data.labels = data.tax_collection.labels;
+                    taxChart.data.datasets[0].data = data.tax_collection.data;
+                    taxChart.update();
+                }
             })
             .catch(error => {
                 console.error('Error loading chart data:', error);
@@ -414,6 +520,14 @@
                 userTypeChart.data.labels = ['Citizens', 'Clerks', 'Admins'];
                 userTypeChart.data.datasets[0].data = [2798, 42, 5];
                 userTypeChart.update();
+                
+                grievanceChart.data.labels = ['Pending', 'Resolved', 'In Progress'];
+                grievanceChart.data.datasets[0].data = [55, 120, 25];
+                grievanceChart.update();
+                
+                taxChart.data.labels = ['Property', 'Water', 'Garbage', 'Health'];
+                taxChart.data.datasets[0].data = [1200000, 350000, 250000, 180000];
+                taxChart.update();
             });
     }
     
@@ -520,7 +634,44 @@
                     }
                 }
             });
+        } else if (chartId === 'grievanceDistributionChart') {
+            // Toggle between doughnut and pie chart for grievances
+            const newChartType = grievanceChart.config.type === 'doughnut' ? 'pie' : 'doughnut';
+            const chartData = {
+                labels: grievanceChart.data.labels,
+                datasets: [{
+                    data: grievanceChart.data.datasets[0].data,
+                    backgroundColor: [
+                        '#fd7e14',
+                        '#198754',
+                        '#6f42c1',
+                        '#dc3545',
+                        '#20c997'
+                    ]
+                }]
+            };
+            
+            grievanceChart.destroy();
+            const grievanceCtx = document.getElementById('grievanceDistributionChart').getContext('2d');
+            grievanceChart = new Chart(grievanceCtx, {
+                type: newChartType,
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
         }
+    }
+    
+    // Format numbers with commas
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
     
     // Toggle table size
@@ -562,12 +713,20 @@
         generateBtn.innerHTML = '<i class="bi bi-search me-2"></i>Generating...';
         generateBtn.disabled = true;
         
-        // Simulate report generation
-        setTimeout(() => {
-            alert(`Generated ${document.getElementById('reportType').options[document.getElementById('reportType').selectedIndex].text} for the last ${dateRange} days in ${format.toUpperCase()} format.`);
-            generateBtn.innerHTML = originalText;
-            generateBtn.disabled = false;
-        }, 1500);
+        // Fetch actual report data
+        fetch(`{% url "admin_module:reports_data" %}?type=summary&report_type=${reportType}&date_range=${dateRange}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(`Generated ${document.getElementById('reportType').options[document.getElementById('reportType').selectedIndex].text} for the last ${dateRange} days in ${format.toUpperCase()} format.`);
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error generating report:', error);
+                alert('Error generating report. Please try again.');
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+            });
     }
     
     // Refresh all data

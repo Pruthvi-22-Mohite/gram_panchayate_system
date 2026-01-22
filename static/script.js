@@ -1,11 +1,14 @@
+// Initialize language setting flag to prevent infinite loops
+window.settingLanguage = false;
+
 const translations = {
     "en": {
         "page_title": "Grampanchayat, Koparde",
         "main_title": "Grampanchayat, Koparde",
         "subtitle": "Gram Panchayat Digital Services | Government of India",
         "welcome_main_title": "Welcome to the Grampanchayat, Koparde",
-        "welcome_para_1": "Grampanchayat, Koparde is a digital platform designed to empower our village community. We provide a single point of access for essential public services, community engagement, and transparent governance.",
-        "welcome_para_2": "Explore this website to find emergency contacts, submit feedback and suggestions, track the progress of local projects, and access important public records. Our goal is to make village administration more accessible and efficient for every resident.",
+        "welcome_para_1": "कोपर्डे हे सातारा तालुका, सातारा जिल्ह्यातील एक गाव आहे. गावाची लोकसंख्या सुमारे 1,806 असून साक्षरता दर 90% पेक्षा अधिक आहे. येथील प्रमुख व्यवसाय शेती असून बहुसंख्य नागरिक शेतकरी व शेतमजूर आहेत. सातारा शहराजवळ असल्यामुळे गावाला चांगली रस्ता व बस दळणवळण सुविधा उपलब्ध आहे.",
+        "welcome_para_2": "कोपर्डे हे सातारा तालुका, सातारा जिल्ह्यातील एक गाव आहे. गावाची लोकसंख्या सुमारे 1,806 असून साक्षरता दर 90% पेक्षा अधिक आहे. येथील प्रमुख व्यवसाय शेती असून बहुसंख्य नागरिक शेतकरी व शेतमजूर आहेत. सातारा शहराजवळ असल्यामुळे गावाला चांगली रस्ता व बस दळणवळण सुविधा उपलब्ध आहे.",
         "citizen_portal": "Citizen Portal",
         "welcome_citizen": "Welcome, Citizen!",
         "logout": "Logout",
@@ -706,53 +709,7 @@ const setLanguage = async (lang) => {
         }
     });
     
-    // Also check for any dynamically added elements that might have been missed
-    setTimeout(() => {
-        document.querySelectorAll('[data-lang-key]').forEach(element => {
-            let key = element.getAttribute('data-lang-key');
-            
-            // For title elements, dynamically determine the appropriate translation key based on content
-            if (element.tagName === 'TITLE') {
-                const titleContent = element.textContent.trim();
-                
-                // Map specific title content to appropriate translation keys
-                if (titleContent.includes('Admin Dashboard')) {
-                    key = 'admin_dashboard_title';
-                } else if (titleContent.includes('Citizen Login')) {
-                    key = 'citizen_login_page_title';
-                } else if (titleContent.includes('Citizen Registration')) {
-                    key = 'citizen_registration_title';
-                } else if (titleContent.includes('Clerk Dashboard')) {
-                    key = 'clerk_dashboard_title';
-                } else if (titleContent.includes('Certificate')) {
-                    key = 'certificate_applications_admin';
-                } else {
-                    // Default to page_title for generic pages
-                    key = 'page_title';
-                }
-            }
-            
-            if (translations[lang] && translations[lang][key]) {
-                let translatedText = translations[lang][key];
-                
-                // Handle dynamic content like welcome messages
-                if (key.includes('welcome') && window.userUsername) {
-                    translatedText = interpolate(translatedText, { username: window.userUsername });
-                }
-                
-                if (element.tagName === 'TITLE') {
-                    document.title = translatedText;
-                } else {
-                    element.innerText = translatedText;
-                }
-            }
-        });
-    }, 100);
-    
-    // Force re-translation of all elements to ensure nothing is missed
-    setTimeout(() => {
-        forceTranslateAll(lang);
-    }, 200);
+
     
     // Store language preference in multiple places for redundancy
     localStorage.setItem('userLanguage', lang);
@@ -764,9 +721,15 @@ const setLanguage = async (lang) => {
     const langSwitcher = document.getElementById('language-switcher');
     if (langSwitcher) langSwitcher.value = lang;
     
-    // Re-render summary cards to ensure they are translated
-    if (document.querySelector('.sidebar')) {
-        loadCitizenDashboard();
+    // Only call if not already in dashboard context to prevent recursion
+    if (document.querySelector('.sidebar') && !window.settingLanguage) {
+        // Set flag to prevent recursive calls
+        window.settingLanguage = true;
+        renderSummaryCards();
+        // Reset flag after a delay
+        setTimeout(() => {
+            window.settingLanguage = false;
+        }, 300);
     }
 };
 // ==========================================================
@@ -809,15 +772,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize language with server-side preference
     const savedLang = await initializeLanguage();
     await setLanguage(savedLang);
-    
-    // Aggressive translation - apply multiple times to catch all elements
-    setTimeout(() => setLanguage(savedLang), 50);
-    setTimeout(() => setLanguage(savedLang), 200);
-    setTimeout(() => setLanguage(savedLang), 500);
-    setTimeout(() => setLanguage(savedLang), 1000);
 
     if (document.querySelector('.sidebar')) {
-        loadCitizenDashboard();
+        renderSummaryCards();
     }
     
     // Listen for Bootstrap tab changes to re-apply translations
@@ -830,7 +787,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                                   localStorage.getItem('userLanguage') || 
                                   document.documentElement.lang || 
                                   'en';
-                setLanguage(currentLang);
+                // Only apply language if it's different from current to prevent loop
+                if (currentLang !== document.documentElement.lang) {
+                    setLanguage(currentLang);
+                }
             }, 50);
         });
     });
@@ -870,18 +830,6 @@ function handleLogin(event) {
 
 function loadCitizenDashboard() {
     renderSummaryCards();
-    
-    // Ensure all elements are translated after rendering
-    const currentLang = sessionStorage.getItem('userLanguage') || 
-                       localStorage.getItem('userLanguage') || 
-                       document.documentElement.lang || 
-                       'en';
-    setLanguage(currentLang);
-    
-    // Additional translation pass to catch any missed elements
-    setTimeout(() => {
-        setLanguage(currentLang);
-    }, 150);
 }
 function renderSummaryCards() {
     const container = document.getElementById('summary-cards-container');
@@ -910,11 +858,22 @@ function renderSummaryCards() {
             </div>
         </div>`;
     
+    // Translate the newly created elements
     const currentLang = sessionStorage.getItem('userLanguage') || 
                        localStorage.getItem('userLanguage') || 
                        document.documentElement.lang || 
                        'en';
-    setLanguage(currentLang);
+    
+    // Only translate if not already in the process of setting language
+    if (!window.settingLanguage) {
+        // Translate the summary cards elements that have data-lang-key attributes
+        container.querySelectorAll('[data-lang-key]').forEach(element => {
+            const key = element.getAttribute('data-lang-key');
+            if (translations[currentLang] && translations[currentLang][key]) {
+                element.innerText = translations[currentLang][key];
+            }
+        });
+    }
     
     // Also update welcome messages dynamically if user data is available
     if (window.userUsername) {
